@@ -9,10 +9,6 @@ return {
     'MunifTanjim/nui.nvim',
   },
   config = function()
-    require('neo-tree').setup {}:
-    local opts = { noremap = true, silent = true }
-
-    -- Toggle Neo-tree file explorer
-    vim.api.nvim_set_keymap('n', '<leader>n', ':Neotree reveal toggle<CR>', opts)
+    require('neo-tree').setup {}
   end,
 }
