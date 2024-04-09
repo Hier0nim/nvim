@@ -70,4 +70,7 @@ vim.opt.shiftwidth = 2
 -- Set 'smarttab' option to true (use shiftwidth instead of tabstop when inserting tabs)
 vim.opt.smarttab = true
 
+-- Hide the cmd lide
+vim.o.cmdheight = 0
+
 -- vim: ts=3 sts=2 sw=2 et
