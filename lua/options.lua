@@ -5,9 +5,7 @@
 
 -- Make line numbers default
 vim.opt.number = true
--- You can also add relative line numbers, to help with jumping.
---  Experiment for yourself to see if you like it!
--- vim.opt.relativenumber = true
+vim.opt.relativenumber = true
 
 -- Enable mouse mode, can be useful for resizing splits for example!
 vim.opt.mouse = 'a'
@@ -16,8 +14,6 @@ vim.opt.mouse = 'a'
 vim.opt.showmode = false
 
 -- Sync clipboard between OS and Neovim.
---  Remove this option if you want your OS clipboard to remain independent.
---  See `:help 'clipboard'`
 vim.opt.clipboard = 'unnamedplus'
 
 -- Enable break indent
@@ -57,6 +53,21 @@ vim.opt.inccommand = 'split'
 vim.opt.cursorline = true
 
 -- Minimal number of screen lines to keep above and below the cursor.
-vim.opt.scrolloff = 10
+vim.opt.scrolloff = 11
 
--- vim: ts=2 sts=2 sw=2 et
+-- Set 'wrap' option to false (disables line wrapping)
+vim.wo.wrap = false
+
+-- Set 'tabstop' option to 2 (number of spaces for a tab)
+vim.opt.tabstop = 2
+
+-- Set 'expandtab' option to true (replace tabs with spaces)
+vim.opt.expandtab = true
+
+-- Set 'shiftwidth' option to 3 (number of spaces to use for each step of (auto)indent)
+vim.opt.shiftwidth = 2
+
+-- Set 'smarttab' option to true (use shiftwidth instead of tabstop when inserting tabs)
+vim.opt.smarttab = true
+
+-- vim: ts=3 sts=2 sw=2 et
