@@ -73,4 +73,12 @@ vim.opt.smarttab = true
 -- Hide the cmd lide
 vim.o.cmdheight = 0
 
+-- Create an autocommand for the 'dbout' file type
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = 'dbout',
+  callback = function()
+    vim.wo.foldenable = false
+  end,
+})
+
 -- vim: ts=3 sts=2 sw=2 et
