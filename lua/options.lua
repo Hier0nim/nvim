@@ -73,21 +73,25 @@ vim.opt.smarttab = true
 -- Hide the cmd lide
 vim.o.cmdheight = 0
 
--- Create an autocommand for the 'dbout' file type
-vim.api.nvim_create_autocmd('FileType', {
-  pattern = 'dbout',
-  callback = function()
-    vim.wo.foldenable = false
-  end,
-})
+-- Check if 'pwsh' is executable and set the shell accordingly
+if vim.fn.executable 'pwsh' == 1 then
+  vim.o.shell = 'pwsh'
+else
+  vim.o.shell = 'powershell'
+end
 
--- set shell options
-vim.opt.shell = vim.fn.executable 'pwsh' and 'pwsh' or 'powershell'
-vim.opt.shellcmdflag =
-  '-NoLogo -NoProfile -ExecutionPolicy RemoteSigned -Command [Console]::InputEncoding=[Console]::OutputEncoding=[System.Text.Encoding]::UTF8;'
-vim.opt.shellredir = '-RedirectStandardOutput %s -NoNewWindow -Wait'
-vim.opt.shellpipe = '2>&1 | Out-File -Encoding UTF8 %s; exit $LastExitCode'
-vim.opt.shellquote = ''
-vim.opt.shellxquote = ''
+-- Setting shell command flags
+vim.o.shellcmdflag =
+  "-NoLogo -ExecutionPolicy RemoteSigned -Command [Console]::InputEncoding=[Console]::OutputEncoding=[System.Text.UTF8Encoding]::new();$PSDefaultParameterValues['Out-File:Encoding']='utf8';"
+
+-- Setting shell redirection
+vim.o.shellredir = '2>&1 | %{ "$_" } | Out-File %s; exit $LastExitCode'
+
+-- Setting shell pipe
+vim.o.shellpipe = '2>&1 | %{ "$_" } | Tee-Object %s; exit $LastExitCode'
+
+-- Setting shell quote options
+vim.o.shellquote = ''
+vim.o.shellxquote = ''
 
 -- vim: ts=3 sts=2 sw=2 et
