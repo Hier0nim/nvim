@@ -154,12 +154,12 @@
               which-key-nvim
               snacks-nvim
               blink-cmp
-              fzf-lua
               SchemaStore-nvim
 
               # NOTE: Mine plugins
               (fidget-nvim.overrideAttrs { name = "j-hui/fidget.nvim"; })
               (pkgs.neovimPlugins.log-highlight.overrideAttrs { name = "fei6409/log-highlight.nvim"; })
+              project-nvim
 
               # copilot
               copilot-lua
