@@ -28,6 +28,8 @@ require('nixCatsUtils.lazyCat').setup(nixCats.pawsible { 'allPlugins', 'start', 
   { import = 'lazyvim.plugins.extras.lang.toml' },
   { import = 'lazyvim.plugins.extras.coding.mini-surround' },
   { import = 'lazyvim.plugins.extras.ai.copilot' },
+  { import = 'lazyvim.plugins.extras.editor.snacks_picker' },
+  { import = 'lazyvim.plugins.extras.util.project' },
 
   -- disable mason.nvim while using nix
   -- precompiled binaries do not agree with nixos, and we can just make nix install this stuff for us.
@@ -77,6 +79,7 @@ require('nixCatsUtils.lazyCat').setup(nixCats.pawsible { 'allPlugins', 'start', 
 }, lazyOptions)
 
 vim.g.snacks_animate = false
+vim.g.lazyvim_picker = 'snacks'
 vim.opt.cmdheight = 0
 
 -- NOTE:  Use zig compiler for treesitter
