@@ -6,9 +6,6 @@ require('nixCatsUtils').setup {
   non_nix_value = true,
 }
 
--- NOTE:  Use zig compiler for treesitter
-require('nvim-treesitter.install').compilers = { 'zig' }
-
 -- NOTE: You might want to move the lazy-lock.json file
 local function getlockfilepath()
   if require('nixCatsUtils').isNixCats and type(nixCats.settings.unwrappedCfgPath) == 'string' then
@@ -25,6 +22,13 @@ local lazyOptions = {
 -- argument, the path to lazy.nvim as downloaded by nix, or nil, before the normal arguments.
 require('nixCatsUtils.lazyCat').setup(nixCats.pawsible { 'allPlugins', 'start', 'lazy.nvim' }, {
   { 'LazyVim/LazyVim', import = 'lazyvim.plugins' },
+  -- Extras
+  { import = 'lazyvim.plugins.extras.lang.nix' },
+  { import = 'lazyvim.plugins.extras.lang.json' },
+  { import = 'lazyvim.plugins.extras.lang.toml' },
+  { import = 'lazyvim.plugins.extras.coding.mini-surround' },
+  { import = 'lazyvim.plugins.extras.ai.copilot' },
+
   -- disable mason.nvim while using nix
   -- precompiled binaries do not agree with nixos, and we can just make nix install this stuff for us.
   { 'williamboman/mason-lspconfig.nvim', enabled = require('nixCatsUtils').lazyAdd(true, false) },
@@ -36,7 +40,24 @@ require('nixCatsUtils.lazyCat').setup(nixCats.pawsible { 'allPlugins', 'start', 
     opts = {
       -- nix already ensured they were installed, and we would need to change the parser_install_dir if we wanted to use it instead.
       -- so we just disable install and do it via nix.
-      ensure_installed = require('nixCatsUtils').lazyAdd({ 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'vim', 'vimdoc' }, false),
+      ensure_installed = require('nixCatsUtils').lazyAdd({
+        'bash',
+        'c',
+        'diff',
+        'html',
+        'lua',
+        'luadoc',
+        'markdown',
+        'markdown_inline',
+        'vim',
+        'vimdoc',
+        'yaml',
+        'toml',
+
+        -- Extras
+        'nix',
+        'json5',
+      }, false),
       auto_install = require('nixCatsUtils').lazyAdd(true, false),
     },
   },
@@ -50,8 +71,13 @@ require('nixCatsUtils.lazyCat').setup(nixCats.pawsible { 'allPlugins', 'start', 
       },
     },
   },
+
   -- import/override with your plugins
   { import = 'plugins' },
 }, lazyOptions)
 
 vim.g.snacks_animate = false
+vim.opt.cmdheight = 0
+
+-- NOTE:  Use zig compiler for treesitter
+require('nvim-treesitter.install').compilers = { 'zig' }

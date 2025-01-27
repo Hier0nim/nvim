@@ -107,7 +107,9 @@
               stdenv.cc.cc
               lua-language-server
               nil # I would go for nixd but lazy chooses this one idk
+              nixfmt-rfc-style
               stylua
+              nodePackages.vscode-json-languageserver
             ];
           };
 
@@ -131,16 +133,14 @@
               neo-tree-nvim
               neoconf-nvim
               neodev-nvim
-              # replaced with fidget-nvim
-              # noice-nvim
+              noice-nvim
               nui-nvim
               nvim-lint
               nvim-lspconfig
-              nvim-notify
               nvim-spectre
-              nvim-treesitter
               nvim-treesitter-context
               nvim-treesitter-textobjects
+              nvim-treesitter.withAllGrammars
               nvim-ts-autotag
               nvim-ts-context-commentstring
               nvim-web-devicons
@@ -155,19 +155,16 @@
               snacks-nvim
               blink-cmp
               fzf-lua
+              SchemaStore-nvim
 
-              # mine
-              fidget-nvim
+              # NOTE: Mine plugins
+              (fidget-nvim.overrideAttrs { name = "j-hui/fidget.nvim"; })
+              (pkgs.neovimPlugins.log-highlight.overrideAttrs { name = "fei6409/log-highlight.nvim"; })
 
-              nvim-treesitter-textobjects
-              nvim-treesitter.withAllGrammars
-              # This is for if you only want some of the grammars
-              # (nvim-treesitter.withPlugins (
-              #   plugins: with plugins; [
-              #     nix
-              #     lua
-              #   ]
-              # ))
+              # copilot
+              copilot-lua
+              copilot-cmp
+              blink-cmp-copilot
 
               # sometimes you have to fix some names
               # you could do this within the lazy spec instead if you wanted
@@ -181,8 +178,7 @@
               (mini-comment.overrideAttrs { name = "mini.comment"; })
               (mini-indentscope.overrideAttrs { name = "mini.indentscope"; })
               (mini-pairs.overrideAttrs { name = "mini.pairs"; })
-              (mini-surround.overrideAttrs { name = "mini.surround"; })
-              (pkgs.neovimPlugins.log-highlight.overrideAttrs { name = "fei6409/log-highlight.nvim"; })
+              (mini-surround.overrideAttrs { name = "echasnovski/mini.surround"; })
             ];
           };
 
