@@ -31,7 +31,7 @@
         "type": "github"
       }
     },
-    "plugins-log-highlight": {
+    "plugins-log-highlight-nvim": {
       "flake": false,
       "locked": {
         "lastModified": 1730026929,
@@ -47,11 +47,45 @@
         "type": "github"
       }
     },
+    "plugins-roslyn-nvim": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1737962573,
+        "narHash": "sha256-zBFrc9SaJCeFxotErkKN5XjKGUia+hLIgN1ad0B6WJY=",
+        "owner": "seblj",
+        "repo": "roslyn.nvim",
+        "rev": "490fd2d0f76249032ef6ce503e43ccdaeed9616e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "seblj",
+        "repo": "roslyn.nvim",
+        "type": "github"
+      }
+    },
+    "plugins-rzls-nvim": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1736523189,
+        "narHash": "sha256-VJgmYEYkfoemEpLWjBihPPpsypDzm/H15m3Ogs8/ECs=",
+        "owner": "tris203",
+        "repo": "rzls.nvim",
+        "rev": "60cb1e722e48a97400ec4a0665f6a76529052bcf",
+        "type": "github"
+      },
+      "original": {
+        "owner": "tris203",
+        "repo": "rzls.nvim",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "nixCats": "nixCats",
         "nixpkgs": "nixpkgs",
-        "plugins-log-highlight": "plugins-log-highlight"
+        "plugins-log-highlight-nvim": "plugins-log-highlight-nvim",
+        "plugins-roslyn-nvim": "plugins-roslyn-nvim",
+        "plugins-rzls-nvim": "plugins-rzls-nvim"
       }
     }
   },
