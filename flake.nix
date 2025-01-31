@@ -7,8 +7,18 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     nixCats.url = "github:BirdeeHub/nixCats-nvim";
 
-    "plugins-log-highlight" = {
+    "plugins-log-highlight-nvim" = {
       url = "github:fei6409/log-highlight.nvim";
+      flake = false;
+    };
+
+    "plugins-roslyn-nvim" = {
+      url = "github:seblj/roslyn.nvim";
+      flake = false;
+    };
+
+    "plugins-rzls-nvim" = {
+      url = "github:tris203/rzls.nvim";
       flake = false;
     };
 
@@ -110,6 +120,13 @@
               nixfmt-rfc-style
               stylua
               nodePackages.vscode-json-languageserver
+              roslyn-ls
+              (
+                with dotnetCorePackages;
+                combinePackages [
+                  sdk_8_0
+                ]
+              )
             ];
           };
 
@@ -155,11 +172,15 @@
               snacks-nvim
               blink-cmp
               SchemaStore-nvim
+              grug-far-nvim
+              ts-comments-nvim
 
               # NOTE: Mine plugins
-              (fidget-nvim.overrideAttrs { name = "j-hui/fidget.nvim"; })
-              (pkgs.neovimPlugins.log-highlight.overrideAttrs { name = "fei6409/log-highlight.nvim"; })
+              (pkgs.neovimPlugins.log-highlight-nvim.overrideAttrs { pname = "log-highlight.nvim"; })
+              (pkgs.neovimPlugins.roslyn-nvim.overrideAttrs { pname = "roslyn.nvim"; })
+              (pkgs.neovimPlugins.rzls-nvim.overrideAttrs { pname = "rzls.nvim"; })
               project-nvim
+              fidget-nvim
 
               # copilot
               copilot-lua
@@ -171,7 +192,7 @@
               # and get the new names from `:NixCats pawsible` debug command
               # but it works the same either way.
               (luasnip.overrideAttrs { name = "LuaSnip"; })
-              (catppuccin-nvim.overrideAttrs { name = "catppuccin"; })
+              (catppuccin-nvim.overrideAttrs { pname = "catppuccin"; })
               (mini-ai.overrideAttrs { name = "mini.ai"; })
               (mini-icons.overrideAttrs { name = "mini.icons"; })
               (mini-bufremove.overrideAttrs { name = "mini.bufremove"; })
