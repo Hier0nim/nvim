@@ -119,7 +119,7 @@
               nil # I would go for nixd but lazy chooses this one idk
               nixfmt-rfc-style
               stylua
-              nodePackages.vscode-json-languageserver
+              vscode-langservers-extracted
               roslyn-ls
               (
                 with dotnetCorePackages;
