@@ -1,7 +1,5 @@
-# Copyright (c) 2023 BirdeeHub
-# Licensed under the MIT license
 {
-  description = "A Lua-natic's neovim flake, with extra cats! nixCats!";
+  description = "A Hieronim's neovim flake, with extra cats! nixCats!";
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
@@ -62,11 +60,6 @@
       # this allows you to use ${pkgs.system} whenever you want in those sections
       # without fear.
 
-      # sometimes our overlays require a ${system} to access the overlay.
-      # Your dependencyOverlays can either be lists
-      # in a set of ${system}, or simply a list.
-      # the nixCats builder function will accept either.
-      # see :help nixCats.flake.outputs.overlays
       dependencyOverlays = # (import ./overlays inputs) ++
         [
           # This overlay grabs all the inputs named in the format
@@ -111,7 +104,13 @@
             general = [
               universal-ctags
               curl
-              lazygit
+              # NOTE:
+              # lazygit
+              # Apparently lazygit when launched via snacks cant create its own config file
+              # but we can add one from nix!
+              (pkgs.writeShellScriptBin "lazygit" ''
+                exec ${pkgs.lazygit}/bin/lazygit --use-config-file ${pkgs.writeText "lazygit_config.yml" ""} "$@"
+              '')
               ripgrep
               fd
               stdenv.cc.cc
@@ -181,6 +180,16 @@
               (pkgs.neovimPlugins.rzls-nvim.overrideAttrs { pname = "rzls.nvim"; })
               project-nvim
               fidget-nvim
+              dial-nvim
+              inc-rename-nvim
+
+              # Dap
+              nvim-dap
+              mason-nvim-dap-nvim
+              nvim-dap-ui
+              nvim-dap-virtual-text
+              nvim-nio
+              nvim-dap-python
 
               # copilot
               copilot-lua
@@ -289,7 +298,7 @@
           {
             settings = {
               wrapRc = false;
-              unwrappedCfgPath = "/absolute/path/to/config";
+              unwrappedCfgPath = "~/nvim";
             };
             categories = {
               general = true;
@@ -346,6 +355,7 @@
       let
         # we also export a nixos module to allow reconfiguration from configuration.nix
         nixosModule = utils.mkNixosModules {
+          moduleNamespace = [ defaultPackageName ];
           inherit
             defaultPackageName
             dependencyOverlays
@@ -358,6 +368,7 @@
         };
         # and the same for home manager
         homeModule = utils.mkHomeModules {
+          moduleNamespace = [ defaultPackageName ];
           inherit
             defaultPackageName
             dependencyOverlays

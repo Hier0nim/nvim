@@ -26,10 +26,14 @@ require('nixCatsUtils.lazyCat').setup(nixCats.pawsible { 'allPlugins', 'start', 
   { import = 'lazyvim.plugins.extras.lang.nix' },
   { import = 'lazyvim.plugins.extras.lang.json' },
   { import = 'lazyvim.plugins.extras.lang.toml' },
+  { import = 'lazyvim.plugins.extras.lang.python' },
   { import = 'lazyvim.plugins.extras.coding.mini-surround' },
   { import = 'lazyvim.plugins.extras.ai.copilot' },
   { import = 'lazyvim.plugins.extras.editor.snacks_picker' },
   { import = 'lazyvim.plugins.extras.util.project' },
+  { import = 'lazyvim.plugins.extras.dap.core' },
+  { import = 'lazyvim.plugins.extras.editor.dial' },
+  { import = 'lazyvim.plugins.extras.editor.inc-rename' },
 
   -- disable mason.nvim while using nix
   -- precompiled binaries do not agree with nixos, and we can just make nix install this stuff for us.
