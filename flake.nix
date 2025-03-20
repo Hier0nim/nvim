@@ -182,6 +182,7 @@
               fidget-nvim
               dial-nvim
               inc-rename-nvim
+              neorg
 
               # Dap
               nvim-dap
