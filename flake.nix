@@ -119,6 +119,9 @@
               nixfmt-rfc-style
               stylua
               vscode-langservers-extracted
+              python3
+              pyright
+              ruff
               roslyn-ls
               (
                 with dotnetCorePackages;
