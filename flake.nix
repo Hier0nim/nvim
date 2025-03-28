@@ -123,12 +123,7 @@
               pyright
               ruff
               roslyn-ls
-              (
-                with dotnetCorePackages;
-                combinePackages [
-                  sdk_8_0
-                ]
-              )
+              dotnetCorePackages.dotnet_9.sdk
             ];
           };
 
