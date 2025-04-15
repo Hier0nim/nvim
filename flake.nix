@@ -49,7 +49,7 @@
       # will not apply to module imports
       # as that will have your system values
       extra_pkg_config = {
-        # allowUnfree = true;
+        allowUnfree = true;
       };
       # management of the system variable is one of the harder parts of using flakes.
 
@@ -123,7 +123,11 @@
               pyright
               ruff
               roslyn-ls
-              dotnetCorePackages.dotnet_10.sdk
+              dotnetCorePackages.dotnet_9.sdk
+              sqlcmd
+              sqlfluff
+              copilot-language-server-fhs
+              nodejs_23
             ];
           };
 
@@ -181,6 +185,11 @@
               dial-nvim
               inc-rename-nvim
               neorg
+
+              #sql
+              vim-dadbod
+              vim-dadbod-ui
+              vim-dadbod-completion
 
               # Dap
               nvim-dap
