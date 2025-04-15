@@ -22,8 +22,8 @@ local lazyOptions = {
 -- argument, the path to lazy.nvim as downloaded by nix, or nil, before the normal arguments.
 require('nixCatsUtils.lazyCat').setup(nixCats.pawsible { 'allPlugins', 'start', 'lazy.nvim' }, {
   { 'LazyVim/LazyVim', import = 'lazyvim.plugins' },
+
   -- Extras
-  { import = 'lazyvim.plugins.extras.lang.nix' },
   { import = 'lazyvim.plugins.extras.lang.json' },
   { import = 'lazyvim.plugins.extras.lang.toml' },
   { import = 'lazyvim.plugins.extras.lang.python' },
@@ -34,6 +34,8 @@ require('nixCatsUtils.lazyCat').setup(nixCats.pawsible { 'allPlugins', 'start', 
   { import = 'lazyvim.plugins.extras.dap.core' },
   { import = 'lazyvim.plugins.extras.editor.dial' },
   { import = 'lazyvim.plugins.extras.editor.inc-rename' },
+
+  require('nixCatsUtils').lazyAdd({}, { import = 'lazyvim.plugins.extras.lang.nix' }),
 
   -- disable mason.nvim while using nix
   -- precompiled binaries do not agree with nixos, and we can just make nix install this stuff for us.
