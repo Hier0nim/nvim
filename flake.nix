@@ -126,7 +126,6 @@
               dotnetCorePackages.dotnet_9.sdk
               sqlcmd
               sqlfluff
-              copilot-language-server-fhs
               nodejs_23
             ];
           };
@@ -199,11 +198,6 @@
               nvim-nio
               nvim-dap-python
 
-              # copilot
-              copilot-lua
-              copilot-cmp
-              blink-cmp-copilot
-
               # sometimes you have to fix some names
               # you could do this within the lazy spec instead if you wanted
               # and get the new names from `:NixCats pawsible` debug command
@@ -260,7 +254,7 @@
           # in your lua config via
           # vim.g.python3_host_prog
           # or run from nvim terminal via :!<packagename>-python3
-          extraPython3Packages = {
+          python3.libraries = {
             test = [ (_: [ ]) ];
           };
           # populates $LUA_PATH and $LUA_CPATH
