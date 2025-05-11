@@ -127,6 +127,7 @@
               sqlcmd
               sqlfluff
               nodejs_23
+              nushell
             ];
           };
 
@@ -183,7 +184,9 @@
               fidget-nvim
               dial-nvim
               inc-rename-nvim
-              neorg
+              obsidian-nvim
+              markdown-preview-nvim
+              render-markdown-nvim
 
               #sql
               vim-dadbod
