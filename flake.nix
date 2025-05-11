@@ -128,6 +128,7 @@
               sqlfluff
               nodejs_23
               nushell
+              marksman
             ];
           };
 
