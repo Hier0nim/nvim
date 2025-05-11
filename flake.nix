@@ -185,9 +185,9 @@
               fidget-nvim
               dial-nvim
               inc-rename-nvim
-              obsidian-nvim
               markdown-preview-nvim
               render-markdown-nvim
+              neorg
 
               #sql
               vim-dadbod
