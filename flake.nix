@@ -126,7 +126,7 @@
               dotnetCorePackages.dotnet_9.sdk
               sqlcmd
               sqlfluff
-              nodejs_23
+              nodejs
               nushell
               marksman
             ];
