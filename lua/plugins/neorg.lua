@@ -83,7 +83,8 @@ return {
           { '<LocalLeader>ol', '<Plug>(neorg.esupports.hop.hop-link)', desc = 'Follow link', mode = 'n' },
           { '<LocalLeader>ov', '<Plug>(neorg.esupports.hop.hop-link.vsplit)', desc = 'Link vsplit', mode = 'n' },
           { '<LocalLeader>ot', '<Plug>(neorg.esupports.hop.hop-link.tab-drop)', desc = 'Link tab', mode = 'n' },
-          { '<LocalLeader>cc', ':Neorg toggle-concealer<CR>', desc = 'Toggle concealer', mode = 'n' },
+
+          { '<LocalLeader>c', ':Neorg toggle-concealer<CR>', desc = 'Toggle concealer', mode = 'n' },
         }, { buffer = true })
       end,
     })
