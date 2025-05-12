@@ -9,7 +9,6 @@ return {
         ['core.keybinds'] = {
           config = {
             default_keybinds = false, -- turn off all defaults
-            neorg_leader = ',',
           },
         },
         ['core.concealer'] = { config = { folds = true, icon_preset = 'diamond' } },
