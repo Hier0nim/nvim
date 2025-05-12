@@ -189,6 +189,13 @@
               render-markdown-nvim
               neorg
 
+              #nvim-cmp switch to blink once neorg ls works
+              nvim-cmp
+              cmp-buffer
+              cmp-nvim-lsp
+              cmp-path
+              nvim-snippets
+
               #sql
               vim-dadbod
               vim-dadbod-ui
