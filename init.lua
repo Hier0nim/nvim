@@ -90,7 +90,6 @@ require('nixCatsUtils.lazyCat').setup(nixCats.pawsible { 'allPlugins', 'start', 
 vim.g.snacks_animate = false
 vim.g.lazyvim_picker = 'snacks'
 vim.opt.cmdheight = 0
-vim.g.maplocalleader = ','
 
 -- NOTE:  Use zig compiler for treesitter
 require('nvim-treesitter.install').compilers = { 'zig' }
