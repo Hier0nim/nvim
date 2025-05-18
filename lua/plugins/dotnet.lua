@@ -7,6 +7,19 @@ return {
     opts = {
       broad_search = false,
       config = {
+        cmd = require('nixCatsUtils').lazyAdd({
+          'dotnet',
+          '<target>/Microsoft.CodeAnalysis.LanguageServer.dll',
+          '--logLevel=Information',
+          '--extensionLogDirectory=' .. vim.fs.dirname(vim.lsp.get_log_path()),
+          '--stdio',
+        }, {
+          'Microsoft.CodeAnalysis.LanguageServer',
+          '--logLevel=Information',
+          '--extensionLogDirectory=' .. vim.fs.dirname(vim.lsp.get_log_path()),
+          '--stdio',
+        }),
+
         settings = {
           ['csharp|inlay_hints'] = {
             csharp_enable_inlay_hints_for_implicit_object_creation = true,
@@ -25,15 +38,8 @@ return {
           ['csharp|code_lens'] = {
             dotnet_enable_references_code_lens = true,
           },
-          ['csharp|symbol_search'] = {
-            dotnet_search_reference_assemblies = true,
-          },
         },
       },
-      exe = require('nixCatsUtils').lazyAdd({
-        'dotnet',
-        vim.fs.joinpath(vim.fn.stdpath 'data', 'roslyn', 'Microsoft.CodeAnalysis.LanguageServer.dll'),
-      }, 'Microsoft.CodeAnalysis.LanguageServer'),
     },
   },
 }
