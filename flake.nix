@@ -123,12 +123,12 @@
               pyright
               ruff
               roslyn-ls
-              dotnetCorePackages.dotnet_9.sdk
               sqlcmd
               sqlfluff
               nodejs
               nushell
               marksman
+              dotnetCorePackages.dotnet_10.sdk
             ];
           };
 
