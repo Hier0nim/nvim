@@ -20,6 +20,11 @@
       flake = false;
     };
 
+    "plugins-nix-store-nvim" = {
+      url = "github:wizardlink/nix-store.nvim";
+      flake = false;
+    };
+
     # see :help nixCats.flake.inputs
     # If you want your plugin to be loaded by the standard overlay,
     # i.e. if it wasnt on nixpkgs, but doesnt have an extra build step.
@@ -122,13 +127,16 @@
               python3
               pyright
               ruff
-              roslyn-ls
               sqlcmd
               sqlfluff
               nodejs
               nushell
               marksman
+
+              # dotnet
               dotnetCorePackages.dotnet_10.sdk
+              roslyn-ls
+              rzls
             ];
           };
 
@@ -181,6 +189,7 @@
               (pkgs.neovimPlugins.log-highlight-nvim.overrideAttrs { pname = "log-highlight.nvim"; })
               (pkgs.neovimPlugins.roslyn-nvim.overrideAttrs { pname = "roslyn.nvim"; })
               (pkgs.neovimPlugins.rzls-nvim.overrideAttrs { pname = "rzls.nvim"; })
+              (pkgs.neovimPlugins.nix-store-nvim.overrideAttrs { pname = "nix-store.nvim"; })
               project-nvim
               fidget-nvim
               dial-nvim

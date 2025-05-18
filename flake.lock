@@ -47,6 +47,22 @@
         "type": "github"
       }
     },
+    "plugins-nix-store-nvim": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1739927138,
+        "narHash": "sha256-/rbS47LmWx1Uunuf4kuhYzM/5en1b3vbikAwXr9XLmA=",
+        "owner": "wizardlink",
+        "repo": "nix-store.nvim",
+        "rev": "b026abae4b0c92998b4c9312e8225068b6fb31e5",
+        "type": "github"
+      },
+      "original": {
+        "owner": "wizardlink",
+        "repo": "nix-store.nvim",
+        "type": "github"
+      }
+    },
     "plugins-roslyn-nvim": {
       "flake": false,
       "locked": {
@@ -84,6 +100,7 @@
         "nixCats": "nixCats",
         "nixpkgs": "nixpkgs",
         "plugins-log-highlight-nvim": "plugins-log-highlight-nvim",
+        "plugins-nix-store-nvim": "plugins-nix-store-nvim",
         "plugins-roslyn-nvim": "plugins-roslyn-nvim",
         "plugins-rzls-nvim": "plugins-rzls-nvim"
       }
