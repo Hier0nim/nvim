@@ -8,25 +8,9 @@ return {
         opts = function(_, opts)
           opts = {
             path = require('nixCatsUtils').lazyAdd(nil, 'rzls'),
-            capabilities = vim.lsp.protocol.make_client_capabilities(),
           }
           return opts
         end,
-        dependencies = {
-          {
-            'neovim/nvim-lspconfig',
-            servers = {
-              rzls = {
-                setup = {
-                  rzls = function(_, opts) -- code
-                    vim.notify 'rzls setup being called'
-                    require('rzls').setup(opts)
-                  end,
-                },
-              },
-            },
-          },
-        },
       },
     },
     opts = function(_, opts)
