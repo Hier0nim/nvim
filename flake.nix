@@ -11,7 +11,7 @@
     };
 
     "plugins-roslyn-nvim" = {
-      url = "github:seblj/roslyn.nvim";
+      url = "github:seblyng/roslyn.nvim";
       flake = false;
     };
 
@@ -187,8 +187,6 @@
 
               # NOTE: Mine plugins
               (pkgs.neovimPlugins.log-highlight-nvim.overrideAttrs { pname = "log-highlight.nvim"; })
-              (pkgs.neovimPlugins.roslyn-nvim.overrideAttrs { pname = "roslyn.nvim"; })
-              (pkgs.neovimPlugins.rzls-nvim.overrideAttrs { pname = "rzls.nvim"; })
               (pkgs.neovimPlugins.nix-store-nvim.overrideAttrs { pname = "nix-store.nvim"; })
               project-nvim
               fidget-nvim
@@ -197,6 +195,10 @@
               markdown-preview-nvim
               render-markdown-nvim
               neorg
+
+              # dotnet
+              (pkgs.neovimPlugins.roslyn-nvim.overrideAttrs { pname = "roslyn.nvim"; })
+              (pkgs.neovimPlugins.rzls-nvim.overrideAttrs { pname = "rzls.nvim"; })
 
               #nvim-cmp switch to blink once neorg ls works
               nvim-cmp
