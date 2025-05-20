@@ -15,21 +15,46 @@ return {
     },
     opts = function(_, opts)
       local utils = require 'nixCatsUtils'
+      local cmd = {}
 
-      local roslyn = vim.fs.joinpath(vim.fn.stdpath 'data', 'roslyn')
-      local rzls = utils.lazyAdd(vim.fs.joinpath(vim.fn.stdpath 'data', 'rzls'), vim.fn.get_nix_store 'rzls')
+      if utils.isNixCats then
+        -- Nix environment
+        local rzls = vim.fn.get_nix_store 'rzls'
 
-      local cmd = utils.lazyAdd({ 'dotnet', vim.fs.joinpath(roslyn, 'Microsoft.CodeAnalysis.LanguageServer.dll') }, { 'Microsoft.CodeAnalysis.LanguageServer' })
-      vim.list_extend(cmd, {
-        '--stdio',
-        '--logLevel=Information',
-        '--extensionLogDirectory=' .. vim.fs.dirname(vim.lsp.get_log_path()),
-        '--razorSourceGenerator=' .. vim.fs.joinpath(rzls, 'Microsoft.CodeAnalysis.Razor.Compiler.dll'),
-        '--razorDesignTimePath=' .. vim.fs.joinpath(rzls, 'Targets', 'Microsoft.NET.Sdk.Razor.DesignTime.targets'),
-        '--extension',
-        vim.fs.joinpath(rzls, 'RazorExtension', 'Microsoft.VisualStudioCode.RazorExtension.dll'),
-      })
+        vim.list_extend(cmd, {
+          'Microsoft.CodeAnalysis.LanguageServer',
+          '--stdio',
+          '--logLevel=Information',
+          '--extensionLogDirectory=' .. vim.fs.dirname(vim.lsp.get_log_path()),
+          '--razorSourceGenerator=' .. vim.fs.joinpath(rzls, 'Microsoft.CodeAnalysis.Razor.Compiler.dll'),
+          '--razorDesignTimePath=' .. vim.fs.joinpath(rzls, 'Targets', 'Microsoft.NET.Sdk.Razor.DesignTime.targets'),
+          '--extension',
+          vim.fs.joinpath(rzls, 'RazorExtension', 'Microsoft.VisualStudioCode.RazorExtension.dll'),
+        })
+      else
+        -- Non-nix: use Mason registry
+        local mason_registry = require 'mason-registry'
 
+        if mason_registry.get_package('roslyn'):is_installed() then
+          vim.list_extend(cmd, {
+            'roslyn',
+            '--stdio',
+            '--logLevel=Information',
+            '--extensionLogDirectory=' .. vim.fs.dirname(vim.lsp.get_log_path()),
+          })
+
+          local rzls_pkg = mason_registry.get_package 'rzls'
+          if rzls_pkg:is_installed() then
+            local rzls_path = vim.fn.expand '$MASON/packages/rzls/libexec'
+            table.insert(cmd, '--razorSourceGenerator=' .. vim.fs.joinpath(rzls_path, 'Microsoft.CodeAnalysis.Razor.Compiler.dll'))
+            table.insert(cmd, '--razorDesignTimePath=' .. vim.fs.joinpath(rzls_path, 'Targets', 'Microsoft.NET.Sdk.Razor.DesignTime.targets'))
+            vim.list_extend(cmd, {
+              '--extension',
+              vim.fs.joinpath(rzls_path, 'RazorExtension', 'Microsoft.VisualStudioCode.RazorExtension.dll'),
+            })
+          end
+        end
+      end
       opts = {
         config = {
           cmd = cmd,
