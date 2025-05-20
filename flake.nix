@@ -30,6 +30,11 @@
       flake = false;
     };
 
+    "plugins-hardtime-nvim" = {
+      url = "github:m4xshen/hardtime.nvim";
+      flake = false;
+    };
+
     # see :help nixCats.flake.inputs
     # If you want your plugin to be loaded by the standard overlay,
     # i.e. if it wasnt on nixpkgs, but doesnt have an extra build step.
@@ -194,6 +199,7 @@
               # NOTE: Mine plugins
               (pkgs.neovimPlugins.log-highlight-nvim.overrideAttrs { pname = "log-highlight.nvim"; })
               (pkgs.neovimPlugins.nix-store-nvim.overrideAttrs { pname = "nix-store.nvim"; })
+              (pkgs.neovimPlugins.hardtime-nvim.overrideAttrs { pname = "hardtime.nvim"; })
               project-nvim
               fidget-nvim
               dial-nvim
