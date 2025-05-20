@@ -37,6 +37,7 @@ require('nixCatsUtils.lazyCat').setup(nixCats.pawsible { 'allPlugins', 'start', 
   { import = 'lazyvim.plugins.extras.dap.core' },
   { import = 'lazyvim.plugins.extras.editor.dial' },
   { import = 'lazyvim.plugins.extras.editor.inc-rename' },
+  { import = 'lazyvim.plugins.extras.editor.snacks_picker' },
 
   require('nixCatsUtils').lazyAdd({}, { import = 'lazyvim.plugins.extras.lang.nix' }),
 
@@ -44,6 +45,7 @@ require('nixCatsUtils.lazyCat').setup(nixCats.pawsible { 'allPlugins', 'start', 
   -- precompiled binaries do not agree with nixos, and we can just make nix install this stuff for us.
   {
     'williamboman/mason-lspconfig.nvim',
+    version = '^1.0.0',
     enabled = require('nixCatsUtils').lazyAdd(true, false),
     config = function()
       require('mason').setup {
@@ -54,7 +56,7 @@ require('nixCatsUtils.lazyCat').setup(nixCats.pawsible { 'allPlugins', 'start', 
       }
     end,
   },
-  { 'williamboman/mason.nvim', enabled = require('nixCatsUtils').lazyAdd(true, false) },
+  { 'williamboman/mason.nvim', version = '^1.0.0', enabled = require('nixCatsUtils').lazyAdd(true, false) },
   {
     'nvim-treesitter/nvim-treesitter',
     build = require('nixCatsUtils').lazyAdd ':TSUpdate',
@@ -100,7 +102,6 @@ require('nixCatsUtils.lazyCat').setup(nixCats.pawsible { 'allPlugins', 'start', 
 }, lazyOptions)
 
 vim.g.snacks_animate = false
-vim.g.lazyvim_picker = 'snacks'
 vim.opt.cmdheight = 0
 
 -- NOTE:  Use zig compiler for treesitter
