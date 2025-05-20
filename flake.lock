@@ -95,6 +95,22 @@
         "type": "github"
       }
     },
+    "plugins-venv-selector-nvim": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1732397488,
+        "narHash": "sha256-L4L14yq5Ix3w5ty/CImkQXx/CBxwH7jsQhU+dWKndtQ=",
+        "owner": "linux-cultist",
+        "repo": "venv-selector.nvim",
+        "rev": "f212a424fb29949cb5e683928bdd4038bbe0062d",
+        "type": "github"
+      },
+      "original": {
+        "owner": "linux-cultist",
+        "repo": "venv-selector.nvim",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "nixCats": "nixCats",
@@ -102,7 +118,8 @@
         "plugins-log-highlight-nvim": "plugins-log-highlight-nvim",
         "plugins-nix-store-nvim": "plugins-nix-store-nvim",
         "plugins-roslyn-nvim": "plugins-roslyn-nvim",
-        "plugins-rzls-nvim": "plugins-rzls-nvim"
+        "plugins-rzls-nvim": "plugins-rzls-nvim",
+        "plugins-venv-selector-nvim": "plugins-venv-selector-nvim"
       }
     }
   },

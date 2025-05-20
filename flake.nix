@@ -25,6 +25,11 @@
       flake = false;
     };
 
+    "plugins-venv-selector-nvim" = {
+      url = "github:linux-cultist/venv-selector.nvim";
+      flake = false;
+    };
+
     # see :help nixCats.flake.inputs
     # If you want your plugin to be loaded by the standard overlay,
     # i.e. if it wasnt on nixpkgs, but doesnt have an extra build step.
@@ -118,6 +123,7 @@
               '')
               ripgrep
               fd
+              jq
               stdenv.cc.cc
               lua-language-server
               nil # I would go for nixd but lazy chooses this one idk
@@ -196,10 +202,6 @@
               render-markdown-nvim
               neorg
 
-              # dotnet
-              (pkgs.neovimPlugins.roslyn-nvim.overrideAttrs { pname = "roslyn.nvim"; })
-              (pkgs.neovimPlugins.rzls-nvim.overrideAttrs { pname = "rzls.nvim"; })
-
               #nvim-cmp switch to blink once neorg ls works
               nvim-cmp
               cmp-buffer
@@ -207,18 +209,26 @@
               cmp-path
               nvim-snippets
 
-              #sql
-              vim-dadbod
-              vim-dadbod-ui
-              vim-dadbod-completion
-
               # Dap
               nvim-dap
               mason-nvim-dap-nvim
               nvim-dap-ui
               nvim-dap-virtual-text
               nvim-nio
+
+              #python
+              (pkgs.neovimPlugins.venv-selector-nvim.overrideAttrs { pname = "venv-selector.nvim"; })
               nvim-dap-python
+
+              #dotnet
+              (pkgs.neovimPlugins.roslyn-nvim.overrideAttrs { pname = "roslyn.nvim"; })
+              (pkgs.neovimPlugins.rzls-nvim.overrideAttrs { pname = "rzls.nvim"; })
+              easy-dotnet-nvim
+
+              #sql
+              vim-dadbod
+              vim-dadbod-ui
+              vim-dadbod-completion
 
               # sometimes you have to fix some names
               # you could do this within the lazy spec instead if you wanted
