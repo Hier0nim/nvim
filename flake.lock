@@ -31,6 +31,22 @@
         "type": "github"
       }
     },
+    "plugins-hardtime-nvim": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1747827934,
+        "narHash": "sha256-hR8oI1bBD7IG/6s39iAS7Wb+6uBVkO9qMXPE+IPvgtE=",
+        "owner": "m4xshen",
+        "repo": "hardtime.nvim",
+        "rev": "b44e11d7a176f184db8b9666a1b41d5890aa5a5b",
+        "type": "github"
+      },
+      "original": {
+        "owner": "m4xshen",
+        "repo": "hardtime.nvim",
+        "type": "github"
+      }
+    },
     "plugins-log-highlight-nvim": {
       "flake": false,
       "locked": {
@@ -115,6 +131,7 @@
       "inputs": {
         "nixCats": "nixCats",
         "nixpkgs": "nixpkgs",
+        "plugins-hardtime-nvim": "plugins-hardtime-nvim",
         "plugins-log-highlight-nvim": "plugins-log-highlight-nvim",
         "plugins-nix-store-nvim": "plugins-nix-store-nvim",
         "plugins-roslyn-nvim": "plugins-roslyn-nvim",

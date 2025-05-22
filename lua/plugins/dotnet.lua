@@ -1,3 +1,12 @@
+local utils = require 'nixCatsUtils'
+local mason_registry = require 'mason-registry'
+
+local enabled = (not utils.isNixCats and mason_registry.get_package('roslyn'):is_installed()) or utils.enableForCategory('dotnet', false)
+
+if not enabled then
+  return {}
+end
+
 return {
   {
     'seblyng/roslyn.nvim',
@@ -14,7 +23,6 @@ return {
       },
     },
     opts = function(_, opts)
-      local utils = require 'nixCatsUtils'
       local cmd = {}
 
       if utils.isNixCats then
@@ -32,9 +40,6 @@ return {
           vim.fs.joinpath(rzls, 'RazorExtension', 'Microsoft.VisualStudioCode.RazorExtension.dll'),
         })
       else
-        -- Non-nix: use Mason registry
-        local mason_registry = require 'mason-registry'
-
         if mason_registry.get_package('roslyn'):is_installed() then
           vim.list_extend(cmd, {
             'roslyn',

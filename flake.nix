@@ -144,7 +144,10 @@
               nushell
               marksman
 
-              # dotnet
+            ];
+
+            # .NET specific runtime dependencies
+            dotnet = [
               dotnetCorePackages.dotnet_10.sdk
               roslyn-ls
               rzls
@@ -226,11 +229,6 @@
               (pkgs.neovimPlugins.venv-selector-nvim.overrideAttrs { pname = "venv-selector.nvim"; })
               nvim-dap-python
 
-              #dotnet
-              (pkgs.neovimPlugins.roslyn-nvim.overrideAttrs { pname = "roslyn.nvim"; })
-              (pkgs.neovimPlugins.rzls-nvim.overrideAttrs { pname = "rzls.nvim"; })
-              easy-dotnet-nvim
-
               #sql
               vim-dadbod
               vim-dadbod-ui
@@ -249,6 +247,13 @@
               (mini-indentscope.overrideAttrs { name = "mini.indentscope"; })
               (mini-pairs.overrideAttrs { name = "mini.pairs"; })
               (mini-surround.overrideAttrs { name = "echasnovski/mini.surround"; })
+            ];
+
+            # .NET specific nvim plugins
+            dotnet = [
+              (pkgs.neovimPlugins.roslyn-nvim.overrideAttrs { pname = "roslyn.nvim"; })
+              (pkgs.neovimPlugins.rzls-nvim.overrideAttrs { pname = "rzls.nvim"; })
+              easy-dotnet-nvim
             ];
           };
 
@@ -330,6 +335,21 @@
             };
             extra = { };
           };
+
+        # nvim package specialized for .NET development
+        dotnet-nvim =
+          { pkgs, mkNvimPlugin, ... }:
+          {
+            settings = {
+              wrapRc = true;
+            };
+            categories = {
+              general = true;
+              dotnet = true;
+            };
+            extra = { };
+          };
+
         # an extra test package with normal lua reload for fast edits
         # nix doesnt provide the config in this package, allowing you free reign to edit it.
         # then you can swap back to the normal pure package when done.
