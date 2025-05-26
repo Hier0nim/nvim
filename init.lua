@@ -26,18 +26,28 @@ require('nixCatsUtils.lazyCat').setup(nixCats.pawsible { 'allPlugins', 'start', 
   -- Extras
   { import = 'lazyvim.plugins.extras.lang.json' },
   { import = 'lazyvim.plugins.extras.lang.toml' },
-  { import = 'lazyvim.plugins.extras.lang.python' },
   { import = 'lazyvim.plugins.extras.lang.markdown' },
   { import = 'lazyvim.plugins.extras.lang.nushell' },
-  { import = 'lazyvim.plugins.extras.lang.sql' },
   { import = 'lazyvim.plugins.extras.coding.mini-surround' },
   { import = 'lazyvim.plugins.extras.coding.nvim-cmp' },
   { import = 'lazyvim.plugins.extras.editor.neo-tree' },
   { import = 'lazyvim.plugins.extras.util.project' },
-  { import = 'lazyvim.plugins.extras.dap.core' },
   { import = 'lazyvim.plugins.extras.editor.dial' },
   { import = 'lazyvim.plugins.extras.editor.inc-rename' },
   { import = 'lazyvim.plugins.extras.editor.snacks_picker' },
+
+  {
+    import = 'lazyvim.plugins.extras.dap.core',
+    enabled = require('nixCatsUtils').enableForCategory('debug', false),
+  },
+  {
+    import = 'lazyvim.plugins.extras.lang.python',
+    enabled = require('nixCatsUtils').enableForCategory('python', false),
+  },
+  {
+    import = 'lazyvim.plugins.extras.lang.sql',
+    enabled = require('nixCatsUtils').enableForCategory('sql', false),
+  },
 
   require('nixCatsUtils').lazyAdd({}, { import = 'lazyvim.plugins.extras.lang.nix' }),
 
@@ -57,6 +67,7 @@ require('nixCatsUtils.lazyCat').setup(nixCats.pawsible { 'allPlugins', 'start', 
     end,
   },
   { 'williamboman/mason.nvim', version = '^1.0.0', enabled = require('nixCatsUtils').lazyAdd(true, false) },
+  { 'jay-babu/mason-nvim-dap.nvim', enabled = false },
   {
     'nvim-treesitter/nvim-treesitter',
     build = require('nixCatsUtils').lazyAdd ':TSUpdate',

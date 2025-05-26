@@ -135,15 +135,9 @@
               nixfmt-rfc-style
               stylua
               vscode-langservers-extracted
-              python3
-              pyright
-              ruff
-              sqlcmd
-              sqlfluff
               nodejs
               nushell
               marksman
-
             ];
 
             # .NET specific runtime dependencies
@@ -151,6 +145,21 @@
               dotnetCorePackages.dotnet_10.sdk
               roslyn-ls
               rzls
+            ];
+
+            # Python specific runtime dependencies
+            python = [
+              python3
+              pyright
+              ruff
+              imagemagick
+              quarto
+            ];
+
+            # SQL specific runtime dependencies
+            sql = [
+              sqlcmd
+              sqlfluff
             ];
           };
 
@@ -218,22 +227,6 @@
               cmp-path
               nvim-snippets
 
-              # Dap
-              nvim-dap
-              mason-nvim-dap-nvim
-              nvim-dap-ui
-              nvim-dap-virtual-text
-              nvim-nio
-
-              #python
-              (pkgs.neovimPlugins.venv-selector-nvim.overrideAttrs { pname = "venv-selector.nvim"; })
-              nvim-dap-python
-
-              #sql
-              vim-dadbod
-              vim-dadbod-ui
-              vim-dadbod-completion
-
               # sometimes you have to fix some names
               # you could do this within the lazy spec instead if you wanted
               # and get the new names from `:NixCats pawsible` debug command
@@ -249,11 +242,40 @@
               (mini-surround.overrideAttrs { name = "echasnovski/mini.surround"; })
             ];
 
+            # Debugging support
+            debug = [
+              nvim-dap
+              mason-nvim-dap-nvim
+              nvim-dap-ui
+              nvim-dap-virtual-text
+              nvim-nio
+            ];
+
             # .NET specific nvim plugins
             dotnet = [
               (pkgs.neovimPlugins.roslyn-nvim.overrideAttrs { pname = "roslyn.nvim"; })
               (pkgs.neovimPlugins.rzls-nvim.overrideAttrs { pname = "rzls.nvim"; })
               easy-dotnet-nvim
+            ];
+
+            # python specific nvim plugins
+            python = [
+              (pkgs.neovimPlugins.venv-selector-nvim.overrideAttrs { pname = "venv-selector.nvim"; })
+              nvim-dap-python
+              molten-nvim
+              image-nvim
+              quarto-nvim
+              otter-nvim
+              jupytext-nvim
+              img-clip-nvim
+              nabla-nvim
+            ];
+
+            # sql nvim plugins
+            sql = [
+              vim-dadbod
+              vim-dadbod-ui
+              vim-dadbod-completion
             ];
           };
 
@@ -299,10 +321,27 @@
           # or run from nvim terminal via :!<packagename>-python3
           python3.libraries = {
             test = [ (_: [ ]) ];
+            python = [
+              (
+                pkg: with pkg; [
+                  pynvim
+                  jupyter-client
+                  cairosvg # for image rendering
+                  pnglatex # for image rendering
+                  plotly # for image rendering
+                  pyperclip
+                  nbformat
+                  jupytext
+                  ipykernel
+                  ipython
+                ]
+              )
+            ];
           };
           # populates $LUA_PATH and $LUA_CPATH
           extraLuaPackages = {
             test = [ (_: [ ]) ];
+            python = [ (pkg: with pkg; [ magick ]) ];
           };
         };
 
@@ -345,7 +384,25 @@
             };
             categories = {
               general = true;
+              debug = true;
               dotnet = true;
+              sql = true;
+            };
+            extra = { };
+          };
+
+        # nvim package specialized for Python development
+        python-nvim =
+          { pkgs, mkNvimPlugin, ... }:
+          {
+            settings = {
+              wrapRc = true;
+              hosts.python3.enable = true;
+            };
+            categories = {
+              general = true;
+              debug = true;
+              python = true;
             };
             extra = { };
           };
