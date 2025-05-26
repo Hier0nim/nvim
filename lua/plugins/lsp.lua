@@ -4,7 +4,6 @@ return {
     servers = {
       html = {},
       cssls = {},
-      rzls = {},
     },
   },
 }
