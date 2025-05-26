@@ -1,8 +1,18 @@
 local utils = require 'nixCatsUtils'
-local mason_registry = require 'mason-registry'
+local has_mason, mreg = pcall(require, 'mason-registry')
 
-local enabled = (not utils.isNixCats and mason_registry.get_package('roslyn'):is_installed()) or utils.enableForCategory('dotnet', false)
+-- safe check: true only if mason-registry loaded & pkg is_installed
+local function has_pkg(name)
+  if not has_mason then
+    return false
+  end
+  local ok, pkg = pcall(mreg.get_package, name)
+  return ok and pkg and pkg:is_installed()
+end
 
+-- honour the nixCats category  flag (default=false for non-nix)
+-- if still false, but roslyn is installed under Mason, enable it
+local enabled = utils.enableForCategory('dotnet', false) or has_pkg 'roslyn'
 if not enabled then
   return {}
 end
