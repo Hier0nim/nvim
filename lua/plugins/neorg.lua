@@ -3,6 +3,12 @@ return {
     'nvim-neorg/neorg',
     lazy = false,
     version = '*',
+    dependencies = {
+      'benlubas/neorg-interim-ls',
+      'nvim-neorg/lua-utils.nvim',
+      'pysan3/pathlib.nvim',
+      'nvim-neotest/nvim-nio',
+    },
     config = function()
       require('neorg').setup {
         load = {
@@ -26,17 +32,18 @@ return {
           },
           ['core.export'] = {},
           ['core.export.markdown'] = {},
-          ['core.completion'] = { config = { engine = 'nvim-cmp' } },
-          ['core.integrations.nvim-cmp'] = {},
-          -- ['external.interim-ls'] = {
-          --   config = {
-          --     completion_provider = {
-          --       enable = true,
-          --       documentation = true,
-          --       categories = false,
-          --     },
-          --   },
-          -- },
+          ['core.completion'] = {
+            config = { engine = { module_name = 'external.lsp-completion' } },
+          },
+          ['external.interim-ls'] = {
+            config = {
+              completion_provider = {
+                enable = true,
+                documentation = true,
+                categories = false,
+              },
+            },
+          },
         },
       }
 
