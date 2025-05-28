@@ -3,6 +3,61 @@ if not utils.enableForCategory('python', false) then
   return {}
 end
 
+-- auto-import outputs and start a kernel that matches notebook metadata
+local function init_molten_buf(e)
+  vim.schedule(function()
+    local kspec = (vim.fn.json_decode(io.open(e.file, 'r'):read 'a').metadata or {}).kernelspec or {}
+    local wanted = kspec.name
+    local kernels = vim.fn.MoltenAvailableKernels()
+    if not vim.tbl_contains(kernels, wanted) then
+      wanted = nil -- fall back to active venv
+      local venv = os.getenv 'VIRTUAL_ENV' or os.getenv 'CONDA_PREFIX'
+      if venv then
+        wanted = venv:match '.*/(.*)'
+      end
+    end
+    if wanted and vim.tbl_contains(kernels, wanted) then
+      vim.cmd(('MoltenInit %s'):format(wanted))
+    end
+    vim.cmd 'MoltenImportOutput'
+  end)
+end
+
+vim.api.nvim_create_autocmd({ 'BufAdd', 'BufEnter' }, {
+  pattern = '*.ipynb',
+  callback = init_molten_buf,
+})
+
+-- export outputs back to the notebook on write
+vim.api.nvim_create_autocmd('BufWritePost', {
+  pattern = '*.ipynb',
+  callback = function()
+    if require('molten.status').initialized() == 'Molten' then
+      vim.cmd 'MoltenExportOutput!'
+    end
+  end,
+})
+
+-- quiet inline output for plain .py buffers, restore for md/qmd/ipynb
+vim.api.nvim_create_autocmd('BufEnter', {
+  pattern = '*.py',
+  callback = function()
+    if require('molten.status').initialized() == 'Molten' then
+      vim.fn.MoltenUpdateOption('virt_text_output', false)
+      vim.fn.MoltenUpdateOption('virt_lines_off_by_1', false)
+    end
+  end,
+})
+vim.api.nvim_create_autocmd('BufEnter', {
+  pattern = { '*.md', '*.qmd', '*.ipynb' },
+  callback = function()
+    if require('molten.status').initialized() == 'Molten' then
+      vim.fn.MoltenUpdateOption('virt_text_output', true)
+      vim.fn.MoltenUpdateOption('virt_lines_off_by_1', true)
+    end
+  end,
+})
+
 return {
   {
     'quarto-dev/quarto-nvim',
@@ -26,14 +81,12 @@ return {
   { -- directly open ipynb files as quarto docuements
     -- and convert back behind the scenes
     'GCBallesteros/jupytext.nvim',
+    config = true,
     opts = {
-      custom_language_formatting = {
-        python = {
-          extension = 'qmd',
-          style = 'quarto',
-          force_ft = 'quarto',
-        },
-      },
+      style = 'markdown',
+      output_extension = 'md',
+      force_ft = 'markdown',
+      lazy = false,
     },
   },
 
@@ -104,5 +157,18 @@ return {
       vim.keymap.set('n', '<localleader>mh', ':MoltenHideOutput<CR>', { silent = true, desc = 'hide output' })
       vim.keymap.set('n', '<localleader>ms', ':noautocmd MoltenEnterOutput<CR>', { silent = true, desc = 'show/enter output' })
     end,
+  },
+  {
+    -- see the image.nvim readme for more information about configuring this plugin
+    '3rd/image.nvim',
+    opts = {
+      backend = 'kitty', -- whatever backend you would like to use
+      max_width = 100,
+      max_height = 12,
+      max_height_window_percentage = math.huge,
+      max_width_window_percentage = math.huge,
+      window_overlap_clear_enabled = true, -- toggles images when windows are overlapped
+      window_overlap_clear_ft_ignore = { 'cmp_menu', 'cmp_docs', '' },
+    },
   },
 }
