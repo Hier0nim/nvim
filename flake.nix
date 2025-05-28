@@ -4,6 +4,7 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     nixCats.url = "github:BirdeeHub/nixCats-nvim";
+    neorg-overlay.url = "github:nvim-neorg/nixpkgs-neorg-overlay";
 
     "plugins-log-highlight-nvim" = {
       url = "github:fei6409/log-highlight.nvim";
@@ -32,6 +33,11 @@
 
     "plugins-hardtime-nvim" = {
       url = "github:m4xshen/hardtime.nvim";
+      flake = false;
+    };
+
+    "plugins-neorg-interim-ls" = {
+      url = "github:benlubas/neorg-interim-ls";
       flake = false;
     };
 
@@ -65,6 +71,7 @@
       # as that will have your system values
       extra_pkg_config = {
         allowUnfree = true;
+        overlays = [ inputs.neorg-overlay.overlays.default ];
       };
       # management of the system variable is one of the harder parts of using flakes.
 
@@ -90,6 +97,7 @@
           # (utils.fixSystemizedOverlay inputs.codeium.overlays
           #   (system: inputs.codeium.overlays.${system}.default)
           # )
+          inputs.neorg-overlay.overlays.default
         ];
 
       # see :help nixCats.flake.outputs.categories
@@ -191,6 +199,8 @@
               nvim-treesitter-context
               nvim-treesitter-textobjects
               nvim-treesitter.withAllGrammars
+              nvim-treesitter.builtGrammars.tree-sitter-norg
+              nvim-treesitter.builtGrammars.tree-sitter-norg-meta
               nvim-ts-autotag
               nvim-ts-context-commentstring
               nvim-web-devicons
@@ -212,6 +222,7 @@
               (pkgs.neovimPlugins.log-highlight-nvim.overrideAttrs { pname = "log-highlight.nvim"; })
               (pkgs.neovimPlugins.nix-store-nvim.overrideAttrs { pname = "nix-store.nvim"; })
               (pkgs.neovimPlugins.hardtime-nvim.overrideAttrs { pname = "hardtime.nvim"; })
+              (pkgs.neovimPlugins.neorg-interim-ls.overrideAttrs { pname = "neorg-interim-ls"; })
               project-nvim
               fidget-nvim
               dial-nvim
@@ -220,12 +231,12 @@
               render-markdown-nvim
               neorg
 
-              #nvim-cmp switch to blink once neorg ls works
-              nvim-cmp
-              cmp-buffer
-              cmp-nvim-lsp
-              cmp-path
-              nvim-snippets
+              ##nvim-cmp switch to blink once neorg ls works
+              #nvim-cmp
+              #cmp-buffer
+              #cmp-nvim-lsp
+              #cmp-path
+              #nvim-snippets
 
               # sometimes you have to fix some names
               # you could do this within the lazy spec instead if you wanted
