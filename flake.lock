@@ -271,6 +271,23 @@
         "type": "github"
       }
     },
+    "plugins-jupytext-nvim": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1747087406,
+        "narHash": "sha256-W6fkL1w2dYSjpAYOtBTlYjd2CMYPB596NQzBylIVHrE=",
+        "owner": "bkp5190",
+        "repo": "jupytext.nvim",
+        "rev": "695295069a3aac0cf9a1b768589216c5b837b6f1",
+        "type": "github"
+      },
+      "original": {
+        "owner": "bkp5190",
+        "ref": "deprecated-healthchecks",
+        "repo": "jupytext.nvim",
+        "type": "github"
+      }
+    },
     "plugins-log-highlight-nvim": {
       "flake": false,
       "locked": {
@@ -373,6 +390,7 @@
         "nixCats": "nixCats",
         "nixpkgs": "nixpkgs_4",
         "plugins-hardtime-nvim": "plugins-hardtime-nvim",
+        "plugins-jupytext-nvim": "plugins-jupytext-nvim",
         "plugins-log-highlight-nvim": "plugins-log-highlight-nvim",
         "plugins-neorg-interim-ls": "plugins-neorg-interim-ls",
         "plugins-nix-store-nvim": "plugins-nix-store-nvim",

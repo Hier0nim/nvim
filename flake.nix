@@ -41,6 +41,11 @@
       flake = false;
     };
 
+    "plugins-jupytext-nvim" = {
+      url = "github:bkp5190/jupytext.nvim/deprecated-healthchecks";
+      flake = false;
+    };
+
     # see :help nixCats.flake.inputs
     # If you want your plugin to be loaded by the standard overlay,
     # i.e. if it wasnt on nixpkgs, but doesnt have an extra build step.
@@ -162,6 +167,7 @@
               ruff
               imagemagick
               quarto
+              python3Packages.jupytext
             ];
 
             # SQL specific runtime dependencies
@@ -277,7 +283,7 @@
               image-nvim
               quarto-nvim
               otter-nvim
-              jupytext-nvim
+              (pkgs.neovimPlugins.jupytext-nvim.overrideAttrs { pname = "jupytext.nvim"; })
               img-clip-nvim
               nabla-nvim
             ];
