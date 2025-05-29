@@ -76,7 +76,10 @@
       # as that will have your system values
       extra_pkg_config = {
         allowUnfree = true;
-        overlays = [ inputs.neorg-overlay.overlays.default ];
+        overlays = [
+          compatTreeSitter
+          inputs.neorg-overlay.overlays.default
+        ];
       };
       # management of the system variable is one of the harder parts of using flakes.
 
@@ -89,6 +92,7 @@
 
       dependencyOverlays = # (import ./overlays inputs) ++
         [
+          compatTreeSitter
           # This overlay grabs all the inputs named in the format
           # `plugins-<pluginName>`
           # Once we add this overlay to our nixpkgs, we are able to
@@ -103,22 +107,22 @@
           #   (system: inputs.codeium.overlays.${system}.default)
           # )
 
-          # Compatibility overlay ──────────────────────────────────────────────
-          (final: prev: {
-            tree-sitter-norg = prev.tree-sitter.buildGrammar {
-              language = "norg";
-              inherit (prev.tree-sitter) version;
-              src = inputs.norg; # note src, not source
-            };
-
-            tree-sitter-norg-meta = prev.tree-sitter.buildGrammar {
-              language = "norg-meta";
-              inherit (prev.tree-sitter) version;
-              src = inputs.norg-meta;
-            };
-          })
           inputs.neorg-overlay.overlays.default
         ];
+
+      compatTreeSitter = final: prev: {
+        tree-sitter = prev.tree-sitter // {
+          # Wrap buildGrammar so it accepts the old `source` key
+          buildGrammar =
+            args:
+            prev.tree-sitter.buildGrammar (
+              if args ? source && !(args ? src) then
+                (builtins.removeAttrs args [ "source" ]) // { src = args.source; }
+              else
+                args
+            );
+        };
+      };
 
       # see :help nixCats.flake.outputs.categories
       # and
