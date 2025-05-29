@@ -76,10 +76,6 @@
       # as that will have your system values
       extra_pkg_config = {
         allowUnfree = true;
-        overlays = [
-          compatTreeSitter
-          inputs.neorg-overlay.overlays.default
-        ];
       };
       # management of the system variable is one of the harder parts of using flakes.
 
@@ -92,7 +88,6 @@
 
       dependencyOverlays = # (import ./overlays inputs) ++
         [
-          compatTreeSitter
           # This overlay grabs all the inputs named in the format
           # `plugins-<pluginName>`
           # Once we add this overlay to our nixpkgs, we are able to
@@ -106,23 +101,8 @@
           # (utils.fixSystemizedOverlay inputs.codeium.overlays
           #   (system: inputs.codeium.overlays.${system}.default)
           # )
-
           inputs.neorg-overlay.overlays.default
         ];
-
-      compatTreeSitter = final: prev: {
-        tree-sitter = prev.tree-sitter // {
-          # Wrap buildGrammar so it accepts the old `source` key
-          buildGrammar =
-            args:
-            prev.tree-sitter.buildGrammar (
-              if args ? source && !(args ? src) then
-                (builtins.removeAttrs args [ "source" ]) // { src = args.source; }
-              else
-                args
-            );
-        };
-      };
 
       # see :help nixCats.flake.outputs.categories
       # and
@@ -224,8 +204,6 @@
               nvim-treesitter-context
               nvim-treesitter-textobjects
               nvim-treesitter.withAllGrammars
-              nvim-treesitter.builtGrammars.tree-sitter-norg
-              nvim-treesitter.builtGrammars.tree-sitter-norg-meta
               nvim-ts-autotag
               nvim-ts-context-commentstring
               nvim-web-devicons
