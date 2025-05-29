@@ -102,6 +102,21 @@
           # (utils.fixSystemizedOverlay inputs.codeium.overlays
           #   (system: inputs.codeium.overlays.${system}.default)
           # )
+
+          # Compatibility overlay ──────────────────────────────────────────────
+          (final: prev: {
+            tree-sitter-norg = prev.tree-sitter.buildGrammar {
+              language = "norg";
+              inherit (prev.tree-sitter) version;
+              src = inputs.norg; # note src, not source
+            };
+
+            tree-sitter-norg-meta = prev.tree-sitter.buildGrammar {
+              language = "norg-meta";
+              inherit (prev.tree-sitter) version;
+              src = inputs.norg-meta;
+            };
+          })
           inputs.neorg-overlay.overlays.default
         ];
 
