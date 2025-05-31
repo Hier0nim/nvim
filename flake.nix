@@ -390,7 +390,7 @@
           };
 
         # nvim package specialized for .NET development
-        dotnet-nvim =
+        nvim-dotnet =
           { pkgs, mkNvimPlugin, ... }:
           {
             settings = {
@@ -406,7 +406,7 @@
           };
 
         # nvim package specialized for Python development
-        python-nvim =
+        nvim-python =
           { pkgs, mkNvimPlugin, ... }:
           {
             settings = {
