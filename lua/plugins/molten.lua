@@ -3,34 +3,50 @@ if not utils.enableForCategory('python', false) then
   return {}
 end
 
--- auto-import outputs and start a kernel that matches notebook metadata
-local function init_molten_buf(e)
+-- automatically import output chunks from a jupyter notebook
+-- tries to find a kernel that matches the kernel in the jupyter notebook
+-- falls back to a kernel that matches the name of the active venv (if any)
+local imb = function(e) -- init molten buffer
   vim.schedule(function()
-    local kspec = (vim.fn.json_decode(io.open(e.file, 'r'):read 'a').metadata or {}).kernelspec or {}
-    local wanted = kspec.name
     local kernels = vim.fn.MoltenAvailableKernels()
-    if not vim.tbl_contains(kernels, wanted) then
-      wanted = nil -- fall back to active venv
+    local try_kernel_name = function()
+      local metadata = vim.json.decode(io.open(e.file, 'r'):read 'a')['metadata']
+      return metadata.kernelspec.name
+    end
+    local ok, kernel_name = pcall(try_kernel_name)
+    if not ok or not vim.tbl_contains(kernels, kernel_name) then
+      kernel_name = nil
       local venv = os.getenv 'VIRTUAL_ENV' or os.getenv 'CONDA_PREFIX'
-      if venv then
-        wanted = venv:match '.*/(.*)'
+      if venv ~= nil then
+        kernel_name = string.match(venv, '/.+/(.+)')
       end
     end
-    if wanted and vim.tbl_contains(kernels, wanted) then
-      vim.cmd(('MoltenInit %s'):format(wanted))
+    if kernel_name ~= nil and vim.tbl_contains(kernels, kernel_name) then
+      vim.cmd(('MoltenInit %s'):format(kernel_name))
     end
     vim.cmd 'MoltenImportOutput'
   end)
 end
 
-vim.api.nvim_create_autocmd({ 'BufAdd', 'BufEnter' }, {
-  pattern = '*.ipynb',
-  callback = init_molten_buf,
+-- automatically import output chunks from a jupyter notebook
+vim.api.nvim_create_autocmd('BufAdd', {
+  pattern = { '*.ipynb' },
+  callback = imb,
 })
 
--- export outputs back to the notebook on write
+-- we have to do this as well so that we catch files opened like nvim ./hi.ipynb
+vim.api.nvim_create_autocmd('BufEnter', {
+  pattern = { '*.ipynb' },
+  callback = function(e)
+    if vim.api.nvim_get_vvar 'vim_did_enter' ~= 1 then
+      imb(e)
+    end
+  end,
+})
+
+-- automatically export output chunks to a jupyter notebook on write
 vim.api.nvim_create_autocmd('BufWritePost', {
-  pattern = '*.ipynb',
+  pattern = { '*.ipynb' },
   callback = function()
     if require('molten.status').initialized() == 'Molten' then
       vim.cmd 'MoltenExportOutput!'
@@ -38,22 +54,36 @@ vim.api.nvim_create_autocmd('BufWritePost', {
   end,
 })
 
--- quiet inline output for plain .py buffers, restore for md/qmd/ipynb
+-- change the configuration when editing a python file
 vim.api.nvim_create_autocmd('BufEnter', {
   pattern = '*.py',
-  callback = function()
-    if require('molten.status').initialized() == 'Molten' then
-      vim.fn.MoltenUpdateOption('virt_text_output', false)
+  callback = function(e)
+    if string.match(e.file, '.otter.') then
+      return
+    end
+    if require('molten.status').initialized() == 'Molten' then -- this is kinda a hack...
       vim.fn.MoltenUpdateOption('virt_lines_off_by_1', false)
+      vim.fn.MoltenUpdateOption('virt_text_output', false)
+    else
+      vim.g.molten_virt_lines_off_by_1 = false
+      vim.g.molten_virt_text_output = false
     end
   end,
 })
+
+-- Undo those config changes when we go back to a markdown or quarto file
 vim.api.nvim_create_autocmd('BufEnter', {
-  pattern = { '*.md', '*.qmd', '*.ipynb' },
-  callback = function()
+  pattern = { '*.qmd', '*.md', '*.ipynb' },
+  callback = function(e)
+    if string.match(e.file, '.otter.') then
+      return
+    end
     if require('molten.status').initialized() == 'Molten' then
-      vim.fn.MoltenUpdateOption('virt_text_output', true)
       vim.fn.MoltenUpdateOption('virt_lines_off_by_1', true)
+      vim.fn.MoltenUpdateOption('virt_text_output', true)
+    else
+      vim.g.molten_virt_lines_off_by_1 = true
+      vim.g.molten_virt_text_output = true
     end
   end,
 })
