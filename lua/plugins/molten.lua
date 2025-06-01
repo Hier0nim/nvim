@@ -3,6 +3,11 @@ if not utils.enableForCategory('python', false) then
   return {}
 end
 
+local venv_python = os.getenv 'VIRTUAL_ENV' and (os.getenv 'VIRTUAL_ENV' .. '/bin/python')
+if venv_python and vim.fn.filereadable(venv_python) == 1 then
+  vim.g.python3_host_prog = venv_python
+end
+
 -- automatically import output chunks from a jupyter notebook
 -- tries to find a kernel that matches the kernel in the jupyter notebook
 -- falls back to a kernel that matches the name of the active venv (if any)
