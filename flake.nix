@@ -220,6 +220,7 @@
               SchemaStore-nvim
               grug-far-nvim
               ts-comments-nvim
+              kanagawa-nvim
 
               # NOTE: Mine plugins
               (pkgs.neovimPlugins.log-highlight-nvim.overrideAttrs { pname = "log-highlight.nvim"; })
