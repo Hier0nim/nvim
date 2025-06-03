@@ -2,7 +2,10 @@ return {
   {
     'LazyVim/LazyVim',
     opts = {
-      colorscheme = 'catppuccin-mocha',
+      colorscheme = 'kanagawa',
     },
+  },
+  {
+    'rebelot/kanagawa.nvim',
   },
 }
