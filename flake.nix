@@ -3,6 +3,7 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
+    nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-25.05";
     nixCats.url = "github:BirdeeHub/nixCats-nvim";
     neorg-overlay.url = "github:nvim-neorg/nixpkgs-neorg-overlay";
 
@@ -157,6 +158,7 @@
               dotnetCorePackages.dotnet_10.sdk
               roslyn-ls
               rzls
+              # (inputs.nixpkgs-stable.legacyPackages.${pkgs.system}.roslyn-ls)
             ];
 
             # Python specific runtime dependencies
@@ -221,6 +223,7 @@
               grug-far-nvim
               ts-comments-nvim
               kanagawa-nvim
+              oxocarbon-nvim
 
               # NOTE: Mine plugins
               (pkgs.neovimPlugins.log-highlight-nvim.overrideAttrs { pname = "log-highlight.nvim"; })
@@ -268,8 +271,11 @@
 
             # .NET specific nvim plugins
             dotnet = [
-              (pkgs.neovimPlugins.roslyn-nvim.overrideAttrs { pname = "roslyn.nvim"; })
-              (pkgs.neovimPlugins.rzls-nvim.overrideAttrs { pname = "rzls.nvim"; })
+              # (pkgs.neovimPlugins.roslyn-nvim.overrideAttrs { pname = "roslyn.nvim"; })
+              # (pkgs.neovimPlugins.rzls-nvim.overrideAttrs { pname = "rzls.nvim"; })
+
+              rzls-nvim
+              roslyn-nvim
               easy-dotnet-nvim
             ];
 
