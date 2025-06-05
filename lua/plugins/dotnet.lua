@@ -19,26 +19,24 @@ end
 
 return {
   {
+    -- 'jmederosalvarado/roslyn.nvim',
     'seblyng/roslyn.nvim',
     ft = { 'cs', 'razor' },
     dependencies = {
       {
         'tris203/rzls.nvim',
-        opts = function(_, opts)
-          opts = {
-            path = require('nixCatsUtils').lazyAdd(nil, 'rzls'),
+        config = function()
+          require('rzls').setup {
+            path = require('nixCatsUtils').lazyAdd(nil, vim.fn.get_nix_store('rzls', { force = true }) .. '/bin/rzls'),
           }
-          return opts
         end,
       },
     },
-    opts = function(_, opts)
+    config = function()
       local cmd = {}
-
       if utils.isNixCats then
         -- Nix environment
-        local rzls = vim.fn.get_nix_store 'rzls'
-
+        local rzls = vim.fn.get_nix_store('rzls', { force = true }) .. '/lib/rzls'
         vim.list_extend(cmd, {
           'Microsoft.CodeAnalysis.LanguageServer',
           '--stdio',
@@ -46,11 +44,11 @@ return {
           '--extensionLogDirectory=' .. vim.fs.dirname(vim.lsp.get_log_path()),
           '--razorSourceGenerator=' .. vim.fs.joinpath(rzls, 'Microsoft.CodeAnalysis.Razor.Compiler.dll'),
           '--razorDesignTimePath=' .. vim.fs.joinpath(rzls, 'Targets', 'Microsoft.NET.Sdk.Razor.DesignTime.targets'),
-          '--extension',
-          vim.fs.joinpath(rzls, 'RazorExtension', 'Microsoft.VisualStudioCode.RazorExtension.dll'),
+          -- '--extension',
+          -- vim.fs.joinpath(rzls, 'RazorExtension', 'Microsoft.VisualStudioCode.RazorExtension.dll'),
         })
       else
-        if mason_registry.get_package('roslyn'):is_installed() then
+        if mreg.get_package('roslyn'):is_installed() then
           vim.list_extend(cmd, {
             'roslyn',
             '--stdio',
@@ -58,7 +56,7 @@ return {
             '--extensionLogDirectory=' .. vim.fs.dirname(vim.lsp.get_log_path()),
           })
 
-          local rzls_pkg = mason_registry.get_package 'rzls'
+          local rzls_pkg = mreg.get_package 'rzls'
           if rzls_pkg:is_installed() then
             local rzls_path = vim.fn.expand '$MASON/packages/rzls/libexec'
             table.insert(cmd, '--razorSourceGenerator=' .. vim.fs.joinpath(rzls_path, 'Microsoft.CodeAnalysis.Razor.Compiler.dll'))
@@ -70,10 +68,8 @@ return {
           end
         end
       end
-      opts = {
-        config = {
-          cmd = cmd,
-        },
+      vim.lsp.config('roslyn', {
+        cmd = cmd,
         handlers = require 'rzls.roslyn_handlers',
         settings = {
           ['csharp|inlay_hints'] = {
@@ -95,8 +91,8 @@ return {
             dotnet_enable_references_code_lens = true,
           },
         },
-      }
-      return opts
+      })
+      vim.lsp.enable 'roslyn'
     end,
     init = function()
       vim.filetype.add {

@@ -5,7 +5,6 @@ return {
       colorscheme = 'kanagawa',
     },
   },
-  {
-    'rebelot/kanagawa.nvim',
-  },
+  { 'rebelot/kanagawa.nvim' },
+  { 'nyoom-engineering/oxocarbon.nvim' },
 }
