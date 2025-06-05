@@ -36,16 +36,16 @@ return {
       local cmd = {}
       if utils.isNixCats then
         -- Nix environment
-        local rzls = vim.fn.get_nix_store('rzls', { force = true }) .. '/lib/rzls'
+        local rzls = vim.fn.get_nix_store('rzls', { force = true })
         vim.list_extend(cmd, {
           'Microsoft.CodeAnalysis.LanguageServer',
           '--stdio',
           '--logLevel=Information',
           '--extensionLogDirectory=' .. vim.fs.dirname(vim.lsp.get_log_path()),
-          '--razorSourceGenerator=' .. vim.fs.joinpath(rzls, 'Microsoft.CodeAnalysis.Razor.Compiler.dll'),
-          '--razorDesignTimePath=' .. vim.fs.joinpath(rzls, 'Targets', 'Microsoft.NET.Sdk.Razor.DesignTime.targets'),
-          -- '--extension',
-          -- vim.fs.joinpath(rzls, 'RazorExtension', 'Microsoft.VisualStudioCode.RazorExtension.dll'),
+          '--razorSourceGenerator=' .. vim.fs.joinpath(rzls .. '/lib/rzls', 'Microsoft.CodeAnalysis.Razor.Compiler.dll'),
+          '--razorDesignTimePath=' .. vim.fs.joinpath(rzls .. '/lib/rzls', 'Targets', 'Microsoft.NET.Sdk.Razor.DesignTime.targets'),
+          '--extension',
+          vim.fs.joinpath(rzls, 'RazorExtension', 'Microsoft.VisualStudioCode.RazorExtension.dll'),
         })
       else
         if mreg.get_package('roslyn'):is_installed() then
