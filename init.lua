@@ -114,6 +114,7 @@ require('nixCatsUtils.lazyCat').setup(nixCats.pawsible { 'allPlugins', 'start', 
 
 vim.g.snacks_animate = false
 vim.opt.cmdheight = 0
+vim.opt.spelllang = { 'en_us', 'pl' }
 
 -- NOTE:  Use zig compiler for treesitter
 require('nvim-treesitter.install').compilers = { 'zig' }
