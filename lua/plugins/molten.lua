@@ -237,5 +237,30 @@ return {
         require('quarto').activate()
       end,
     })
+
+    vim.api.nvim_create_autocmd('DirChanged', {
+      pattern = { '*' },
+      callback = function(ctx)
+        local new_dir = ctx.file:gsub("'", "\\'")
+        if vim.fn.exists ':MoltenEvaluateArgument' ~= 2 then
+          return
+        end
+        if require('molten.status').initialized() ~= 'Molten' then
+          return
+        end
+
+        local snippets = {
+          'import os',
+          ("os.chdir('%s')"):format(new_dir),
+        }
+
+        for _, line in ipairs(snippets) do
+          local cmd = 'MoltenEvaluateArgument ' .. line
+          pcall(function()
+            vim.cmd(cmd)
+          end)
+        end
+      end,
+    })
   end,
 }
