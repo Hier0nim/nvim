@@ -320,6 +320,22 @@
         "type": "github"
       }
     },
+    "plugins-molten-nvim": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1747527165,
+        "narHash": "sha256-olmGcsywBxMlhX4A0SZhjZq5DdJwxQvBWr6QB2AIa8k=",
+        "owner": "benlubas",
+        "repo": "molten-nvim",
+        "rev": "e18ac7395d19a39a8180d7a383a07084940e9090",
+        "type": "github"
+      },
+      "original": {
+        "owner": "benlubas",
+        "repo": "molten-nvim",
+        "type": "github"
+      }
+    },
     "plugins-neorg-interim-ls": {
       "flake": false,
       "locked": {
@@ -409,6 +425,7 @@
         "plugins-hardtime-nvim": "plugins-hardtime-nvim",
         "plugins-jupytext-nvim": "plugins-jupytext-nvim",
         "plugins-log-highlight-nvim": "plugins-log-highlight-nvim",
+        "plugins-molten-nvim": "plugins-molten-nvim",
         "plugins-neorg-interim-ls": "plugins-neorg-interim-ls",
         "plugins-nix-store-nvim": "plugins-nix-store-nvim",
         "plugins-roslyn-nvim": "plugins-roslyn-nvim",

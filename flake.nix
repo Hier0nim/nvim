@@ -47,6 +47,11 @@
       flake = false;
     };
 
+    "plugins-molten-nvim" = {
+      url = "github:benlubas/molten-nvim";
+      flake = false;
+    };
+
     # see :help nixCats.flake.inputs
     # If you want your plugin to be loaded by the standard overlay,
     # i.e. if it wasnt on nixpkgs, but doesnt have an extra build step.
@@ -283,7 +288,8 @@
             python = [
               (pkgs.neovimPlugins.venv-selector-nvim.overrideAttrs { pname = "venv-selector.nvim"; })
               nvim-dap-python
-              molten-nvim
+              # molten-nvim
+              (pkgs.neovimPlugins.molten-nvim.overrideAttrs { pname = "molten-nvim"; })
               image-nvim
               quarto-nvim
               otter-nvim
