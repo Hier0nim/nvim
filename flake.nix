@@ -32,11 +32,6 @@
       flake = false;
     };
 
-    "plugins-hardtime-nvim" = {
-      url = "github:m4xshen/hardtime.nvim";
-      flake = false;
-    };
-
     "plugins-neorg-interim-ls" = {
       url = "github:benlubas/neorg-interim-ls";
       flake = false;
@@ -233,7 +228,6 @@
               # NOTE: Mine plugins
               (pkgs.neovimPlugins.log-highlight-nvim.overrideAttrs { pname = "log-highlight.nvim"; })
               (pkgs.neovimPlugins.nix-store-nvim.overrideAttrs { pname = "nix-store.nvim"; })
-              (pkgs.neovimPlugins.hardtime-nvim.overrideAttrs { pname = "hardtime.nvim"; })
               (pkgs.neovimPlugins.neorg-interim-ls.overrideAttrs { pname = "neorg-interim-ls"; })
               project-nvim
               fidget-nvim
@@ -242,6 +236,7 @@
               markdown-preview-nvim
               render-markdown-nvim
               neorg
+              precognition-nvim
 
               ##nvim-cmp switch to blink once neorg ls works
               #nvim-cmp
@@ -430,6 +425,21 @@
               general = true;
               debug = true;
               python = true;
+            };
+            extra = { };
+          };
+
+        # nvim package specialized for sql development
+        nvim-sql =
+          { pkgs, mkNvimPlugin, ... }:
+          {
+            settings = {
+              wrapRc = true;
+              hosts.python3.enable = true;
+            };
+            categories = {
+              general = true;
+              sql = true;
             };
             extra = { };
           };
