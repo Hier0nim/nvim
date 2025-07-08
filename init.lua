@@ -1,125 +1,60 @@
--- NOTE: this just gives nixCats global command a default value
--- so that it doesnt throw an error if you didnt install via nix.
--- usage of both this setup and the nixCats command is optional,
--- but it is very useful for passing info from nix to lua so you will likely use it at least once.
+--[[
+NOTE:
+if you plan to always load your nixCats via nix,
+you can safely ignore this setup call,
+and the require('myLuaConf.non_nix_download') call below it.
+as well as the entire lua/myLuaConf/non_nix_download file.
+Unless you want the lzUtils file, or the lazy wrapper, you also wont need lua/nixCatsUtils
+
+IF YOU DO NOT DO THIS SETUP CALL:
+the result will be that, when you load this folder without using nix,
+the global nixCats function which you use everywhere
+to check for categories will throw an error.
+This setup function will give it a default value.
+Of course, if you only ever download nvim with nix, this isnt needed.]]
+--[[ ----------------------------------- ]]
+--[[ This setup function will provide    ]]
+--[[ a default value for the nixCats('') ]]
+--[[ function so that it will not throw  ]]
+--[[ an error if not loaded via nixCats  ]]
+--[[ ----------------------------------- ]]
 require('nixCatsUtils').setup {
   non_nix_value = true,
 }
+--[[
+Nix puts the plugins
+into the directories paq-nvim expects them to be in,
+because both follow the normal neovim scheme.
+So you just put the URLs and build steps in there, and use its opt option to do the same
+thing as putting a plugin in nixCat's optionalPlugins field.
+then load the plugins via paq-nvim
+YOU are in charge of putting the plugin
+urls and build steps in there, which will only be used when not on nix,
+and you should keep any setup functions
+OUT of that file, as they are ONLY loaded when this
+configuration is NOT loaded via nix.
+--]]
+require("myLuaConf.non_nix_download")
+-- OK, again, that isnt needed if you load this setup via nix, but it is an option.
 
--- NOTE: You might want to move the lazy-lock.json file
-local function getlockfilepath()
-  if require('nixCatsUtils').isNixCats and type(nixCats.settings.unwrappedCfgPath) == 'string' then
-    return nixCats.settings.unwrappedCfgPath .. '/lazy-lock.json'
-  else
-    return vim.fn.stdpath 'config' .. '/lazy-lock.json'
-  end
-end
-local lazyOptions = {
-  lockfile = getlockfilepath(),
-}
+--[[
+outside of when you want to use the nixCats global command
+to decide if something should be loaded, or to pass info from nix to lua,
+thats pretty much everything specific to nixCats that
+needs to be in your config.
+If you always want to load it via nix,
+you pretty much dont need this file at all, and you also won't need
+anything within lua/nixCatsUtils, nor will that be in the default template.
+that directory is addable via the luaUtils template.
+it is not required, but has some useful utility functions.
+--]]
 
--- NOTE: this the lazy wrapper. Use it like require('lazy').setup() but with an extra
--- argument, the path to lazy.nvim as downloaded by nix, or nil, before the normal arguments.
-require('nixCatsUtils.lazyCat').setup(nixCats.pawsible { 'allPlugins', 'start', 'lazy.nvim' }, {
-  { 'LazyVim/LazyVim', import = 'lazyvim.plugins' },
-
-  -- Extras
-  { import = 'lazyvim.plugins.extras.lang.json' },
-  { import = 'lazyvim.plugins.extras.lang.toml' },
-  { import = 'lazyvim.plugins.extras.lang.markdown' },
-  { import = 'lazyvim.plugins.extras.lang.nushell' },
-  { import = 'lazyvim.plugins.extras.coding.mini-surround' },
-  -- { import = 'lazyvim.plugins.extras.coding.nvim-cmp' },
-  { import = 'lazyvim.plugins.extras.editor.neo-tree' },
-  { import = 'lazyvim.plugins.extras.util.project' },
-  { import = 'lazyvim.plugins.extras.editor.dial' },
-  { import = 'lazyvim.plugins.extras.editor.inc-rename' },
-  { import = 'lazyvim.plugins.extras.editor.snacks_picker' },
-
-  {
-    import = 'lazyvim.plugins.extras.dap.core',
-    enabled = require('nixCatsUtils').enableForCategory('debug', false),
-  },
-  {
-    import = 'lazyvim.plugins.extras.lang.python',
-    enabled = require('nixCatsUtils').enableForCategory('python', false),
-  },
-  {
-    import = 'lazyvim.plugins.extras.lang.sql',
-    enabled = require('nixCatsUtils').enableForCategory('sql', false),
-  },
-
-  require('nixCatsUtils').lazyAdd({}, { import = 'lazyvim.plugins.extras.lang.nix' }),
-
-  -- disable mason.nvim while using nix
-  -- precompiled binaries do not agree with nixos, and we can just make nix install this stuff for us.
-  {
-    'williamboman/mason-lspconfig.nvim',
-    version = '^1.0.0',
-    enabled = require('nixCatsUtils').lazyAdd(true, false),
-    config = function()
-      require('mason').setup {
-        registries = {
-          'github:mason-org/mason-registry',
-          'github:Crashdummyy/mason-registry',
-        },
-      }
-    end,
-  },
-  { 'williamboman/mason.nvim', version = '^1.0.0', enabled = require('nixCatsUtils').lazyAdd(true, false) },
-  { 'jay-babu/mason-nvim-dap.nvim', enabled = false },
-  {
-    'nvim-treesitter/nvim-treesitter',
-    build = require('nixCatsUtils').lazyAdd ':TSUpdate',
-    opts_extend = require('nixCatsUtils').lazyAdd(nil, false),
-    opts = {
-      -- nix already ensured they were installed, and we would need to change the parser_install_dir if we wanted to use it instead.
-      -- so we just disable install and do it via nix.
-      ensure_installed = require('nixCatsUtils').lazyAdd({
-        'bash',
-        'c',
-        'diff',
-        'html',
-        'css',
-        'lua',
-        'luadoc',
-        'markdown',
-        'markdown_inline',
-        'vim',
-        'vimdoc',
-        'yaml',
-        'toml',
-
-        -- Extras
-        'nix',
-        'json5',
-      }, false),
-      auto_install = require('nixCatsUtils').lazyAdd(true, false),
-    },
-  },
-  {
-    'folke/lazydev.nvim',
-    ft = 'lua',
-    opts = {
-      library = {
-        -- adds type hints for nixCats global, but LazyDev is just nice in general
-        { path = (nixCats.nixCatsPath or '') .. '/lua', words = { 'nixCats' } },
-      },
-    },
-  },
-
-  -- import/override with your plugins
-  { import = 'plugins' },
-}, lazyOptions)
-
-vim.g.snacks_animate = false
-vim.opt.cmdheight = 0
-vim.opt.spelllang = { 'en_us', 'pl' }
-vim.filetype.add {
-  extension = {
-    csharp = 'cs',
-  },
-}
-
--- NOTE:  Use zig compiler for treesitter
-require('nvim-treesitter.install').compilers = { 'zig' }
+--[[
+ok thats enough for 1 file. Off to lua/myLuaConf/init.lua
+all the config starts there in this example config.
+This config is loadable with and without nix due to the above,
+and the lua/myLuaConf/non_nix_download.lua file.
+the rest is just example of how to configure nvim making use of various
+features of nixCats and using the plugin lze for lazy loading.
+--]]
+require('myLuaConf')
