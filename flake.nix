@@ -165,7 +165,7 @@
                 nvim-notify
               ];
               extra = [
-                oil-nvim
+                mini-files
                 nvim-web-devicons
               ];
             };

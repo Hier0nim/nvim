@@ -23,7 +23,7 @@ require('nixCatsUtils.catPacker').setup {
   --[[ ------------------------------------------ ]]
   { 'BirdeeHub/lze' },
   { 'BirdeeHub/lzextras' },
-  { 'stevearc/oil.nvim' },
+  { 'echasnovski/mini.files' },
   { 'joshdick/onedark.vim' },
   { 'rebelot/kanagawa.nvim' },
   { 'thesimonho/kanagawa-paper.nvim' },
