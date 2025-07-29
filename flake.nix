@@ -174,13 +174,15 @@
             # :help nixCats.flake.outputs.categoryDefinitions.scheme
             themer =
               with pkgs.vimPlugins;
-              (builtins.getAttr (categories.colorscheme or "onedark") {
+              (builtins.getAttr (categories.colorscheme or "kanagawa-paper") {
                 # Theme switcher without creating a new category
                 "onedark" = onedark-nvim;
                 "catppuccin" = catppuccin-nvim;
                 "catppuccin-mocha" = catppuccin-nvim;
                 "tokyonight" = tokyonight-nvim;
                 "tokyonight-day" = tokyonight-nvim;
+                "kanagawa" = kanagawa-nvim;
+                "kanagawa-paper" = kanagawa-paper-nvim;
               });
             # This is obviously a fairly basic usecase for this, but still nice.
           };
@@ -402,7 +404,7 @@
               # you could also pass something else:
               # see :help nixCats
               themer = true;
-              colorscheme = "onedark";
+              colorscheme = "kanagawa-paper";
             };
             extra = {
               # to keep the categories table from being filled with non category things that you want to pass
