@@ -1,6 +1,6 @@
 local colorschemeName = nixCats 'colorscheme'
 if not require('nixCatsUtils').isNixCats then
-  colorschemeName = 'onedark'
+  colorschemeName = 'kanagawa-paper'
 end
 -- Could I lazy load on colorscheme with lze?
 -- sure. But I was going to call vim.cmd.colorscheme() during startup anyway
@@ -17,6 +17,7 @@ if ok then
   vim.notify = notify
   vim.keymap.set('n', '<Esc>', function()
     notify.dismiss { silent = true }
+    vim.cmd 'nohlsearch'
   end, { desc = 'dismiss notify popup and clear hlsearch' })
 end
 
