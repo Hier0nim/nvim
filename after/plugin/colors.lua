@@ -1,1 +1,1 @@
-vim.cmd([[hi LineNr guifg=#bb9af7]])
+vim.cmd [[hi LineNr guifg=#bb9af7]]
