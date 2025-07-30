@@ -75,6 +75,8 @@ return {
           require('telescope.builtin').current_buffer_fuzzy_find(require('telescope.themes').get_dropdown {
             winblend = 10,
             previewer = false,
+            border = true,
+            borderchars = { ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' },
           })
         end,
         mode = { 'n' },
@@ -187,6 +189,15 @@ return {
           mappings = {
             i = { ['<c-enter>'] = 'to_fuzzy_refine' },
           },
+          sorting_strategy = 'ascending',
+          layout_strategy = 'flex',
+          layout_config = {
+            horizontal = {
+              prompt_position = 'top',
+            },
+          },
+          border = true,
+          borderchars = { ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' },
         },
         -- pickers = {}
         extensions = {
