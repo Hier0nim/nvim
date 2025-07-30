@@ -44,6 +44,16 @@
     #   flake = false;
     # };
 
+    "plugins-continue-nvim" = {
+      url = "github:niba/continue.nvim";
+      flake = false;
+    };
+
+    "plugins-log-highlight-nvim" = {
+      url = "github:fei6409/log-highlight.nvim";
+      flake = false;
+    };
+
     # neovim-nightly-overlay = {
     #   url = "github:nix-community/neovim-nightly-overlay";
     # };
@@ -174,7 +184,7 @@
             # :help nixCats.flake.outputs.categoryDefinitions.scheme
             themer =
               with pkgs.vimPlugins;
-              (builtins.getAttr (categories.colorscheme or "kanagawa-paper") {
+              (builtins.getAttr (categories.colorscheme or "kanagawa-paper-ink") {
                 # Theme switcher without creating a new category
                 "onedark" = onedark-nvim;
                 "catppuccin" = catppuccin-nvim;
@@ -182,7 +192,7 @@
                 "tokyonight" = tokyonight-nvim;
                 "tokyonight-day" = tokyonight-nvim;
                 "kanagawa" = kanagawa-nvim;
-                "kanagawa-paper" = kanagawa-paper-nvim;
+                "kanagawa-paper-ink" = kanagawa-paper-nvim;
               });
             # This is obviously a fairly basic usecase for this, but still nice.
           };
@@ -249,6 +259,7 @@
                 vim-fugitive
                 vim-rhubarb
                 nvim-surround
+                (pkgs.neovimPlugins.continue-nvim.overrideAttrs { pname = "continue.nvim"; })
               ];
               extra = with pkgs.vimPlugins; [
                 fidget-nvim
@@ -261,6 +272,7 @@
                 # If it was included in your flake inputs as plugins-hlargs,
                 # this would be how to add that plugin in your config.
                 # pkgs.neovimPlugins.hlargs
+                (pkgs.neovimPlugins.log-highlight-nvim.overrideAttrs { pname = "log-highlight.nvim"; })
               ];
             };
           };
@@ -404,7 +416,7 @@
               # you could also pass something else:
               # see :help nixCats
               themer = true;
-              colorscheme = "kanagawa-paper";
+              colorscheme = "kanagawa-paper-ink";
             };
             extra = {
               # to keep the categories table from being filled with non category things that you want to pass

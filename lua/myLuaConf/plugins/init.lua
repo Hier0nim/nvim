@@ -1,6 +1,6 @@
 local colorschemeName = nixCats 'colorscheme'
 if not require('nixCatsUtils').isNixCats then
-  colorschemeName = 'kanagawa-paper'
+  colorschemeName = 'kanagawa-paper-ink'
 end
 -- Could I lazy load on colorscheme with lze?
 -- sure. But I was going to call vim.cmd.colorscheme() during startup anyway
@@ -115,6 +115,25 @@ require('lze').load {
     -- keys = "",
     after = function(_)
       require('fidget').setup {}
+    end,
+  },
+  {
+    'continue.nvim',
+    for_cat = 'general.always',
+    event = 'VimEnter',
+    -- keys = "",
+    after = function(_)
+      require('continue').setup {
+        picker = "telescope"
+      }
+    end,
+  },
+  {
+    'log-highlight.nvim',
+    for_cat = 'general.extra',
+    event = 'DeferredUIEnter',
+    after = function(_)
+      require('log-highlight').setup {}
     end,
   },
   -- {
