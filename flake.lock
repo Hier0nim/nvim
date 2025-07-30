@@ -31,10 +31,44 @@
         "type": "github"
       }
     },
+    "plugins-continue-nvim": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1749136284,
+        "narHash": "sha256-2uvhY8JHQaL+9TImRUDkPRpJyVOkY2KoRdOfAYlKrzU=",
+        "owner": "niba",
+        "repo": "continue.nvim",
+        "rev": "dea84de20883c7932a2afbc00ceff65a1dd46c69",
+        "type": "github"
+      },
+      "original": {
+        "owner": "niba",
+        "repo": "continue.nvim",
+        "type": "github"
+      }
+    },
+    "plugins-log-highlight-nvim": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1752572230,
+        "narHash": "sha256-d9ocjLy3Y0zGpj0cDEK+9Io/DyxGK+OSiY1Z3O+cK0M=",
+        "owner": "fei6409",
+        "repo": "log-highlight.nvim",
+        "rev": "c840b5881651dff7ca56e0cc1059826186a74ccf",
+        "type": "github"
+      },
+      "original": {
+        "owner": "fei6409",
+        "repo": "log-highlight.nvim",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "nixCats": "nixCats",
-        "nixpkgs": "nixpkgs"
+        "nixpkgs": "nixpkgs",
+        "plugins-continue-nvim": "plugins-continue-nvim",
+        "plugins-log-highlight-nvim": "plugins-log-highlight-nvim"
       }
     }
   },
