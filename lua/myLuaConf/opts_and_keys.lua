@@ -63,6 +63,7 @@ vim.o.completeopt = 'menu,preview,noselect'
 -- NOTE: You should make sure your terminal supports this
 vim.o.termguicolors = true
 
+vim.o.linebreak = true
 vim.opt.cmdheight = 0
 vim.opt.spelllang = { 'en_us', 'pl' }
 

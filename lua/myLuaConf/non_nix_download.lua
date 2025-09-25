@@ -70,7 +70,7 @@ require('nixCatsUtils.catPacker').setup {
   { 'jay-babu/mason-nvim-dap.nvim', opt = true },
   { 'mfussenegger/nvim-dap', opt = true },
 
-  -- { 'm-demare/hlargs.nvim', },
+  { 'm-demare/hlargs.nvim', },
   { 'mbbill/undotree', opt = true },
   { 'tpope/vim-fugitive', opt = true },
   { 'tpope/vim-rhubarb', opt = true },

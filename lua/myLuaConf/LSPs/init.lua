@@ -94,14 +94,6 @@ require('lze').load {
     -- also these are regular specs and you can use before and after and all the other normal fields
   },
   {
-    'gopls',
-    for_cat = 'go',
-    -- if you don't provide the filetypes it asks lspconfig for them
-    lsp = {
-      filetypes = { 'go', 'gomod', 'gowork', 'gotmpl' },
-    },
-  },
-  {
     'rnix',
     -- mason doesn't have nixd
     enabled = not catUtils.isNixCats,
