@@ -102,20 +102,20 @@ return {
         desc = '[ ] Find existing buffers',
       },
       {
-        '<leader>s.',
+        '<leader>sr',
         function()
           return require('telescope.builtin').oldfiles()
         end,
         mode = { 'n' },
-        desc = '[S]earch Recent Files ("." for repeat)',
+        desc = '[S]earch Recent Files',
       },
       {
-        '<leader>sr',
+        '<leader>s.',
         function()
           return require('telescope.builtin').resume()
         end,
         mode = { 'n' },
-        desc = '[S]earch [R]esume',
+        desc = '[S]earch Resume ("." for repeat)',
       },
       {
         '<leader>sd',

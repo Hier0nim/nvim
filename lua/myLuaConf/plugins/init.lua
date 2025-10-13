@@ -21,24 +21,7 @@ if ok then
   end, { desc = 'dismiss notify popup and clear hlsearch' })
 end
 
--- NOTE: you can check if you included the category with the thing wherever you want.
-if nixCats 'general.extra' then
-  -- I didnt want to bother with lazy loading this.
-  -- I could put it in opt and put it in a spec anyway
-  -- and then not set any handlers and it would load at startup,
-  -- but why... I guess I could make it load
-  -- after the other lze definitions in the next call using priority value?
-  -- didnt seem necessary.
-  vim.g.loaded_netrwPlugin = 1
-  require('mini.files').setup {}
-
-  vim.keymap.set('n', '-', function()
-    require('mini.files').open(vim.api.nvim_buf_get_name(0), true)
-  end, { noremap = true, desc = 'Open Parent Directory' })
-  vim.keymap.set('n', '<leader>-', function()
-    require('mini.files').open(vim.uv.cwd(), true)
-  end, { noremap = true, desc = 'Open nvim root directory' })
-end
+require 'myLuaConf.plugins.mini-files'
 
 require('lze').load {
   { import = 'myLuaConf.plugins.telescope' },
