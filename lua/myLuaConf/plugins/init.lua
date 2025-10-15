@@ -25,27 +25,9 @@ require 'myLuaConf.plugins.mini-files'
 
 require('lze').load {
   { import = 'myLuaConf.plugins.telescope' },
+  { import = 'myLuaConf.plugins.markdown' },
   { import = 'myLuaConf.plugins.treesitter' },
   { import = 'myLuaConf.plugins.completion' },
-  {
-    'markdown-preview.nvim',
-    -- NOTE: for_cat is a custom handler that just sets enabled value for us,
-    -- based on result of nixCats('cat.name') and allows us to set a different default if we wish
-    -- it is defined in luaUtils template in lua/nixCatsUtils/lzUtils.lua
-    -- you could replace this with enabled = nixCats('cat.name') == true
-    -- if you didnt care to set a different default for when not using nix than the default you already set
-    for_cat = 'general.markdown',
-    cmd = { 'MarkdownPreview', 'MarkdownPreviewStop', 'MarkdownPreviewToggle' },
-    ft = 'markdown',
-    keys = {
-      { '<leader>mp', '<cmd>MarkdownPreview <CR>', mode = { 'n' }, noremap = true, desc = 'markdown preview' },
-      { '<leader>ms', '<cmd>MarkdownPreviewStop <CR>', mode = { 'n' }, noremap = true, desc = 'markdown preview stop' },
-      { '<leader>mt', '<cmd>MarkdownPreviewToggle <CR>', mode = { 'n' }, noremap = true, desc = 'markdown preview toggle' },
-    },
-    before = function(plugin)
-      vim.g.mkdp_auto_close = 0
-    end,
-  },
   {
     'undotree',
     for_cat = 'general.extra',
@@ -107,7 +89,9 @@ require('lze').load {
     -- keys = "",
     after = function(_)
       require('continue').setup {
-        picker = 'telescope',
+        opts = {
+          picker = 'native',
+        },
       }
     end,
   },
@@ -120,17 +104,17 @@ require('lze').load {
     end,
   },
   {
-    "hlargs",
+    'hlargs',
     for_cat = 'general.extra',
-    event = "DeferredUIEnter",
+    event = 'DeferredUIEnter',
     -- keys = "",
-    dep_of = { "nvim-lspconfig" },
+    dep_of = { 'nvim-lspconfig' },
     after = function(plugin)
       require('hlargs').setup {
         color = '#32a88f',
       }
-      vim.cmd([[hi clear @lsp.type.parameter]])
-      vim.cmd([[hi link @lsp.type.parameter Hlargs]])
+      vim.cmd [[hi clear @lsp.type.parameter]]
+      vim.cmd [[hi link @lsp.type.parameter Hlargs]]
     end,
   },
   {
@@ -282,6 +266,8 @@ require('lze').load {
         { '<leader>r_', hidden = true },
         { '<leader>s', group = '[s]earch' },
         { '<leader>s_', hidden = true },
+        { '<leader>f', group = '[f]find' },
+        { '<leader>f_', hidden = true },
         { '<leader>t', group = '[t]oggles' },
         { '<leader>t_', hidden = true },
         { '<leader>w', group = '[w]orkspace' },

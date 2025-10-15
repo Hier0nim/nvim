@@ -14,7 +14,7 @@ vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
 
 -- Set highlight on search
 vim.opt.hlsearch = true
-vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
+vim.keymap.set('n', '<Esc>', 'nohlsearch<CR>')
 
 -- Preview substitutions live, as you type!
 vim.opt.inccommand = 'split'
@@ -66,6 +66,11 @@ vim.o.termguicolors = true
 vim.o.linebreak = true
 vim.opt.cmdheight = 0
 vim.opt.spelllang = { 'en_us', 'pl' }
+
+vim.o.sessionoptions="blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions"
+
+vim.keymap.set('v', '<', '<gv^', { desc = 'Indent left and keep selection' })
+vim.keymap.set('v', '>', '>gv^', { desc = 'Indent right and keep selection' })
 
 -- [[ Disable auto comment on enter ]]
 -- See :help formatoptions
