@@ -23,7 +23,7 @@ require('nixCatsUtils.catPacker').setup {
   --[[ ------------------------------------------ ]]
   { 'BirdeeHub/lze' },
   { 'BirdeeHub/lzextras' },
-  { 'echasnovski/mini.files' },
+  { 'nvim-mini/mini.files' },
   { 'joshdick/onedark.vim' },
   { 'rebelot/kanagawa.nvim' },
   { 'thesimonho/kanagawa-paper.nvim' },
@@ -70,7 +70,7 @@ require('nixCatsUtils.catPacker').setup {
   { 'jay-babu/mason-nvim-dap.nvim', opt = true },
   { 'mfussenegger/nvim-dap', opt = true },
 
-  { 'm-demare/hlargs.nvim', },
+  { 'm-demare/hlargs.nvim' },
   { 'mbbill/undotree', opt = true },
   { 'tpope/vim-fugitive', opt = true },
   { 'tpope/vim-rhubarb', opt = true },
@@ -86,6 +86,8 @@ require('nixCatsUtils.catPacker').setup {
     build = ':call mkdp#util#install()',
     opt = true,
   },
+  { 'obsidian-nvim/obsidian.nvim', opt = true },
+  { 'MeanderingProgrammer/render-markdown.nvim', opt = true },
 
   -- all the rest of the setup will be done using the normal setup functions later,
   -- thus working regardless of what method loads the plugins.

@@ -42,6 +42,7 @@ return {
     'blink.cmp',
     for_cat = 'general.blink',
     event = 'DeferredUIEnter',
+    on_require = 'blink.cmp',
     after = function(_)
       require('blink.cmp').setup {
         -- 'default' (recommended) for mappings similar to built-in completions (C-y to accept)

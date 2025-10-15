@@ -157,6 +157,8 @@
             ];
             markdown = with pkgs.vimPlugins; [
               markdown-preview-nvim
+              render-markdown-nvim
+              obsidian-nvim
             ];
             neonixdev = with pkgs.vimPlugins; [
               lazydev-nvim
