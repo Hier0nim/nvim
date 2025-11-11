@@ -18,30 +18,30 @@ if nixCats 'general.extra' then
     MiniFiles.open(vim.uv.cwd(), true)
   end, { noremap = true, desc = 'Open nvim root directory' })
 
-  -- check if it's a directory
-  local is_dir = function()
-    local fs_entry = MiniFiles.get_fs_entry()
-    local is_at_dir = fs_entry ~= nil and fs_entry.fs_type == "directory"
-    return is_at_dir
-  end
-
-  -- create go_in_plus fn
-  local open_and_close = function()
-    if is_dir() then
-      MiniFiles.go_in()
-    else
-      MiniFiles.go_in()
-      MiniFiles.close()
-    end
-  end
-
-  vim.api.nvim_create_autocmd("User", {
-    pattern = "MiniFilesBufferCreate",
-    callback = function()
-      vim.keymap.set("n", "<cr>", open_and_close)
-      vim.keymap.set("n", "<ESC>", MiniFiles.close)
-    end,
-  })
+  -- -- check if it's a directory
+  -- local is_dir = function()
+  --   local fs_entry = MiniFiles.get_fs_entry()
+  --   local is_at_dir = fs_entry ~= nil and fs_entry.fs_type == "directory"
+  --   return is_at_dir
+  -- end
+  --
+  -- -- create go_in_plus fn
+  -- local open_and_close = function()
+  --   if is_dir() then
+  --     MiniFiles.go_in()
+  --   else
+  --     MiniFiles.go_in()
+  --     MiniFiles.close()
+  --   end
+  -- end
+  --
+  -- vim.api.nvim_create_autocmd("User", {
+  --   pattern = "MiniFilesBufferCreate",
+  --   callback = function()
+  --     vim.keymap.set("n", "<cr>", open_and_close)
+  --     vim.keymap.set("n", "<ESC>", MiniFiles.close)
+  --   end,
+  -- })
 
   local nsMiniFiles = vim.api.nvim_create_namespace("mini_files_git")
   local autocmd = vim.api.nvim_create_autocmd

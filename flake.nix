@@ -93,6 +93,10 @@
               # each will be its own sub category
               inherit (pkgs) nix-doc lua-language-server nixd;
             };
+            latex = with pkgs; [
+              zathura
+              texliveFull
+            ];
           };
 
           # This is for plugins that will load at startup without using packadd:
@@ -209,6 +213,10 @@
                 (pkgs.neovimPlugins.log-highlight-nvim.overrideAttrs { pname = "log-highlight.nvim"; })
               ];
             };
+
+            latex = with pkgs.vimPlugins; [
+              vimtex
+            ];
           };
 
           # shared libraries to be added to LD_LIBRARY_PATH
@@ -324,6 +332,46 @@
 
               # you could also pass something else:
               # see :help nixCats
+              themer = true;
+              colorscheme = "kanagawa-paper-ink";
+            };
+            extra = {
+              # to keep the categories table from being filled with non category things that you want to pass
+              # there is also an extra table you can use to pass extra stuff.
+              # but you can pass all the same stuff in any of these sets and access it in lua
+              nixdExtras = {
+                nixpkgs = ''import ${pkgs.path} {}'';
+                # or inherit nixpkgs;
+              };
+            };
+          };
+        nvim-latex =
+          { pkgs, name, ... }@misc:
+          {
+            settings = {
+              suffix-path = true;
+              suffix-LD = true;
+              aliases = [
+                "lvim"
+              ];
+
+              # OR see :help nixCats.flake.outputs.settings for all of the settings available
+              wrapRc = true;
+              configDirName = "nvim-latex";
+              hosts.python3.enable = true;
+              hosts.node.enable = true;
+            };
+            # enable the categories you want from categoryDefinitions
+            categories = {
+              latex = true;
+              markdown = true;
+              general = true;
+              lint = true;
+              format = true;
+              neonixdev = true;
+              test = {
+                subtest1 = true;
+              };
               themer = true;
               colorscheme = "kanagawa-paper-ink";
             };

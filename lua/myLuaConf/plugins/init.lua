@@ -28,6 +28,7 @@ require('lze').load {
   { import = 'myLuaConf.plugins.markdown' },
   { import = 'myLuaConf.plugins.treesitter' },
   { import = 'myLuaConf.plugins.completion' },
+  { import = 'myLuaConf.plugins.vimtex' },
   {
     'undotree',
     for_cat = 'general.extra',

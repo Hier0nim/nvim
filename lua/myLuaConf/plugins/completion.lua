@@ -18,11 +18,14 @@ return {
   {
     'luasnip',
     for_cat = 'general.blink',
+    on_require = { 'luasnip' },
     dep_of = { 'blink.cmp' },
     after = function(_)
       local luasnip = require 'luasnip'
       require('luasnip.loaders.from_vscode').lazy_load()
-      luasnip.config.setup {}
+      luasnip.config.setup {
+        enable_autosnippets = true,
+      }
 
       local ls = require 'luasnip'
 
