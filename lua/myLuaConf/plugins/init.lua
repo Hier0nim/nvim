@@ -29,6 +29,8 @@ require('lze').load {
   { import = 'myLuaConf.plugins.treesitter' },
   { import = 'myLuaConf.plugins.completion' },
   { import = 'myLuaConf.plugins.vimtex' },
+  { import = 'myLuaConf.plugins.fff' },
+  -- { import = 'myLuaConf.plugins.easy-dotnet' },
   {
     'undotree',
     for_cat = 'general.extra',
