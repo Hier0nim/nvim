@@ -7,9 +7,8 @@ if nixCats 'general.extra' then
   -- after the other lze definitions in the next call using priority value?
   -- didnt seem necessary.
   vim.g.loaded_netrwPlugin = 1
-  local MiniFiles = require("mini.files")
+  local MiniFiles = require 'mini.files'
   MiniFiles.setup {}
-  
 
   vim.keymap.set('n', '-', function()
     MiniFiles.open(vim.api.nvim_buf_get_name(0), true)
@@ -43,9 +42,9 @@ if nixCats 'general.extra' then
   --   end,
   -- })
 
-  local nsMiniFiles = vim.api.nvim_create_namespace("mini_files_git")
+  local nsMiniFiles = vim.api.nvim_create_namespace 'mini_files_git'
   local autocmd = vim.api.nvim_create_autocmd
-  local _, MiniFiles = pcall(require, "mini.files")
+  local _, MiniFiles = pcall(require, 'mini.files')
 
   -- Cache for git status
   local gitStatusCache = {}
@@ -54,7 +53,7 @@ if nixCats 'general.extra' then
 
   local function isSymlink(path)
     local stat = uv.fs_lstat(path)
-    return stat and stat.type == "link"
+    return stat and stat.type == 'link'
   end
 
   ---@type table<string, {symbol: string, hlGroup: string}>
@@ -80,18 +79,16 @@ if nixCats 'general.extra' then
       -- stylua: ignore end
     }
 
-    local result = statusMap[status] or { symbol = "?", hlGroup = "NonText" }
+    local result = statusMap[status] or { symbol = '?', hlGroup = 'NonText' }
     local gitSymbol = result.symbol
     local gitHlGroup = result.hlGroup
 
-    local symlinkSymbol = is_symlink and "↩" or ""
+    local symlinkSymbol = is_symlink and '↩' or ''
 
     -- Combine symlink symbol with Git status if both exist
-    local combinedSymbol = (symlinkSymbol .. gitSymbol)
-      :gsub("^%s+", "")
-      :gsub("%s+$", "")
+    local combinedSymbol = (symlinkSymbol .. gitSymbol):gsub('^%s+', ''):gsub('%s+$', '')
     -- Change the color of the symlink icon from "MiniDiffSignDelete" to something else
-    local combinedHlGroup = is_symlink and "MiniDiffSignDelete" or gitHlGroup
+    local combinedHlGroup = is_symlink and 'MiniDiffSignDelete' or gitHlGroup
 
     return combinedSymbol, combinedHlGroup
   end
@@ -100,7 +97,7 @@ if nixCats 'general.extra' then
   ---@param callback function
   ---@return nil
   local function fetchGitStatus(cwd, callback)
-    local clean_cwd = cwd:gsub("^minifiles://%d+/", "")
+    local clean_cwd = cwd:gsub('^minifiles://%d+/', '')
     ---@param content table
     local function on_exit(content)
       if content.code == 0 then
@@ -109,11 +106,7 @@ if nixCats 'general.extra' then
       end
     end
     ---@see vim.system
-    vim.system(
-      { "git", "status", "--ignored", "--porcelain" },
-      { text = true, cwd = clean_cwd },
-      on_exit
-    )
+    vim.system({ 'git', 'status', '--ignored', '--porcelain' }, { text = true, cwd = clean_cwd }, on_exit)
   end
 
   ---@param buf_id integer
@@ -122,7 +115,7 @@ if nixCats 'general.extra' then
   local function updateMiniWithGit(buf_id, gitStatusMap)
     vim.schedule(function()
       local nlines = vim.api.nvim_buf_line_count(buf_id)
-      local cwd = vim.fs.root(buf_id, ".git")
+      local cwd = vim.fs.root(buf_id, '.git')
       local escapedcwd = cwd and vim.pesc(cwd)
       escapedcwd = vim.fs.normalize(escapedcwd)
 
@@ -131,7 +124,7 @@ if nixCats 'general.extra' then
         if not entry then
           break
         end
-        local relativePath = entry.path:gsub("^" .. escapedcwd .. "/", "")
+        local relativePath = entry.path:gsub('^' .. escapedcwd .. '/', '')
         local status = gitStatusMap[relativePath]
 
         if status then
@@ -145,20 +138,13 @@ if nixCats 'general.extra' then
           local line = vim.api.nvim_buf_get_lines(buf_id, i - 1, i, false)[1]
           -- Find the name position accounting for potential icons
           local nameStartCol = line:find(vim.pesc(entry.name)) or 0
-          
-          if nameStartCol > 0 then
-            vim.api.nvim_buf_set_extmark(
-              buf_id,
-              nsMiniFiles,
-              i - 1,
-              nameStartCol - 1,
-              {
-                end_col = nameStartCol + #entry.name - 1,
-                hl_group = hlGroup,
-              }
-            )
-          end
 
+          if nameStartCol > 0 then
+            vim.api.nvim_buf_set_extmark(buf_id, nsMiniFiles, i - 1, nameStartCol - 1, {
+              end_col = nameStartCol + #entry.name - 1,
+              hl_group = hlGroup,
+            })
+          end
         else
         end
       end
@@ -171,19 +157,19 @@ if nixCats 'general.extra' then
   local function parseGitStatus(content)
     local gitStatusMap = {}
     -- lua match is faster than vim.split (in my experience )
-    for line in content:gmatch("[^\r\n]+") do
-      local status, filePath = string.match(line, "^(..)%s+(.*)")
+    for line in content:gmatch '[^\r\n]+' do
+      local status, filePath = string.match(line, '^(..)%s+(.*)')
       -- Split the file path into parts
       local parts = {}
-      for part in filePath:gmatch("[^/]+") do
+      for part in filePath:gmatch '[^/]+' do
         table.insert(parts, part)
       end
       -- Start with the root directory
-      local currentKey = ""
+      local currentKey = ''
       for i, part in ipairs(parts) do
         if i > 1 then
           -- Concatenate parts with a separator to create a unique key
-          currentKey = currentKey .. "/" .. part
+          currentKey = currentKey .. '/' .. part
         else
           currentKey = part
         end
@@ -204,17 +190,14 @@ if nixCats 'general.extra' then
   ---@param buf_id integer
   ---@return nil
   local function updateGitStatus(buf_id)
-    if not vim.fs.root(buf_id, ".git") then
+    if not vim.fs.root(buf_id, '.git') then
       return
     end
-    local cwd = vim.fs.root(buf_id, ".git")
+    local cwd = vim.fs.root(buf_id, '.git')
     -- local cwd = vim.fn.expand("%:p:h")
     local currentTime = os.time()
 
-    if
-      gitStatusCache[cwd]
-      and currentTime - gitStatusCache[cwd].time < cacheTimeout
-    then
+    if gitStatusCache[cwd] and currentTime - gitStatusCache[cwd].time < cacheTimeout then
       updateMiniWithGit(buf_id, gitStatusCache[cwd].statusMap)
     else
       fetchGitStatus(cwd, function(content)
@@ -234,36 +217,35 @@ if nixCats 'general.extra' then
   end
 
   local function augroup(name)
-    return vim.api.nvim_create_augroup("MiniFiles_" .. name, { clear = true })
+    return vim.api.nvim_create_augroup('MiniFiles_' .. name, { clear = true })
   end
 
-  autocmd("User", {
-    group = augroup("start"),
-    pattern = "MiniFilesExplorerOpen",
+  autocmd('User', {
+    group = augroup 'start',
+    pattern = 'MiniFilesExplorerOpen',
     callback = function()
       local bufnr = vim.api.nvim_get_current_buf()
       updateGitStatus(bufnr)
     end,
   })
 
-  autocmd("User", {
-    group = augroup("close"),
-    pattern = "MiniFilesExplorerClose",
+  autocmd('User', {
+    group = augroup 'close',
+    pattern = 'MiniFilesExplorerClose',
     callback = function()
       clearCache()
     end,
   })
 
-  autocmd("User", {
-    group = augroup("update"),
-    pattern = "MiniFilesBufferUpdate",
+  autocmd('User', {
+    group = augroup 'update',
+    pattern = 'MiniFilesBufferUpdate',
     callback = function(args)
       local bufnr = args.data.buf_id
-      local cwd = vim.fs.root(bufnr, ".git")
+      local cwd = vim.fs.root(bufnr, '.git')
       if gitStatusCache[cwd] then
         updateMiniWithGit(bufnr, gitStatusCache[cwd].statusMap)
       end
     end,
   })
 end
-

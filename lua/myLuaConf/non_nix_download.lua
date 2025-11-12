@@ -23,7 +23,7 @@ require('nixCatsUtils.catPacker').setup {
   --[[ ------------------------------------------ ]]
   { 'BirdeeHub/lze' },
   { 'BirdeeHub/lzextras' },
-  { 'nvim-mini/mini.files' },
+  { 'nvim-mini/mini.nvim' },
   { 'joshdick/onedark.vim' },
   { 'rebelot/kanagawa.nvim' },
   { 'thesimonho/kanagawa-paper.nvim' },
@@ -88,6 +88,12 @@ require('nixCatsUtils.catPacker').setup {
   },
   { 'obsidian-nvim/obsidian.nvim', opt = true },
   { 'MeanderingProgrammer/render-markdown.nvim', opt = true },
+  { 'GustavEikaas/easy-dotnet.nvim', opt = true },
+  {
+    'dmtrKovalenko/fff.nvim',
+    opt = true,
+    build = ':lua require("fff.download").download_or_build_binary()',
+  },
 
   -- all the rest of the setup will be done using the normal setup functions later,
   -- thus working regardless of what method loads the plugins.

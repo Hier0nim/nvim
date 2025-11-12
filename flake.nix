@@ -19,7 +19,6 @@
       url = "github:fei6409/log-highlight.nvim";
       flake = false;
     };
-
   };
 
   # see :help nixCats.flake.outputs
@@ -190,6 +189,7 @@
                 telescope-fzf-native-nvim
                 telescope-ui-select-nvim
                 telescope-nvim
+                fff-nvim
               ];
               always = with pkgs.vimPlugins; [
                 nvim-lspconfig
