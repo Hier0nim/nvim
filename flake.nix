@@ -5,18 +5,23 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     nixCats.url = "github:BirdeeHub/nixCats-nvim";
 
-    "plugins-hlargs" = {
+    plugins-hlargs = {
       url = "github:m-demare/hlargs.nvim";
       flake = false;
     };
 
-    "plugins-continue-nvim" = {
+    plugins-continue-nvim = {
       url = "github:niba/continue.nvim";
       flake = false;
     };
 
-    "plugins-log-highlight-nvim" = {
+    plugins-log-highlight-nvim = {
       url = "github:fei6409/log-highlight.nvim";
+      flake = false;
+    };
+
+    plugins-treesitter-textobjects = {
+      url = "github:nvim-treesitter/nvim-treesitter-textobjects/main";
       flake = false;
     };
   };
@@ -79,6 +84,7 @@
               universal-ctags
               ripgrep
               fd
+              tree-sitter
             ];
             lint = [
             ];
@@ -175,7 +181,7 @@
                 colorful-menu-nvim
               ];
               treesitter = with pkgs.vimPlugins; [
-                nvim-treesitter-textobjects
+                pkgs.neovimPlugins.treesitter-textobjects
                 nvim-treesitter.withAllGrammars
                 # This is for if you only want some of the grammars
                 # (nvim-treesitter.withPlugins (
@@ -340,7 +346,7 @@
               # there is also an extra table you can use to pass extra stuff.
               # but you can pass all the same stuff in any of these sets and access it in lua
               nixdExtras = {
-                nixpkgs = ''import ${pkgs.path} {}'';
+                nixpkgs = "import ${pkgs.path} {}";
                 # or inherit nixpkgs;
               };
             };
@@ -380,7 +386,7 @@
               # there is also an extra table you can use to pass extra stuff.
               # but you can pass all the same stuff in any of these sets and access it in lua
               nixdExtras = {
-                nixpkgs = ''import ${pkgs.path} {}'';
+                nixpkgs = "import ${pkgs.path} {}";
                 # or inherit nixpkgs;
               };
             };
@@ -444,7 +450,7 @@
             name = defaultPackageName;
             packages = [ defaultPackage ];
             inputsFrom = [ ];
-            shellHook = '''';
+            shellHook = "";
           };
         };
 
