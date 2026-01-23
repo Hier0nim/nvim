@@ -92,7 +92,7 @@
             };
             format = with pkgs; [
               stylua
-              nixfmt-rfc-style
+              nixfmt
             ];
             neonixdev = {
               # each will be its own sub category
