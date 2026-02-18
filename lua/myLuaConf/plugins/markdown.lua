@@ -69,15 +69,15 @@ return {
         workspaces = {
           {
             name = 'personal',
-            path = '~/SecondBrain/personal',
+            path = '~/Projects/SecondBrain/personal',
           },
           {
             name = 'work',
-            path = '~/SecondBrain/work',
+            path = '~/Projects/SecondBrain/work',
           },
           {
             name = 'vault',
-            path = '~/SecondBrain', -- Generic vault location
+            path = '~/Projects/SecondBrain', -- Generic vault location
           },
         },
         legacy_commands = false,
@@ -100,27 +100,10 @@ return {
           end
         end,
 
-        -- Wiki links configuration
-        wiki_link_func = 'use_alias_only',
-
         -- UI settings
         ui = {
           enable = true,
         },
-
-        -- Image handling
-        attachments = {
-          img_folder = 'assets/imgs',
-          img_text_func = function(client, path)
-            path = client:vault_relative_path(path) or path
-            return string.format('![%s](%s)', path.name, path)
-          end,
-        },
-
-        -- Follow URL configuration
-        follow_url_func = function(url)
-          vim.fn.jobstart { 'open', url }
-        end,
       }
     end,
   },
