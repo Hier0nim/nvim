@@ -19,11 +19,6 @@
       url = "github:fei6409/log-highlight.nvim";
       flake = false;
     };
-
-    plugins-treesitter-textobjects = {
-      url = "github:nvim-treesitter/nvim-treesitter-textobjects/main";
-      flake = false;
-    };
   };
 
   # see :help nixCats.flake.outputs
@@ -181,7 +176,7 @@
                 colorful-menu-nvim
               ];
               treesitter = with pkgs.vimPlugins; [
-                pkgs.neovimPlugins.treesitter-textobjects
+                nvim-treesitter-textobjects
                 nvim-treesitter.withAllGrammars
                 # This is for if you only want some of the grammars
                 # (nvim-treesitter.withPlugins (
