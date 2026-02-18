@@ -79,31 +79,13 @@
         "type": "github"
       }
     },
-    "plugins-treesitter-textobjects": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1769600306,
-        "narHash": "sha256-J3D+nbalJqZ4aeFBD7veW6TuI0BEU2jbx5pMEew4dkA=",
-        "owner": "nvim-treesitter",
-        "repo": "nvim-treesitter-textobjects",
-        "rev": "a0e182ae21fda68c59d1f36c9ed45600aef50311",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nvim-treesitter",
-        "ref": "main",
-        "repo": "nvim-treesitter-textobjects",
-        "type": "github"
-      }
-    },
     "root": {
       "inputs": {
         "nixCats": "nixCats",
         "nixpkgs": "nixpkgs",
         "plugins-continue-nvim": "plugins-continue-nvim",
         "plugins-hlargs": "plugins-hlargs",
-        "plugins-log-highlight-nvim": "plugins-log-highlight-nvim",
-        "plugins-treesitter-textobjects": "plugins-treesitter-textobjects"
+        "plugins-log-highlight-nvim": "plugins-log-highlight-nvim"
       }
     }
   },
