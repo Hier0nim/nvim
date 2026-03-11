@@ -15,6 +15,11 @@
     flake = false;
   };
 
+  inputs.plugins-markdown-plus-nvim = {
+    url = "github:YousefHadder/markdown-plus.nvim";
+    flake = false;
+  };
+
   outputs =
     {
       self,

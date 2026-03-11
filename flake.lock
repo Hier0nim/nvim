@@ -48,11 +48,28 @@
         "type": "github"
       }
     },
+    "plugins-markdown-plus-nvim": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1773209306,
+        "narHash": "sha256-sJlpH6dh7T6wL9sac80MKVKy70cAtCZTvZUAh7GMHMc=",
+        "owner": "YousefHadder",
+        "repo": "markdown-plus.nvim",
+        "rev": "6ddbb55f1e8be011cdae7f20910034fcd52e8be3",
+        "type": "github"
+      },
+      "original": {
+        "owner": "YousefHadder",
+        "repo": "markdown-plus.nvim",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "nixpkgs": "nixpkgs",
         "plugins-lze": "plugins-lze",
         "plugins-lzextras": "plugins-lzextras",
+        "plugins-markdown-plus-nvim": "plugins-markdown-plus-nvim",
         "wrappers": "wrappers"
       }
     },

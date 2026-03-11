@@ -4,6 +4,9 @@ return {
     auto_enable = true,
     lazy = false,
     after = function()
+      local ts = require 'nvim-treesitter'
+
+      ---Attach Treesitter features to a buffer if the parser is available.
       ---@param buf integer
       ---@param language string
       ---@return boolean
@@ -14,16 +17,38 @@ return {
 
         vim.treesitter.start(buf, language)
 
-        vim.wo.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
-        vim.wo.foldmethod = 'expr'
-        vim.o.foldlevel = 99
+        vim.bo[buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
 
-        vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+        if vim.api.nvim_get_current_buf() == buf then
+          vim.wo.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
+          vim.wo.foldmethod = 'expr'
+          vim.wo.foldlevel = 99
+        end
 
         return true
       end
 
-      local installable_parsers = require('nvim-treesitter').get_available()
+      local installable_parsers = ts.get_available()
+
+      if not nixInfo.isNix then
+        local parsers_to_ensure = {
+          'lua',
+          'nix',
+          'vim',
+          'vimdoc',
+          'query',
+          'markdown',
+          'markdown_inline',
+        }
+
+        for _, parser in ipairs(parsers_to_ensure) do
+          if vim.tbl_contains(installable_parsers, parser) then
+            pcall(function()
+              ts.install(parser)
+            end)
+          end
+        end
+      end
 
       vim.api.nvim_create_autocmd('FileType', {
         callback = function(args)
@@ -35,12 +60,14 @@ return {
             return
           end
 
-          if not treesitter_try_attach(buf, language) then
-            if vim.tbl_contains(installable_parsers, language) then
-              require('nvim-treesitter').install(language):await(function()
-                treesitter_try_attach(buf, language)
-              end)
-            end
+          if treesitter_try_attach(buf, language) then
+            return
+          end
+
+          if vim.tbl_contains(installable_parsers, language) then
+            ts.install(language):await(function()
+              treesitter_try_attach(buf, language)
+            end)
           end
         end,
       })
