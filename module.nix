@@ -103,6 +103,9 @@ inputs:
       conform-nvim
       nvim-treesitter-textobjects
       nvim-treesitter.withAllGrammars
+
+      (config.nvim-lib.neovimPlugins.markdown-plus-nvim.overrideAttrs { pname = "markdown-plus.nvim"; })
+      render-markdown-nvim
     ];
   };
 

@@ -76,4 +76,8 @@ bootstrap_paq {
   { 'lewis6991/gitsigns.nvim', opt = true },
   { 'folke/which-key.nvim', opt = true },
   { 'tpope/vim-sleuth' },
+
+
+  { 'MeanderingProgrammer/render-markdown.nvim', opt = true },
+  { 'YousefHadder/markdown-plus.nvim', opt = true },
 }
