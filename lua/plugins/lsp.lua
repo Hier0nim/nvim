@@ -19,16 +19,19 @@ return {
     enabled = not nixInfo.isNix,
     priority = 100,
     on_plugin = { 'nvim-lspconfig' },
-    lsp = function(plugin)
-      vim.cmd.MasonInstall(plugin.name)
-    end,
+
     load = function(name)
       vim.cmd.packadd(name)
-      vim.cmd.packadd 'mason-lspconfig.nvim'
+      vim.cmd.packadd('mason-lspconfig.nvim')
+
       require('mason').setup()
-      require('mason-lspconfig').setup {
+
+      require('mason-lspconfig').setup({
         automatic_installation = true,
-      }
+        ensure_installed = {
+          'lua_ls',
+        },
+      })
     end,
   },
   {
