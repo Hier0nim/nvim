@@ -4,10 +4,13 @@ return {
   {
     'nvim-lspconfig',
     auto_enable = true,
+    ---Enable an LSP server with its configuration.
+    ---@param plugin table
     lsp = function(plugin)
       vim.lsp.config(plugin.name, plugin.lsp or {})
       vim.lsp.enable(plugin.name)
     end,
+    ---Apply shared LSP defaults before registering servers.
     before = function()
       vim.lsp.config('*', {
         on_attach = lsp_config.on_attach,
@@ -19,19 +22,20 @@ return {
     enabled = not nixInfo.isNix,
     priority = 100,
     on_plugin = { 'nvim-lspconfig' },
-
+    ---Configure mason.nvim and mason-lspconfig.nvim.
+    ---@param name string
     load = function(name)
       vim.cmd.packadd(name)
       vim.cmd.packadd('mason-lspconfig.nvim')
 
       require('mason').setup()
 
-      require('mason-lspconfig').setup({
+      require('mason-lspconfig').setup {
         automatic_installation = true,
         ensure_installed = {
           'lua_ls',
         },
-      })
+      }
     end,
   },
   {
@@ -39,6 +43,7 @@ return {
     auto_enable = true,
     cmd = { 'LazyDev' },
     ft = 'lua',
+    ---Configure lazydev.nvim.
     after = function()
       require('lazydev').setup {
         library = {

@@ -12,13 +12,23 @@ do
   ok, _G.nixInfo = pcall(require, vim.g.nix_info_plugin_name)
 
   if not ok then
-    package.preload[vim.g.nix_info_plugin_name] = function()
+    ---Return the default value for nixInfo calls when running without Nix metadata.
+    ---@param _ table
+    ---@param default any
+    ---@return any
+    local function nix_info_fallback(_, default)
+      return default
+    end
+
+    ---Create a minimal nixInfo module when running without Nix metadata.
+    ---@return table
+    local function create_nix_info_fallback()
       return setmetatable({}, {
-        __call = function(_, default)
-          return default
-        end,
+        __call = nix_info_fallback,
       })
     end
+
+    package.preload[vim.g.nix_info_plugin_name] = create_nix_info_fallback
     _G.nixInfo = require(vim.g.nix_info_plugin_name)
   end
 
@@ -36,46 +46,59 @@ do
   end
 end
 
+---Apply auto_enable rules for a plugin spec.
+---@param plugin table
+---@return table
+local function apply_auto_enable(plugin)
+  if nixInfo.isNix then
+    if type(plugin.auto_enable) == 'table' then
+      for _, name in pairs(plugin.auto_enable) do
+        if not nixInfo.get_nix_plugin_path(name) then
+          plugin.enabled = false
+          break
+        end
+      end
+    elseif type(plugin.auto_enable) == 'string' then
+      if not nixInfo.get_nix_plugin_path(plugin.auto_enable) then
+        plugin.enabled = false
+      end
+    elseif type(plugin.auto_enable) == 'boolean' and plugin.auto_enable then
+      if not nixInfo.get_nix_plugin_path(plugin.name) then
+        plugin.enabled = false
+      end
+    end
+  end
+  return plugin
+end
+
+---Apply cat-based enablement rules for a plugin spec.
+---@param plugin table
+---@return table
+local function apply_for_cat(plugin)
+  if nixInfo.isNix and type(plugin.for_cat) == 'string' then
+    plugin.enabled = nixInfo(false, 'settings', 'cats', plugin.for_cat)
+  end
+  return plugin
+end
+
 nixInfo.lze.register_handlers {
   {
     spec_field = 'auto_enable',
     set_lazy = false,
-    modify = function(plugin)
-      if nixInfo.isNix then
-        if type(plugin.auto_enable) == 'table' then
-          for _, name in pairs(plugin.auto_enable) do
-            if not nixInfo.get_nix_plugin_path(name) then
-              plugin.enabled = false
-              break
-            end
-          end
-        elseif type(plugin.auto_enable) == 'string' then
-          if not nixInfo.get_nix_plugin_path(plugin.auto_enable) then
-            plugin.enabled = false
-          end
-        elseif type(plugin.auto_enable) == 'boolean' and plugin.auto_enable then
-          if not nixInfo.get_nix_plugin_path(plugin.name) then
-            plugin.enabled = false
-          end
-        end
-      end
-      return plugin
-    end,
+    modify = apply_auto_enable,
   },
   {
     spec_field = 'for_cat',
     set_lazy = false,
-    modify = function(plugin)
-      if nixInfo.isNix and type(plugin.for_cat) == 'string' then
-        plugin.enabled = nixInfo(false, 'settings', 'cats', plugin.for_cat)
-      end
-      return plugin
-    end,
+    modify = apply_for_cat,
   },
   nixInfo.lze.lsp,
 }
 
-nixInfo.lze.h.lsp.set_ft_fallback(function(name)
+---Return fallback filetypes for a missing LSP config.
+---@param name string
+---@return string[]
+local function lsp_filetype_fallback(name)
   local lspcfg = nixInfo.get_nix_plugin_path 'nvim-lspconfig'
   if lspcfg then
     local ok, cfg = pcall(dofile, lspcfg .. '/lsp/' .. name .. '.lua')
@@ -83,7 +106,9 @@ nixInfo.lze.h.lsp.set_ft_fallback(function(name)
   else
     return (vim.lsp.config[name] or {}).filetypes or {}
   end
-end)
+end
+
+nixInfo.lze.h.lsp.set_ft_fallback(lsp_filetype_fallback)
 
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '

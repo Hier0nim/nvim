@@ -1,34 +1,29 @@
 return {
-  ---------------------------------------------------------------------------
-  -- Render Markdown inside buffer
-  ---------------------------------------------------------------------------
   {
-    "render-markdown.nvim",
-    ft = "markdown",
+    'render-markdown.nvim',
+    ft = 'markdown',
+    ---Configure render-markdown.nvim.
     after = function()
-      require("render-markdown").setup({
+      require('render-markdown').setup {
         enabled = true,
         max_file_size = 1.5,
         log_level = 'error',
-      })
+      }
     end,
     keys = {
       {
-        "<leader>mr",
-        "<cmd>RenderMarkdown toggle<CR>",
-        desc = "Markdown render toggle",
+        '<leader>mr',
+        '<cmd>RenderMarkdown toggle<CR>',
+        desc = 'Markdown render toggle',
       },
     },
   },
-
-  ---------------------------------------------------------------------------
-  -- Modern markdown editing 
-  ---------------------------------------------------------------------------
   {
-    "markdown-plus.nvim",
-    ft = "markdown",
+    'markdown-plus.nvim',
+    ft = 'markdown',
+    ---Configure markdown-plus.nvim.
     after = function()
-      require("markdown-plus").setup({})
+      require('markdown-plus').setup {}
     end,
   },
 }

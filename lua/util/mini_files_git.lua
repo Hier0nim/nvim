@@ -1,13 +1,15 @@
 local M = {}
 local did_setup = false
 
+---Attach Git status overlays to mini.files.
+---@param MiniFiles table
 function M.setup(MiniFiles)
   if did_setup then
     return
   end
   did_setup = true
 
-  local ns_mini_files_git = vim.api.nvim_create_namespace('mini_files_git')
+  local ns_mini_files_git = vim.api.nvim_create_namespace 'mini_files_git'
   local uv = vim.uv or vim.loop
 
   ---Cache for Git status per repository root.
@@ -94,20 +96,20 @@ function M.setup(MiniFiles)
   local function map_symbols(status, symlink)
     ---@type table<string, { symbol: string, hl_group: string }>
     local status_map = {
-      [" M"] = { symbol = "~", hl_group = "MiniDiffSignChange" }, -- Modified in the working directory
-      ["M "] = { symbol = "≈", hl_group = "MiniDiffSignChange" }, -- modified in index
-      ["MM"] = { symbol = "≋", hl_group = "MiniDiffSignChange" }, -- modified in both working tree and index
-      ["A "] = { symbol = "+", hl_group = "MiniDiffSignAdd"    }, -- Added to the staging area, new file
-      ["AA"] = { symbol = "✚", hl_group = "MiniDiffSignAdd"    }, -- file is added in both working tree and index
-      ["D "] = { symbol = "−", hl_group = "MiniDiffSignDelete" }, -- Deleted from the staging area
-      ["AM"] = { symbol = "⊕", hl_group = "MiniDiffSignChange" }, -- added in working tree, modified in index
-      ["AD"] = { symbol = "⊖", hl_group = "MiniDiffSignChange" }, -- Added in the index and deleted in the working directory
-      ["R "] = { symbol = "➜", hl_group = "MiniDiffSignChange" }, -- Renamed in the index
-      ["U "] = { symbol = "‼", hl_group = "MiniDiffSignChange" }, -- Unmerged path
-      ["UU"] = { symbol = "⇆", hl_group = "MiniDiffSignAdd"    }, -- file is unmerged
-      ["UA"] = { symbol = "⊗", hl_group = "MiniDiffSignAdd"    }, -- file is unmerged and added in working tree
-      ["??"] = { symbol = "?", hl_group = "MiniDiffSignDelete" }, -- Untracked files
-      ["!!"] = { symbol = "!", hl_group = "MiniDiffSignChange" }, -- Ignored files
+      [' M'] = { symbol = '~', hl_group = 'MiniDiffSignChange' }, -- Modified in the working directory
+      ['M '] = { symbol = '≈', hl_group = 'MiniDiffSignChange' }, -- modified in index
+      ['MM'] = { symbol = '≋', hl_group = 'MiniDiffSignChange' }, -- modified in both working tree and index
+      ['A '] = { symbol = '+', hl_group = 'MiniDiffSignAdd' }, -- Added to the staging area, new file
+      ['AA'] = { symbol = '✚', hl_group = 'MiniDiffSignAdd' }, -- file is added in both working tree and index
+      ['D '] = { symbol = '−', hl_group = 'MiniDiffSignDelete' }, -- Deleted from the staging area
+      ['AM'] = { symbol = '⊕', hl_group = 'MiniDiffSignChange' }, -- added in working tree, modified in index
+      ['AD'] = { symbol = '⊖', hl_group = 'MiniDiffSignChange' }, -- Added in the index and deleted in the working directory
+      ['R '] = { symbol = '➜', hl_group = 'MiniDiffSignChange' }, -- Renamed in the index
+      ['U '] = { symbol = '‼', hl_group = 'MiniDiffSignChange' }, -- Unmerged path
+      ['UU'] = { symbol = '⇆', hl_group = 'MiniDiffSignAdd' }, -- file is unmerged
+      ['UA'] = { symbol = '⊗', hl_group = 'MiniDiffSignAdd' }, -- file is unmerged and added in working tree
+      ['??'] = { symbol = '?', hl_group = 'MiniDiffSignDelete' }, -- Untracked files
+      ['!!'] = { symbol = '!', hl_group = 'MiniDiffSignChange' }, -- Ignored files
     }
 
     local result = status_map[status] or { symbol = '?', hl_group = 'NonText' }
@@ -126,11 +128,15 @@ function M.setup(MiniFiles)
   ---@param repo_root string
   ---@param callback fun(stdout: string)
   local function fetch_git_status(repo_root, callback)
-    vim.system({ 'git', 'status', '--ignored', '--porcelain' }, { text = true, cwd = repo_root }, function(result)
+    ---Handle Git status command output.
+    ---@param result table
+    local function handle_result(result)
       if result.code == 0 and type(result.stdout) == 'string' then
         callback(result.stdout)
       end
-    end)
+    end
+
+    vim.system({ 'git', 'status', '--ignored', '--porcelain' }, { text = true, cwd = repo_root }, handle_result)
   end
 
   ---Parse Git porcelain output into a map of relative path -> status.
@@ -141,11 +147,11 @@ function M.setup(MiniFiles)
     ---@type table<string, string>
     local git_status_map = {}
 
-    for line in content:gmatch('[^\r\n]+') do
+    for line in content:gmatch '[^\r\n]+' do
       local status, file_path = string.match(line, '^(..)%s+(.*)')
       if status and file_path then
         local parts = {}
-        for part in file_path:gmatch('[^/]+') do
+        for part in file_path:gmatch '[^/]+' do
           table.insert(parts, part)
         end
 
@@ -180,7 +186,8 @@ function M.setup(MiniFiles)
   ---@param repo_root string
   ---@param git_status_map table<string, string>
   local function update_mini_with_git(buf_id, repo_root, git_status_map)
-    vim.schedule(function()
+    ---Render Git overlay signs in the MiniFiles buffer.
+    local function apply_git_marks()
       if not vim.api.nvim_buf_is_valid(buf_id) then
         return
       end
@@ -220,7 +227,9 @@ function M.setup(MiniFiles)
           end
         end
       end
-    end)
+    end
+
+    vim.schedule(apply_git_marks)
   end
 
   ---Update Git overlay for a MiniFiles buffer, using cache when possible.
@@ -246,14 +255,18 @@ function M.setup(MiniFiles)
       return
     end
 
-    fetch_git_status(repo_root, function(content)
+    ---Handle Git status refresh and update overlays.
+    ---@param content string
+    local function on_git_status(content)
       local git_status_map = parse_git_status(content)
       git_status_cache[repo_root] = {
         time_ms = now_ms(),
         status_map = git_status_map,
       }
       update_mini_with_git(buf_id, repo_root, git_status_map)
-    end)
+    end
+
+    fetch_git_status(repo_root, on_git_status)
   end
 
   ---Clear cached Git status.
@@ -261,30 +274,40 @@ function M.setup(MiniFiles)
     git_status_cache = {}
   end
 
+  ---Handle MiniFilesExplorerOpen events.
+  local function on_explorer_open()
+    local buf_id = vim.api.nvim_get_current_buf()
+    update_git_status(buf_id)
+  end
+
+  ---Handle MiniFilesExplorerClose events.
+  local function on_explorer_close()
+    clear_cache()
+  end
+
+  ---Handle MiniFilesBufferUpdate events.
+  ---@param args table
+  local function on_buffer_update(args)
+    local buf_id = args.data.buf_id
+    update_git_status(buf_id)
+  end
+
   vim.api.nvim_create_autocmd('User', {
-    group = augroup('start'),
+    group = augroup 'start',
     pattern = 'MiniFilesExplorerOpen',
-    callback = function()
-      local buf_id = vim.api.nvim_get_current_buf()
-      update_git_status(buf_id)
-    end,
+    callback = on_explorer_open,
   })
 
   vim.api.nvim_create_autocmd('User', {
-    group = augroup('close'),
+    group = augroup 'close',
     pattern = 'MiniFilesExplorerClose',
-    callback = function()
-      clear_cache()
-    end,
+    callback = on_explorer_close,
   })
 
   vim.api.nvim_create_autocmd('User', {
-    group = augroup('update'),
+    group = augroup 'update',
     pattern = 'MiniFilesBufferUpdate',
-    callback = function(args)
-      local buf_id = args.data.buf_id
-      update_git_status(buf_id)
-    end,
+    callback = on_buffer_update,
   })
 end
 
