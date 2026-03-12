@@ -94,6 +94,7 @@ inputs:
       blink-compat
       cmp-cmdline
       colorful-menu-nvim
+      plenary-nvim
 
       lualine-nvim
       gitsigns-nvim
@@ -106,6 +107,8 @@ inputs:
 
       (config.nvim-lib.neovimPlugins.markdown-plus-nvim.overrideAttrs { pname = "markdown-plus.nvim"; })
       render-markdown-nvim
+
+      (config.nvim-lib.neovimPlugins.continue-nvim.overrideAttrs { pname = "continue.nvim"; })
     ];
   };
 

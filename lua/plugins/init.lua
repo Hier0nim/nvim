@@ -7,4 +7,8 @@ nixInfo.lze.load {
   { import = 'plugins.git' },
   { import = 'plugins.ui' },
   { import = 'plugins.markdown' },
+  { import = 'plugins.session' },
+  {
+    'plenary.nvim',
+ },
 }
