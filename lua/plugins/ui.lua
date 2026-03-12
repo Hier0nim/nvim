@@ -3,6 +3,7 @@ return {
     'vim-startuptime',
     auto_enable = true,
     cmd = { 'StartupTime' },
+    ---Configure vim-startuptime globals.
     before = function()
       vim.g.startuptime_event_width = 0
       vim.g.startuptime_tries = 10
@@ -13,6 +14,7 @@ return {
     'fidget.nvim',
     auto_enable = true,
     event = 'DeferredUIEnter',
+    ---Configure fidget.nvim.
     after = function()
       require('fidget').setup {
         notification = {
@@ -36,6 +38,7 @@ return {
     'lualine.nvim',
     auto_enable = true,
     event = 'DeferredUIEnter',
+    ---Configure lualine.nvim.
     after = function()
       require('lualine').setup {
         options = {
@@ -62,6 +65,7 @@ return {
     'which-key.nvim',
     auto_enable = true,
     event = 'DeferredUIEnter',
+    ---Configure which-key.nvim and keymap groups.
     after = function()
       require('which-key').setup {
         preset = 'helix',
