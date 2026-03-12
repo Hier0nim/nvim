@@ -58,13 +58,13 @@ bootstrap_paq {
   { 'williamboman/mason-lspconfig.nvim', opt = true },
   { 'folke/lazydev.nvim', opt = true },
 
-  { 'nvim-treesitter/nvim-treesitter', build = ':TSUpdate', opt = true },
+  { 'nvim-treesitter/nvim-treesitter', branch='master', build = ':TSUpdate', opt = true },
   { 'nvim-treesitter/nvim-treesitter-textobjects', opt = true },
 
   { 'stevearc/conform.nvim', opt = true },
   { 'mfussenegger/nvim-lint', opt = true },
 
-  { 'Saghen/blink.cmp', branch = 'v1.*', opt = true },
+  { 'Saghen/blink.cmp', branch = 'v1.7.0', opt = true },
   { 'Saghen/blink.compat', opt = true },
   { 'hrsh7th/cmp-cmdline', opt = true },
   { 'xzbdmw/colorful-menu.nvim', opt = true },
