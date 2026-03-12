@@ -16,6 +16,22 @@
         "type": "github"
       }
     },
+    "plugins-continue-nvim": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1765484266,
+        "narHash": "sha256-HVXu8P7warOLHmzrk4LliSNhvUdYoNqA5G3Ft0bN+wc=",
+        "owner": "niba",
+        "repo": "continue.nvim",
+        "rev": "ca67b611f4b48cf121e6af7b45eccb0829917f72",
+        "type": "github"
+      },
+      "original": {
+        "owner": "niba",
+        "repo": "continue.nvim",
+        "type": "github"
+      }
+    },
     "plugins-lze": {
       "flake": false,
       "locked": {
@@ -67,6 +83,7 @@
     "root": {
       "inputs": {
         "nixpkgs": "nixpkgs",
+        "plugins-continue-nvim": "plugins-continue-nvim",
         "plugins-lze": "plugins-lze",
         "plugins-lzextras": "plugins-lzextras",
         "plugins-markdown-plus-nvim": "plugins-markdown-plus-nvim",

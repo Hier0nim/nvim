@@ -1,23 +1,31 @@
 {
   description = "Hier0nim's neovim flake";
 
-  inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
-  inputs.wrappers.url = "github:BirdeeHub/nix-wrapper-modules";
-  inputs.wrappers.inputs.nixpkgs.follows = "nixpkgs";
+  inputs = {
+    nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
 
-  inputs.plugins-lze = {
-    url = "github:BirdeeHub/lze";
-    flake = false;
-  };
+    wrappers.url = "github:BirdeeHub/nix-wrapper-modules";
+    wrappers.inputs.nixpkgs.follows = "nixpkgs";
 
-  inputs.plugins-lzextras = {
-    url = "github:BirdeeHub/lzextras";
-    flake = false;
-  };
+    plugins-lze = {
+      url = "github:BirdeeHub/lze";
+      flake = false;
+    };
 
-  inputs.plugins-markdown-plus-nvim = {
-    url = "github:YousefHadder/markdown-plus.nvim";
-    flake = false;
+    plugins-lzextras = {
+      url = "github:BirdeeHub/lzextras";
+      flake = false;
+    };
+
+    plugins-markdown-plus-nvim = {
+      url = "github:YousefHadder/markdown-plus.nvim";
+      flake = false;
+    };
+
+    plugins-continue-nvim = {
+      url = "github:niba/continue.nvim";
+      flake = false;
+    };
   };
 
   outputs =
@@ -74,7 +82,10 @@
         neovim = wrappers.lib.mkInstallModule {
           name = "neovim";
           value = module;
-          loc = [ "home" "packages" ];
+          loc = [
+            "home"
+            "packages"
+          ];
         };
       };
     };
