@@ -16,7 +16,6 @@ return {
         end
 
         vim.treesitter.start(buf, language)
-
         vim.bo[buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
 
         if vim.api.nvim_get_current_buf() == buf then
@@ -28,7 +27,65 @@ return {
         return true
       end
 
-      local installable_parsers = ts.get_available()
+      ---Return installable parser names for both old and newer nvim-treesitter APIs.
+      ---@return string[]
+      local function get_installable_parsers()
+        local ok_ts, ts_mod = pcall(require, 'nvim-treesitter')
+        if ok_ts and type(ts_mod.get_available) == 'function' then
+          return ts_mod.get_available()
+        end
+
+        local ok_parsers, parsers = pcall(require, 'nvim-treesitter.parsers')
+        if ok_parsers and type(parsers.available_parsers) == 'function' then
+          return parsers.available_parsers()
+        end
+
+        return {}
+      end
+
+      ---Install parser if possible, across different nvim-treesitter versions.
+      ---@param language string
+      ---@param on_done? fun()
+      local function install_parser(language, on_done)
+        local ok_install, install_mod = pcall(require, 'nvim-treesitter.install')
+        if ok_install and type(install_mod.commands) == 'table' then
+          local install_fn = install_mod.commands.TSInstallSync or install_mod.commands.TSInstall
+          if type(install_fn) == 'function' then
+            pcall(install_fn, { language })
+            if on_done then
+              vim.schedule(on_done)
+            end
+            return
+          end
+        end
+
+        if type(ts.install) == 'function' then
+          local ok_result, result = pcall(ts.install, language)
+          if ok_result then
+            if type(result) == 'table' and type(result.await) == 'function' then
+              result:await(function()
+                if on_done then
+                  on_done()
+                end
+              end)
+            else
+              if on_done then
+                vim.schedule(on_done)
+              end
+            end
+            return
+          end
+        end
+
+        vim.schedule(function()
+          vim.notify(
+            ("Treesitter parser '%s' is not installed. Run :TSInstallSync %s"):format(language, language),
+            vim.log.levels.WARN
+          )
+        end)
+      end
+
+      local installable_parsers = get_installable_parsers()
 
       if not nixInfo.isNix then
         local parsers_to_ensure = {
@@ -43,9 +100,7 @@ return {
 
         for _, parser in ipairs(parsers_to_ensure) do
           if vim.tbl_contains(installable_parsers, parser) then
-            pcall(function()
-              ts.install(parser)
-            end)
+            install_parser(parser)
           end
         end
       end
@@ -65,7 +120,7 @@ return {
           end
 
           if vim.tbl_contains(installable_parsers, language) then
-            ts.install(language):await(function()
+            install_parser(language, function()
               treesitter_try_attach(buf, language)
             end)
           end
@@ -256,5 +311,5 @@ return {
     after = function()
       require('nvim-surround').setup()
     end,
-  },
+},
 }
