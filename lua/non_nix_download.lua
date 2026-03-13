@@ -81,4 +81,6 @@ bootstrap_paq {
 
   { 'MeanderingProgrammer/render-markdown.nvim', opt = true },
   { 'YousefHadder/markdown-plus.nvim', opt = true },
+
+  { 'GustavEikaas/easy-dotnet.nvim', opt = true },
 }
