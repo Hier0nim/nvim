@@ -1,84 +1,43 @@
----Clone paq-nvim if it is not already installed.
----
----Used for the non-Nix fallback plugin installation path.
----@return boolean  True if paq-nvim was installed during this run.
-local function clone_paq()
-  local path = vim.fn.stdpath 'data' .. '/site/pack/paqs/start/paq-nvim'
-  local is_installed = vim.fn.empty(vim.fn.glob(path)) == 0
+local gh = function(x) return 'https://github.com/' .. x end
 
-  if not is_installed then
-    vim.fn.system {
-      'git',
-      'clone',
-      '--depth=1',
-      'https://github.com/savq/paq-nvim.git',
-      path,
-    }
-    return true
-  end
+vim.pack.add {
+  { src = gh 'BirdeeHub/lze' },
+  { src = gh 'BirdeeHub/lzextras' },
 
-  return false
-end
+  { src = gh 'olimorris/onedarkpro.nvim' },
+  { src = gh 'bluz71/vim-moonfly-colors' },
+  { src = gh 'thesimonho/kanagawa-paper.nvim' },
 
----Bootstrap paq-nvim and install the requested plugin list.
----
----This runs only when the configuration is not using the Nix wrapper.
----@param packages table[]
-local function bootstrap_paq(packages)
-  local first_install = clone_paq()
+  { src = gh 'nvim-mini/mini.nvim' },
+  { src = gh 'nvim-tree/nvim-web-devicons' },
+  { src = gh 'folke/snacks.nvim' },
 
-  vim.cmd.packadd 'paq-nvim'
+  { src = gh 'neovim/nvim-lspconfig', load = false },
+  { src = gh 'williamboman/mason.nvim', load = false },
+  { src = gh 'williamboman/mason-lspconfig.nvim', load = false },
+  { src = gh 'folke/lazydev.nvim', load = false },
 
-  local paq = require 'paq'
-  if first_install then
-    vim.notify 'Installing plugins. If prompted, press Enter to continue.'
-  end
+  { src = gh 'nvim-treesitter/nvim-treesitter', version = 'main', load = false },
+  { src = gh 'nvim-treesitter/nvim-treesitter-textobjects', load = false },
 
-  paq(vim.list_extend({
-    'savq/paq-nvim',
-  }, packages))
+  { src = gh 'stevearc/conform.nvim', load = false },
+  { src = gh 'mfussenegger/nvim-lint', load = false },
 
-  paq.install()
-end
+  { src = gh 'Saghen/blink.cmp', version = vim.version.range('1.*'), load = false },
+  { src = gh 'Saghen/blink.compat', load = false },
+  { src = gh 'hrsh7th/cmp-cmdline', load = false },
+  { src = gh 'xzbdmw/colorful-menu.nvim', load = false },
 
-bootstrap_paq {
-  { 'BirdeeHub/lze' },
-  { 'BirdeeHub/lzextras' },
+  { src = gh 'kylechui/nvim-surround', load = false },
+  { src = gh 'dstein64/vim-startuptime', load = false },
+  { src = gh 'j-hui/fidget.nvim', load = false },
+  { src = gh 'nvim-lualine/lualine.nvim', load = false },
+  { src = gh 'lewis6991/gitsigns.nvim', load = false },
+  { src = gh 'folke/which-key.nvim', load = false },
+  { src = gh 'tpope/vim-sleuth' },
+  { src = gh 'niba/continue.nvim' },
+  { src = gh 'nvim-lua/plenary.nvim' },
 
-  { 'olimorris/onedarkpro.nvim' },
-  { 'bluz71/vim-moonfly-colors' },
-  { 'thesimonho/kanagawa-paper.nvim' },
-
-  { 'nvim-mini/mini.nvim' },
-  { 'nvim-tree/nvim-web-devicons' },
-  { 'folke/snacks.nvim' },
-
-  { 'neovim/nvim-lspconfig', opt = true },
-  { 'williamboman/mason.nvim', opt = true },
-  { 'williamboman/mason-lspconfig.nvim', opt = true },
-  { 'folke/lazydev.nvim', opt = true },
-
-  { 'nvim-treesitter/nvim-treesitter', branch='master', build = ':TSUpdate', opt = true },
-  { 'nvim-treesitter/nvim-treesitter-textobjects', opt = true },
-
-  { 'stevearc/conform.nvim', opt = true },
-  { 'mfussenegger/nvim-lint', opt = true },
-
-  { 'Saghen/blink.cmp', branch = 'v1.7.0', opt = true },
-  { 'Saghen/blink.compat', opt = true },
-  { 'hrsh7th/cmp-cmdline', opt = true },
-  { 'xzbdmw/colorful-menu.nvim', opt = true },
-
-  { 'kylechui/nvim-surround', opt = true },
-  { 'dstein64/vim-startuptime', opt = true },
-  { 'j-hui/fidget.nvim', opt = true },
-  { 'nvim-lualine/lualine.nvim', opt = true },
-  { 'lewis6991/gitsigns.nvim', opt = true },
-  { 'folke/which-key.nvim', opt = true },
-  { 'tpope/vim-sleuth' },
-  { 'niba/continue.nvim' },
-  { 'nvim-lua/plenary.nvim' },
-
-  { 'MeanderingProgrammer/render-markdown.nvim', opt = true },
-  { 'YousefHadder/markdown-plus.nvim', opt = true },
+  { src = gh 'MeanderingProgrammer/render-markdown.nvim', load = false },
+  { src = gh 'YousefHadder/markdown-plus.nvim', load = false },
 }
