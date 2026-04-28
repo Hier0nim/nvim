@@ -82,8 +82,6 @@ return {
         { '<leader>f_', hidden = true },
         { '<leader>g', group = '[g]it' },
         { '<leader>g_', hidden = true },
-        { '<leader>r', group = '[r]ename' },
-        { '<leader>r_', hidden = true },
         { '<leader>s', group = '[s]earch' },
         { '<leader>s_', hidden = true },
         { '<leader>t', group = '[t]oggles' },
