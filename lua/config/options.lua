@@ -1,4 +1,4 @@
-vim.o.exrc = false
+vim.o.exrc = true
 
 vim.opt.list = true
 vim.opt.listchars = {

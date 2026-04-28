@@ -43,7 +43,7 @@ return {
       require('lualine').setup {
         options = {
           icons_enabled = false,
-          theme = nixInfo('kanagawa-paper-ink', 'settings', 'colorscheme'),
+          theme = 'auto',
           component_separators = '|',
           section_separators = '',
         },
