@@ -7,6 +7,7 @@ vim.pack.add {
   { src = gh 'olimorris/onedarkpro.nvim' },
   { src = gh 'bluz71/vim-moonfly-colors' },
   { src = gh 'thesimonho/kanagawa-paper.nvim' },
+  { src = gh 'f-person/auto-dark-mode.nvim' },
 
   { src = gh 'nvim-mini/mini.nvim' },
   { src = gh 'nvim-tree/nvim-web-devicons' },

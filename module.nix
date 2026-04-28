@@ -109,6 +109,8 @@ inputs:
       render-markdown-nvim
 
       (config.nvim-lib.neovimPlugins.continue-nvim.overrideAttrs { pname = "continue.nvim"; })
+
+      (config.nvim-lib.neovimPlugins.auto-dark-mode-nvim.overrideAttrs { pname = "auto-dark-mode.nvim"; })
     ];
   };
 
