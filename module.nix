@@ -75,6 +75,7 @@ inputs:
       nvim-dap
     ];
     extraPackages = with pkgs; [
+      (pkgs.callPackage ./pkgs/easydotnet.nix { })
       netcoredbg
     ];
   };
