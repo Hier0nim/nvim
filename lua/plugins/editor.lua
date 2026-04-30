@@ -386,6 +386,22 @@ return {
 
       require('util.mini_files_git').setup(MiniFiles)
 
+      vim.api.nvim_create_autocmd('User', {
+        pattern = 'MiniFilesBufferCreate',
+        callback = function(args)
+          local buf_id = args.data.buf_id
+          vim.keymap.set('n', '<leader>a', function()
+            local entry = MiniFiles.get_fs_entry()
+            if entry == nil then
+              return
+            end
+            local target_dir = entry.fs_type == 'file' and vim.fn.fnamemodify(entry.path, ':h') or entry.path
+            MiniFiles.close()
+            require('easy-dotnet').create_new_item(target_dir)
+          end, { buffer = buf_id, desc = 'Create file from dotnet template' })
+        end,
+      })
+
       ---Open MiniFiles in the parent directory of the current buffer.
       local function open_parent_directory()
         MiniFiles.open(vim.api.nvim_buf_get_name(0), true)
