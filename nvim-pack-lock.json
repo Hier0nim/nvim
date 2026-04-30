@@ -29,6 +29,10 @@
       "rev": "ca67b611f4b48cf121e6af7b45eccb0829917f72",
       "src": "https://github.com/niba/continue.nvim"
     },
+    "easy-dotnet.nvim": {
+      "rev": "cccd08c1e86f4952cbab1e27a2bd54c7251b28de",
+      "src": "https://github.com/GustavEikaas/easy-dotnet.nvim"
+    },
     "fidget.nvim": {
       "rev": "889e2e96edef4e144965571d46f7a77bcc4d0ddf",
       "src": "https://github.com/j-hui/fidget.nvim"
@@ -72,6 +76,10 @@
     "mini.nvim": {
       "rev": "be81509b7160aa02264a59789164a2e1c4a6750a",
       "src": "https://github.com/nvim-mini/mini.nvim"
+    },
+    "nvim-dap": {
+      "rev": "45a69eba683a2c448dd9ecfc4de89511f0646b5f",
+      "src": "https://github.com/mfussenegger/nvim-dap"
     },
     "nvim-lint": {
       "rev": "eab58b48eb11d7745c11c505e0f3057165902461",

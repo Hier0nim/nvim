@@ -41,4 +41,7 @@ vim.pack.add {
 
   { src = gh 'MeanderingProgrammer/render-markdown.nvim', load = false },
   { src = gh 'YousefHadder/markdown-plus.nvim', load = false },
+
+  { src = gh 'GustavEikaas/easy-dotnet.nvim', load = false },
+  { src = gh 'mfussenegger/nvim-dap', load = false },
 }

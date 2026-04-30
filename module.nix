@@ -68,6 +68,17 @@ inputs:
     ];
   };
 
+  config.specs.dotnet = {
+    lazy = true;
+    data = with pkgs.vimPlugins; [
+      easy-dotnet-nvim
+      nvim-dap
+    ];
+    extraPackages = with pkgs; [
+      netcoredbg
+    ];
+  };
+
   config.specs.general = {
     after = [ "lze" ];
     extraPackages = with pkgs; [
