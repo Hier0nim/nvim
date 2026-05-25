@@ -22,11 +22,6 @@
       flake = false;
     };
 
-    plugins-continue-nvim = {
-      url = "github:niba/continue.nvim";
-      flake = false;
-    };
-
     plugins-auto-dark-mode-nvim = {
       url = "github:f-person/auto-dark-mode.nvim";
       flake = false;

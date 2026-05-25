@@ -106,8 +106,6 @@ inputs:
       blink-compat
       cmp-cmdline
       colorful-menu-nvim
-      plenary-nvim
-
       lualine-nvim
       gitsigns-nvim
       which-key-nvim
@@ -120,17 +118,15 @@ inputs:
       (config.nvim-lib.neovimPlugins.markdown-plus-nvim.overrideAttrs { pname = "markdown-plus.nvim"; })
       render-markdown-nvim
 
-      (config.nvim-lib.neovimPlugins.continue-nvim.overrideAttrs { pname = "continue.nvim"; })
-
       (config.nvim-lib.neovimPlugins.auto-dark-mode-nvim.overrideAttrs { pname = "auto-dark-mode.nvim"; })
     ];
   };
 
   config.specMods =
     {
-      parentSpec ? null,
-      parentOpts ? null,
-      parentName ? null,
+      _parentSpec ? null,
+      _parentOpts ? null,
+      _parentName ? null,
       config,
       ...
     }:

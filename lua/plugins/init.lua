@@ -8,7 +8,4 @@ nixInfo.lze.load {
   { import = 'plugins.markdown' },
   { import = 'plugins.session' },
   { import = 'plugins.dotnet' },
-  {
-    'plenary.nvim',
-  },
 }
