@@ -50,7 +50,7 @@ inputs:
 
   config.specs.nix = {
     data = null;
-    extraPackages = with pkgs; [
+    runtimePkgs = with pkgs; [
       nixd
       nixfmt
     ];
@@ -62,7 +62,7 @@ inputs:
     data = with pkgs.vimPlugins; [
       lazydev-nvim
     ];
-    extraPackages = with pkgs; [
+    runtimePkgs = with pkgs; [
       lua-language-server
       stylua
     ];
@@ -74,7 +74,7 @@ inputs:
       easy-dotnet-nvim
       nvim-dap
     ];
-    extraPackages = with pkgs; [
+    runtimePkgs = with pkgs; [
       (pkgs.callPackage ./pkgs/easydotnet.nix { })
       netcoredbg
     ];
@@ -82,7 +82,7 @@ inputs:
 
   config.specs.general = {
     after = [ "lze" ];
-    extraPackages = with pkgs; [
+    runtimePkgs = with pkgs; [
       lazygit
       tree-sitter
       ripgrep
@@ -129,17 +129,19 @@ inputs:
   config.specMods =
     {
       parentSpec ? null,
+      parentOpts ? null,
+      parentName ? null,
       config,
       ...
     }:
     {
-      options.extraPackages = lib.mkOption {
+      options.runtimePkgs = lib.mkOption {
         type = lib.types.listOf wlib.types.stringable;
         default = [ ];
       };
     };
 
-  config.extraPackages = config.specCollect (acc: v: acc ++ (v.extraPackages or [ ])) [ ];
+  config.runtimePkgs = config.specCollect (acc: v: acc ++ (v.runtimePkgs or [ ])) [ ];
 
   options.settings.cats = lib.mkOption {
     readOnly = true;
