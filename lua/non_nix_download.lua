@@ -36,8 +36,6 @@ vim.pack.add {
   { src = gh 'lewis6991/gitsigns.nvim', load = false },
   { src = gh 'folke/which-key.nvim', load = false },
   { src = gh 'tpope/vim-sleuth' },
-  { src = gh 'niba/continue.nvim' },
-  { src = gh 'nvim-lua/plenary.nvim' },
 
   { src = gh 'MeanderingProgrammer/render-markdown.nvim', load = false },
   { src = gh 'YousefHadder/markdown-plus.nvim', load = false },

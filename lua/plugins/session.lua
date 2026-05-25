@@ -1,33 +1,35 @@
 return {
   {
-    'continue.nvim',
+    'mini.sessions',
     event = 'VimEnter',
-    ---Configure continue.nvim.
+    ---Configure mini.sessions for automatic session read/write.
     after = function()
-      require('continue').setup {
-        picker = 'snacks',
+      require('mini.sessions').setup {
+        autoread = true,
+        autowrite = true,
+        force = { read = false, write = true, delete = false },
+        verbose = { read = false, write = true, delete = true },
       }
-
-      ---Override continue.nvim picker to prefer Snacks.
-      local function apply_continue_snacks_workaround()
-        local picker_mod = require 'continue.pickers.picker'
-        local snacks_picker = require 'continue.pickers.snacks'
-
-        ---Dispatch picker requests through the Snacks integration when available.
-        ---@param opts table
-        ---@param _ any
-        local function pick_with_snacks(opts, _)
-          if snacks_picker.enabled and type(snacks_picker.pick) == 'function' then
-            return snacks_picker.pick(opts)
-          end
-
-          vim.notify('continue.nvim: snacks picker is not usable', vim.log.levels.ERROR)
-        end
-
-        picker_mod.pick = pick_with_snacks
-      end
-
-      apply_continue_snacks_workaround()
+    end,
+  },
+  {
+    'mini.starter',
+    event = 'VimEnter',
+    ---Configure mini.starter as the start screen.
+    after = function()
+      local starter = require('mini.starter')
+      starter.setup {
+        evaluate_single = true,
+        items = {
+          starter.sections.builtin_actions(),
+          starter.sections.recent_files(10, true),
+          starter.sections.recent_files(10, false),
+        },
+        content_hooks = {
+          starter.gen_hook.adding_bullet(),
+          starter.gen_hook.aligning('center', 'center'),
+        },
+      }
     end,
   },
 }
