@@ -210,7 +210,15 @@ return {
 
       conform.setup {
         formatters_by_ft = {
-          lua = nixInfo(nil, 'settings', 'cats', 'lua') and { 'stylua' } or nil,
+          lua = { 'stylua' },
+          typescript = { 'prettierd' },
+          javascript = { 'prettierd' },
+          typescriptreact = { 'prettierd' },
+          javascriptreact = { 'prettierd' },
+          json = { 'prettierd' },
+          html = { 'prettierd' },
+          css = { 'prettierd' },
+          yaml = { 'prettierd' },
         },
       }
 

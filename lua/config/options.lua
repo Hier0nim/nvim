@@ -1,4 +1,5 @@
 vim.o.exrc = true
+vim.o.background = 'dark'
 
 vim.opt.list = true
 vim.opt.listchars = {
