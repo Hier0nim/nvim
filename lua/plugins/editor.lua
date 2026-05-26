@@ -427,6 +427,40 @@ return {
         open_working_directory,
         { noremap = true, desc = 'Open current working directory' }
       )
+
+      require('mini.ai').setup()
+      require('mini.pairs').setup()
+      require('mini.move').setup {
+        mappings = {
+          left = '',
+          right = '',
+          down = 'J',
+          up = 'K',
+          line_left = '',
+          line_right = '',
+          line_down = '',
+          line_up = '',
+        },
+      }
+      require('mini.bracketed').setup()
+      require('mini.splitjoin').setup()
+      require('mini.cursorword').setup()
+      require('mini.align').setup()
+      require('mini.operators').setup()
+      require('mini.diff').setup {
+        view = {
+          style = 'sign',
+          signs = { add = '+', change = '~', delete = '_' },
+        },
+      }
+      require('mini.hipatterns').setup {
+        highlighters = {
+          fixme = { pattern = '%f[%w]()FIXME()%f[%W]', group = 'MiniHipatternsFixme' },
+          todo = { pattern = '%f[%w]()TODO()%f[%W]', group = 'MiniHipatternsTodo' },
+          note = { pattern = '%f[%w]()NOTE()%f[%W]', group = 'MiniHipatternsNote' },
+          hex_color = require('mini.hipatterns').gen_highlighter.hex_color(),
+        },
+      }
     end,
   },
   {

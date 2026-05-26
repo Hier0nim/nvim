@@ -11,10 +11,19 @@ return {
       require('util.lazygit').setup(nixInfo)
 
       require('snacks').setup {
+        bigfile = {},
+        quickfile = {},
+        words = {},
+        gitbrowse = {},
+        rename = {},
+        dim = {},
+        zen = {},
         picker = {},
         git = {},
         terminal = {},
         scope = {},
+        toggle = {},
+        input = {},
         indent = {
           scope = {
             hl = 'MySnacksIndent',
@@ -74,6 +83,23 @@ return {
       vim.keymap.set('n', '<leader>sq', Snacks.picker.qflist, { desc = 'Quickfix list' })
       vim.keymap.set('n', '<leader>sR', Snacks.picker.resume, { desc = 'Resume picker' })
       vim.keymap.set('n', '<leader>su', Snacks.picker.undo, { desc = 'Undo history' })
+
+      vim.keymap.set('n', ']]', function() Snacks.words.jump(vim.v.count1) end, { desc = 'Next reference' })
+      vim.keymap.set('n', '[[', function() Snacks.words.jump(-vim.v.count1) end, { desc = 'Prev reference' })
+      vim.keymap.set({ 'n', 'v' }, '<leader>gB', Snacks.gitbrowse.open, { desc = 'Git browse' })
+      vim.keymap.set('n', '<leader>cR', Snacks.rename.rename_file, { desc = 'Rename file' })
+      vim.keymap.set('n', '<leader>z', function() Snacks.zen() end, { desc = 'Zen mode' })
+      vim.keymap.set('n', '<leader>Z', function() Snacks.zen.zoom() end, { desc = 'Zen zoom' })
+      vim.keymap.set('n', '<leader>uD', function() Snacks.dim() end, { desc = 'Toggle dim' })
+
+      Snacks.toggle.option('spell', { name = 'Spelling' }):map '<leader>ts'
+      Snacks.toggle.option('wrap', { name = 'Wrap' }):map '<leader>tw'
+      Snacks.toggle.option('relativenumber', { name = 'Relative number' }):map '<leader>tL'
+      Snacks.toggle.diagnostics():map '<leader>td'
+      Snacks.toggle.line_number():map '<leader>tl'
+      Snacks.toggle.treesitter():map '<leader>tT'
+      Snacks.toggle.inlay_hints():map '<leader>th'
+      Snacks.toggle.dim():map '<leader>tD'
     end,
   },
 }

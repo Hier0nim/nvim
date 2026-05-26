@@ -47,3 +47,6 @@ vim.o.sessionoptions = 'blank,buffers,curdir,folds,help,tabpages,winsize,winpos,
 
 vim.g.netrw_liststyle = 0
 vim.g.netrw_banner = 0
+
+-- Large file safety: stop syntax/regex matching on very long lines
+vim.o.synmaxcol = 500
