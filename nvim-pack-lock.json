@@ -25,6 +25,10 @@
       "rev": "dca1a190aa85f9065979ef35802fb77131911106",
       "src": "https://github.com/stevearc/conform.nvim"
     },
+    "continue.nvim": {
+      "rev": "ca67b611f4b48cf121e6af7b45eccb0829917f72",
+      "src": "https://github.com/niba/continue.nvim"
+    },
     "easy-dotnet.nvim": {
       "rev": "cccd08c1e86f4952cbab1e27a2bd54c7251b28de",
       "src": "https://github.com/GustavEikaas/easy-dotnet.nvim"
@@ -105,6 +109,10 @@
     "onedarkpro.nvim": {
       "rev": "f5fddfd5122fe00421e199151ae4fe8571a02898",
       "src": "https://github.com/olimorris/onedarkpro.nvim"
+    },
+    "plenary.nvim": {
+      "rev": "74b06c6c75e4eeb3108ec01852001636d85a932b",
+      "src": "https://github.com/nvim-lua/plenary.nvim"
     },
     "render-markdown.nvim": {
       "rev": "3f3eea97b80839f629c951ca660ffd125bfa5b34",

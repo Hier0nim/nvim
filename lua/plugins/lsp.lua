@@ -31,9 +31,19 @@ return {
       require('mason').setup()
 
       require('mason-lspconfig').setup {
-        automatic_installation = true,
         ensure_installed = {
           'lua_ls',
+          'ts_ls',
+          'html',
+          'cssls',
+          'jsonls',
+          'yamlls',
+          'eslint',
+        },
+        handlers = {
+          function(server_name)
+            vim.lsp.enable(server_name)
+          end,
         },
       }
     end,
@@ -95,4 +105,10 @@ return {
       },
     },
   },
+  { 'ts_ls', for_cat = 'web', lsp = {} },
+  { 'html', for_cat = 'web', lsp = {} },
+  { 'cssls', for_cat = 'web', lsp = {} },
+  { 'jsonls', for_cat = 'web', lsp = {} },
+  { 'yamlls', for_cat = 'web', lsp = {} },
+  { 'eslint', for_cat = 'web', lsp = {} },
 }

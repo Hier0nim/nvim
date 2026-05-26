@@ -56,6 +56,16 @@ inputs:
     ];
   };
 
+  config.specs.web = {
+    data = null;
+    runtimePkgs = with pkgs; [
+      typescript-language-server
+      vscode-langservers-extracted
+      yaml-language-server
+      prettierd
+    ];
+  };
+
   config.specs.lua = {
     after = [ "general" ];
     lazy = true;
