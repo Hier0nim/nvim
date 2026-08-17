@@ -225,43 +225,14 @@ return {
       ---Format the current buffer with Conform.
       local function format_with_conform()
         conform.format {
-          lsp_fallback = true,
+          lsp_format = 'fallback',
           async = false,
-          timeout_ms = 1000,
+          timeout_ms = 3000,
         }
       end
 
       vim.keymap.set({ 'n', 'v' }, '<leader>cf', format_with_conform, { desc = '[C]ode [F]ormat' })
     end,
-  },
-  {
-    'nvim-lint',
-    auto_enable = true,
-    event = 'FileType',
-    ---Configure nvim-lint and its autocmd.
-    after = function()
-      require('lint').linters_by_ft = {}
-
-      ---Run linting for the current buffer.
-      local function run_lint()
-        require('lint').try_lint()
-      end
-
-      vim.api.nvim_create_autocmd({ 'BufWritePost' }, {
-        callback = run_lint,
-      })
-    end,
-  },
-  {
-    'cmp-cmdline',
-    auto_enable = true,
-    on_plugin = { 'blink.cmp' },
-    load = nixInfo.lze.loaders.with_after,
-  },
-  {
-    'blink.compat',
-    auto_enable = true,
-    dep_of = { 'cmp-cmdline' },
   },
   {
     'colorful-menu.nvim',
@@ -282,7 +253,7 @@ return {
           return { 'buffer' }
         end
         if cmdtype == ':' or cmdtype == '@' then
-          return { 'cmdline', 'cmp_cmdline' }
+          return { 'cmdline' }
         end
         return {}
       end
@@ -344,21 +315,13 @@ return {
           },
         },
         sources = {
-          default = { 'lsp', 'path', 'buffer', 'omni' },
+          default = { 'lsp', 'path', 'snippets', 'buffer' },
           providers = {
             path = {
               score_offset = 50,
             },
             lsp = {
               score_offset = 40,
-            },
-            cmp_cmdline = {
-              name = 'cmp_cmdline',
-              module = 'blink.compat.source',
-              score_offset = -100,
-              opts = {
-                cmp_name = 'cmdline',
-              },
             },
           },
         },
@@ -405,7 +368,7 @@ return {
             end
             local target_dir = entry.fs_type == 'file' and vim.fn.fnamemodify(entry.path, ':h') or entry.path
             MiniFiles.close()
-            require('easy-dotnet').create_new_item(target_dir)
+            require('easy-dotnet').create_item(target_dir)
           end, { buffer = buf_id, desc = 'Create file from dotnet template' })
         end,
       })
@@ -444,15 +407,9 @@ return {
       }
       require('mini.bracketed').setup()
       require('mini.splitjoin').setup()
-      require('mini.cursorword').setup()
+      require('mini.surround').setup()
       require('mini.align').setup()
       require('mini.operators').setup()
-      require('mini.diff').setup {
-        view = {
-          style = 'sign',
-          signs = { add = '+', change = '~', delete = '_' },
-        },
-      }
       require('mini.hipatterns').setup {
         highlighters = {
           fixme = { pattern = '%f[%w]()FIXME()%f[%W]', group = 'MiniHipatternsFixme' },
@@ -461,15 +418,6 @@ return {
           hex_color = require('mini.hipatterns').gen_highlighter.hex_color(),
         },
       }
-    end,
-  },
-  {
-    'nvim-surround',
-    auto_enable = true,
-    event = 'DeferredUIEnter',
-    ---Configure nvim-surround.
-    after = function()
-      require('nvim-surround').setup()
     end,
   },
 }

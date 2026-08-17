@@ -5,19 +5,21 @@ return {
     lazy = false,
     ---Configure auto-dark-mode.nvim.
     after = function()
-      ---Apply custom highlights for line numbers.
-      local function apply_line_number_highlight()
+      ---Apply custom highlights that should persist across colorscheme changes.
+      local function apply_custom_highlights()
         vim.cmd [[hi LineNr guifg=#bb9af7]]
       end
+
+      vim.api.nvim_create_autocmd('ColorScheme', {
+        callback = apply_custom_highlights,
+      })
 
       require('auto-dark-mode').setup {
         set_dark_mode = function()
           vim.cmd.colorscheme 'kanagawa-paper-ink'
-          apply_line_number_highlight()
         end,
         set_light_mode = function()
           vim.cmd.colorscheme 'onelight'
-          apply_line_number_highlight()
         end,
         fallback = 'dark',
       }

@@ -38,22 +38,22 @@ vim.keymap.set({ 'v', 'x', 'n' }, '<leader>y', '"+y', {
   desc = 'Yank to clipboard',
 })
 
-vim.keymap.set({ 'n', 'v', 'x' }, '<leader>Y', '"+yy', {
+vim.keymap.set('n', '<leader>Y', '"+yy', {
   noremap = true,
   silent = true,
   desc = 'Yank line to clipboard',
+})
+
+vim.keymap.set({ 'v', 'x' }, '<leader>Y', '"+y', {
+  noremap = true,
+  silent = true,
+  desc = 'Yank selection to clipboard',
 })
 
 vim.keymap.set({ 'n', 'v', 'x' }, '<leader>p', '"+p', {
   noremap = true,
   silent = true,
   desc = 'Paste from clipboard',
-})
-
-vim.keymap.set('i', '<C-p>', '<C-r><C-p>+', {
-  noremap = true,
-  silent = true,
-  desc = 'Paste from clipboard in insert mode',
 })
 
 vim.keymap.set('x', '<leader>P', '"_dP', {

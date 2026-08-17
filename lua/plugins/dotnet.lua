@@ -11,22 +11,6 @@ return {
     cmd = { 'Dotnet' },
     ---Configure easy-dotnet.nvim.
     after = function()
-      -- Register easy-dotnet as a blink.cmp source if blink is loaded.
-      local ok, blink_config = pcall(require, 'blink.cmp.config')
-      if ok then
-        local provider_id = 'easy-dotnet'
-        local provider_cfg = {
-          name = 'easy-dotnet',
-          module = 'easy-dotnet.completion.blink',
-          score_offset = 10000,
-          async = true,
-        }
-        blink_config.sources.providers[provider_id] = provider_cfg
-        table.insert(blink_config.sources.default, provider_id)
-        local sources_lib = require 'blink.cmp.sources.lib'
-        sources_lib.providers[provider_id] = require('blink.cmp.sources.lib.provider').new(provider_id, provider_cfg)
-      end
-
       require('easy-dotnet').setup {
         picker = 'snacks',
         lsp = {
@@ -41,6 +25,8 @@ return {
           auto_register_dap = true,
           console = 'integratedTerminal',
           apply_value_converters = true,
+          bin_path = nil,
+          engine = 'netcoredbg',
         },
         test_runner = {
           auto_start_testrunner = true,
@@ -52,7 +38,6 @@ return {
           type = 'block_scoped',
           enabled = true,
         },
-        background_scanning = true,
       }
 
       local dap = require 'dap'
