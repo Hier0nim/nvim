@@ -39,4 +39,6 @@ vim.pack.add {
   { src = gh 'nvim-lua/plenary.nvim', load = false },
   { src = gh 'GustavEikaas/easy-dotnet.nvim', load = false },
   { src = gh 'mfussenegger/nvim-dap', load = false },
+  { src = gh 'rcarriga/nvim-dap-ui', load = false },
+  { src = gh 'nvim-neotest/nvim-nio', load = false },
 }

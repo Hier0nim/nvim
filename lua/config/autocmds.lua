@@ -1,17 +1,16 @@
 -- Remove automatic comment continuation when creating new lines
 vim.api.nvim_create_autocmd('FileType', {
+  group = vim.api.nvim_create_augroup('FormatOptions', { clear = true }),
   desc = 'Remove automatic comment continuation',
   callback = function()
-    vim.opt.formatoptions:remove { 'c', 'r', 'o' }
+    vim.opt_local.formatoptions:remove { 'c', 'r', 'o' }
   end,
 })
 
 -- Highlight text after it is yanked
-local highlight_group = vim.api.nvim_create_augroup('YankHighlight', { clear = true })
-
 vim.api.nvim_create_autocmd('TextYankPost', {
+  group = vim.api.nvim_create_augroup('YankHighlight', { clear = true }),
   desc = 'Highlight yanked text',
-  group = highlight_group,
   callback = function()
     vim.hl.on_yank()
   end,

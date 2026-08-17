@@ -77,6 +77,8 @@ inputs:
       (config.nvim-lib.neovimPlugins.easy-dotnet-nvim.overrideAttrs { pname = "easy-dotnet.nvim"; })
       plenary-nvim
       nvim-dap
+      nvim-dap-ui
+      nvim-nio
     ];
     runtimePkgs = with pkgs; [
       (pkgs.callPackage ./pkgs/easydotnet.nix { })
