@@ -27,17 +27,10 @@ inputs:
 
   config.specs.colorscheme = {
     lazy = true;
-    data = builtins.getAttr config.settings.colorscheme (
-      with pkgs.vimPlugins;
-      {
-        "onedark_dark" = onedarkpro-nvim;
-        "onedark_vivid" = onedarkpro-nvim;
-        "onedark" = onedarkpro-nvim;
-        "onelight" = onedarkpro-nvim;
-        "moonfly" = vim-moonfly-colors;
-        "kanagawa-paper-ink" = kanagawa-paper-nvim;
-      }
-    );
+    data = with pkgs.vimPlugins; [
+      kanagawa-paper-nvim
+      onedarkpro-nvim
+    ];
   };
 
   config.specs.lze = [
@@ -81,12 +74,12 @@ inputs:
   config.specs.dotnet = {
     lazy = true;
     data = with pkgs.vimPlugins; [
-      easy-dotnet-nvim
+      (config.nvim-lib.neovimPlugins.easy-dotnet-nvim.overrideAttrs { pname = "easy-dotnet.nvim"; })
+      plenary-nvim
       nvim-dap
     ];
     runtimePkgs = with pkgs; [
       (pkgs.callPackage ./pkgs/easydotnet.nix { })
-      netcoredbg
     ];
   };
 
@@ -109,18 +102,14 @@ inputs:
       mini-nvim
       snacks-nvim
       nvim-lspconfig
-      nvim-surround
       vim-startuptime
 
       blink-cmp
-      blink-compat
-      cmp-cmdline
       colorful-menu-nvim
       lualine-nvim
       gitsigns-nvim
       which-key-nvim
       fidget-nvim
-      nvim-lint
       conform-nvim
       nvim-treesitter-textobjects
       nvim-treesitter.withAllGrammars

@@ -22,14 +22,10 @@ vim.pack.add {
   { src = gh 'nvim-treesitter/nvim-treesitter-textobjects', load = false },
 
   { src = gh 'stevearc/conform.nvim', load = false },
-  { src = gh 'mfussenegger/nvim-lint', load = false },
 
   { src = gh 'Saghen/blink.cmp', version = vim.version.range('1.*'), load = false },
-  { src = gh 'Saghen/blink.compat', load = false },
-  { src = gh 'hrsh7th/cmp-cmdline', load = false },
   { src = gh 'xzbdmw/colorful-menu.nvim', load = false },
 
-  { src = gh 'kylechui/nvim-surround', load = false },
   { src = gh 'dstein64/vim-startuptime', load = false },
   { src = gh 'j-hui/fidget.nvim', load = false },
   { src = gh 'nvim-lualine/lualine.nvim', load = false },
@@ -40,6 +36,7 @@ vim.pack.add {
   { src = gh 'MeanderingProgrammer/render-markdown.nvim', load = false },
   { src = gh 'YousefHadder/markdown-plus.nvim', load = false },
 
+  { src = gh 'nvim-lua/plenary.nvim', load = false },
   { src = gh 'GustavEikaas/easy-dotnet.nvim', load = false },
   { src = gh 'mfussenegger/nvim-dap', load = false },
 }

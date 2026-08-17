@@ -26,6 +26,11 @@
       url = "github:f-person/auto-dark-mode.nvim";
       flake = false;
     };
+
+    plugins-easy-dotnet-nvim = {
+      url = "github:GustavEikaas/easy-dotnet.nvim";
+      flake = false;
+    };
   };
 
   outputs =

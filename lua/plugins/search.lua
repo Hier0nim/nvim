@@ -40,7 +40,7 @@ return {
             git_hl = false,
           },
           git = {
-            patterns = { 'GitSign', 'MiniDiffSign' },
+            patterns = { 'GitSign' },
           },
           refresh = 50,
         },
@@ -65,7 +65,7 @@ return {
 
       vim.keymap.set('n', '<leader>sf', Snacks.picker.smart, { desc = 'Smart find files' })
       vim.keymap.set('n', '<leader>sr', Snacks.picker.recent, { desc = 'Smart find files' })
-      vim.keymap.set('n', '<leader><feader>s', Snacks.picker.buffers, { desc = 'Search buffers' })
+      vim.keymap.set('n', '<leader><leader>s', Snacks.picker.buffers, { desc = 'Search buffers' })
       vim.keymap.set('n', 'ff', Snacks.picker.files, { desc = 'Find files' })
       vim.keymap.set('n', '<leader>fg', Snacks.picker.git_files, { desc = 'Find git files' })
       vim.keymap.set('n', '<leader>sb', Snacks.picker.lines, { desc = 'Buffer lines' })
