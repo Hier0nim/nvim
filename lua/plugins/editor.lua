@@ -7,6 +7,10 @@ return {
     after = function()
       local ts = require 'nvim-treesitter'
 
+      -- Filetypes where treesitter indentexpr should not be set
+      -- (EasyDotnet manages its own indentation for C#)
+      local skip_indentexpr = { c_sharp = true }
+
       ---Attach Treesitter features to a buffer if the parser is available.
       ---@param buf integer
       ---@param language string
@@ -17,7 +21,9 @@ return {
         end
 
         vim.treesitter.start(buf, language)
-        vim.bo[buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+        if not skip_indentexpr[language] then
+          vim.bo[buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+        end
 
         if vim.api.nvim_get_current_buf() == buf then
           vim.wo.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
@@ -345,51 +351,38 @@ return {
       end
 
       local ok_files, MiniFiles = pcall(require, 'mini.files')
-      if not ok_files then
-        return
+      if ok_files then
+        MiniFiles.setup {
+          options = {
+            use_as_default_explorer = true,
+          },
+        }
+
+        require('util.mini_files_git').setup(MiniFiles)
+
+        vim.api.nvim_create_autocmd('User', {
+          pattern = 'MiniFilesBufferCreate',
+          callback = function(args)
+            local buf_id = args.data.buf_id
+            vim.keymap.set('n', '<leader>a', function()
+              local entry = MiniFiles.get_fs_entry()
+              if entry == nil then
+                return
+              end
+              local target_dir = entry.fs_type == 'file' and vim.fn.fnamemodify(entry.path, ':h') or entry.path
+              MiniFiles.close()
+              require('easy-dotnet').create_item(target_dir)
+            end, { buffer = buf_id, desc = 'Create file from dotnet template' })
+          end,
+        })
+
+        ---Open MiniFiles in the parent directory of the current buffer.
+        local function open_parent_directory()
+          MiniFiles.open(vim.api.nvim_buf_get_name(0), true)
+        end
+
+        vim.keymap.set('n', '-', open_parent_directory, { noremap = true, desc = 'Open parent directory' })
       end
-
-      MiniFiles.setup {
-        options = {
-          use_as_default_explorer = true,
-        },
-      }
-
-      require('util.mini_files_git').setup(MiniFiles)
-
-      vim.api.nvim_create_autocmd('User', {
-        pattern = 'MiniFilesBufferCreate',
-        callback = function(args)
-          local buf_id = args.data.buf_id
-          vim.keymap.set('n', '<leader>a', function()
-            local entry = MiniFiles.get_fs_entry()
-            if entry == nil then
-              return
-            end
-            local target_dir = entry.fs_type == 'file' and vim.fn.fnamemodify(entry.path, ':h') or entry.path
-            MiniFiles.close()
-            require('easy-dotnet').create_item(target_dir)
-          end, { buffer = buf_id, desc = 'Create file from dotnet template' })
-        end,
-      })
-
-      ---Open MiniFiles in the parent directory of the current buffer.
-      local function open_parent_directory()
-        MiniFiles.open(vim.api.nvim_buf_get_name(0), true)
-      end
-
-      ---Open MiniFiles in the current working directory.
-      local function open_working_directory()
-        MiniFiles.open(vim.fn.getcwd(), true)
-      end
-
-      vim.keymap.set('n', '-', open_parent_directory, { noremap = true, desc = 'Open parent directory' })
-      vim.keymap.set(
-        'n',
-        '<leader>-',
-        open_working_directory,
-        { noremap = true, desc = 'Open current working directory' }
-      )
 
       require('mini.ai').setup()
       require('mini.pairs').setup()
@@ -409,7 +402,9 @@ return {
       require('mini.splitjoin').setup()
       require('mini.surround').setup()
       require('mini.align').setup()
-      require('mini.operators').setup()
+      require('mini.operators').setup {
+        replace = { prefix = 'cr' },
+      }
       require('mini.hipatterns').setup {
         highlighters = {
           fixme = { pattern = '%f[%w]()FIXME()%f[%W]', group = 'MiniHipatternsFixme' },

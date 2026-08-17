@@ -25,7 +25,7 @@ return {
         ---@return string
         local function next_hunk()
           if vim.wo.diff then
-            return ']c'
+            return ']h'
           end
           vim.schedule(gs.next_hunk)
           return '<Ignore>'
@@ -35,7 +35,7 @@ return {
         ---@return string
         local function prev_hunk()
           if vim.wo.diff then
-            return '[c'
+            return '[h'
           end
           vim.schedule(gs.prev_hunk)
           return '<Ignore>'
@@ -61,11 +61,11 @@ return {
           gs.diffthis '~'
         end
 
-        map({ 'n', 'v' }, ']c', next_hunk, { expr = true, desc = 'Jump to next hunk' })
-        map({ 'n', 'v' }, '[c', prev_hunk, { expr = true, desc = 'Jump to previous hunk' })
+        map({ 'n', 'v' }, ']h', next_hunk, { expr = true, desc = 'Jump to next hunk' })
+        map({ 'n', 'v' }, '[h', prev_hunk, { expr = true, desc = 'Jump to previous hunk' })
 
-        map('v', '<leader>hs', stage_visual_hunk, { desc = 'Stage git hunk' })
-        map('v', '<leader>hr', reset_visual_hunk, { desc = 'Reset git hunk' })
+        map('v', '<leader>gs', stage_visual_hunk, { desc = 'Stage git hunk' })
+        map('v', '<leader>gr', reset_visual_hunk, { desc = 'Reset git hunk' })
 
         map('n', '<leader>gs', gs.stage_hunk, { desc = 'Git stage hunk' })
         map('n', '<leader>gr', gs.reset_hunk, { desc = 'Git reset hunk' })
@@ -77,8 +77,8 @@ return {
         map('n', '<leader>gd', gs.diffthis, { desc = 'Git diff against index' })
         map('n', '<leader>gD', diff_last_commit, { desc = 'Git diff against last commit' })
 
-        map('n', '<leader>gtb', gs.toggle_current_line_blame, { desc = 'Toggle git blame line' })
-        map('n', '<leader>gtd', gs.toggle_deleted, { desc = 'Toggle deleted lines' })
+        map('n', '<leader>ub', gs.toggle_current_line_blame, { desc = 'Toggle git blame line' })
+        map('n', '<leader>uG', gs.toggle_deleted, { desc = 'Toggle deleted lines' })
 
         map({ 'o', 'x' }, 'ih', ':<C-U>Gitsigns select_hunk<CR>', { desc = 'Select git hunk' })
       end
@@ -93,10 +93,6 @@ return {
         },
         on_attach = on_attach,
       }
-
-      vim.cmd [[hi GitSignsAdd guifg=#04de21]]
-      vim.cmd [[hi GitSignsChange guifg=#83fce6]]
-      vim.cmd [[hi GitSignsDelete guifg=#fa2525]]
     end,
   },
 }

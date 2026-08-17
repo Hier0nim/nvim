@@ -8,19 +8,10 @@ vim.keymap.set('n', 'N', 'Nzzzv', { desc = 'Previous search result' })
 vim.keymap.set('v', '<', '<gv^', { desc = 'Indent left and keep selection' })
 vim.keymap.set('v', '>', '>gv^', { desc = 'Indent right and keep selection' })
 
-vim.keymap.set('n', '<leader><leader>[', '<cmd>bprev<CR>', { desc = 'Previous buffer' })
-vim.keymap.set('n', '<leader><leader>]', '<cmd>bnext<CR>', { desc = 'Next buffer' })
-vim.keymap.set('n', '<leader><leader>l', '<cmd>b#<CR>', { desc = 'Last buffer' })
-vim.keymap.set('n', '<leader><leader>d', '<cmd>bdelete<CR>', { desc = 'Delete buffer' })
-
-vim.cmd [[command! W w]]
-vim.cmd [[command! Wq wq]]
-vim.cmd [[command! WQ wq]]
-vim.cmd [[command! Q q]]
-
 vim.keymap.set('n', 'k', "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
 vim.keymap.set('n', 'j', "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
 
+-- Diagnostics
 vim.keymap.set('n', '[d', function()
   vim.diagnostic.jump { count = -1 }
 end, { desc = 'Previous diagnostic' })
@@ -29,10 +20,26 @@ vim.keymap.set('n', ']d', function()
   vim.diagnostic.jump { count = 1 }
 end, { desc = 'Next diagnostic' })
 
-vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = 'Open diagnostic float' })
-vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostics list' })
+vim.keymap.set('n', '<leader>ce', vim.diagnostic.open_float, { desc = 'Open diagnostic float' })
 
-vim.keymap.set({ 'v', 'x', 'n' }, '<leader>y', '"+y', {
+-- Window navigation
+vim.keymap.set('n', '<C-h>', '<C-w>h', { desc = 'Move to left window' })
+vim.keymap.set('n', '<C-j>', '<C-w>j', { desc = 'Move to below window' })
+vim.keymap.set('n', '<C-k>', '<C-w>k', { desc = 'Move to above window' })
+vim.keymap.set('n', '<C-l>', '<C-w>l', { desc = 'Move to right window' })
+
+-- Window management
+vim.keymap.set('n', '<leader>wv', '<cmd>vsplit<CR>', { desc = 'Split vertical' })
+vim.keymap.set('n', '<leader>ws', '<cmd>split<CR>', { desc = 'Split horizontal' })
+vim.keymap.set('n', '<leader>w=', '<C-w>=', { desc = 'Equalize windows' })
+vim.keymap.set('n', '<leader>wq', '<cmd>close<CR>', { desc = 'Close window' })
+
+-- Buffers
+vim.keymap.set('n', '<leader><leader>l', '<cmd>b#<CR>', { desc = 'Last buffer' })
+vim.keymap.set('n', '<leader><leader>d', '<cmd>bdelete<CR>', { desc = 'Delete buffer' })
+
+-- Clipboard
+vim.keymap.set({ 'n', 'x' }, '<leader>y', '"+y', {
   noremap = true,
   silent = true,
   desc = 'Yank to clipboard',
@@ -44,13 +51,13 @@ vim.keymap.set('n', '<leader>Y', '"+yy', {
   desc = 'Yank line to clipboard',
 })
 
-vim.keymap.set({ 'v', 'x' }, '<leader>Y', '"+y', {
+vim.keymap.set('x', '<leader>Y', '"+y', {
   noremap = true,
   silent = true,
   desc = 'Yank selection to clipboard',
 })
 
-vim.keymap.set({ 'n', 'v', 'x' }, '<leader>p', '"+p', {
+vim.keymap.set({ 'n', 'x' }, '<leader>p', '"+p', {
   noremap = true,
   silent = true,
   desc = 'Paste from clipboard',

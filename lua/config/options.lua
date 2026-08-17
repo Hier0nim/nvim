@@ -43,10 +43,12 @@ vim.o.termguicolors = true
 vim.opt.cmdheight = 0
 vim.opt.spelllang = { 'en_us', 'pl' }
 
-vim.o.sessionoptions = 'blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions'
+vim.o.splitright = true
+vim.o.splitbelow = true
+vim.o.confirm = true
+vim.opt.sidescrolloff = 8
 
-vim.g.netrw_liststyle = 0
-vim.g.netrw_banner = 0
+vim.o.sessionoptions = 'blank,buffers,curdir,folds,help,tabpages,winsize,winpos,localoptions'
 
 -- Large file safety: stop syntax/regex matching on very long lines
 vim.o.synmaxcol = 500

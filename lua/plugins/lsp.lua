@@ -1,5 +1,3 @@
-local lsp_config = require 'config.lsp'
-
 return {
   {
     'nvim-lspconfig',
@@ -9,12 +7,6 @@ return {
     lsp = function(plugin)
       vim.lsp.config(plugin.name, plugin.lsp or {})
       vim.lsp.enable(plugin.name)
-    end,
-    ---Apply shared LSP defaults before registering servers.
-    before = function()
-      vim.lsp.config('*', {
-        on_attach = lsp_config.on_attach,
-      })
     end,
   },
   {

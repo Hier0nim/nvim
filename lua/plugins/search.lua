@@ -6,8 +6,6 @@ return {
     priority = 1000,
     ---Configure Snacks and related keymaps.
     after = function()
-      vim.api.nvim_set_hl(0, 'MySnacksIndent', { fg = '#32a88f' })
-
       require('util.lazygit').setup(nixInfo)
 
       require('snacks').setup {
@@ -60,46 +58,57 @@ return {
         },
       }
 
-      vim.keymap.set('n', '<leader>_', Snacks.lazygit.open, { desc = 'Snacks lazygit' })
-      vim.keymap.set('n', '<C-\\>', Snacks.terminal.open, { desc = 'Snacks terminal' })
+      -- Find
+      vim.keymap.set('n', '<leader>ff', Snacks.picker.smart, { desc = 'Find files' })
+      vim.keymap.set('n', '<leader>fg', Snacks.picker.grep, { desc = 'Grep' })
+      vim.keymap.set({ 'n', 'x' }, '<leader>fw', Snacks.picker.grep_word, { desc = 'Grep word/selection' })
+      vim.keymap.set('n', '<leader>fr', Snacks.picker.recent, { desc = 'Recent files' })
+      vim.keymap.set('n', '<leader>fb', Snacks.picker.buffers, { desc = 'Buffers' })
+      vim.keymap.set('n', '<leader>fs', Snacks.picker.lsp_symbols, { desc = 'Document symbols' })
+      vim.keymap.set('n', '<leader>fS', Snacks.picker.lsp_workspace_symbols, { desc = 'Workspace symbols' })
+      vim.keymap.set('n', '<leader>fd', Snacks.picker.diagnostics, { desc = 'Diagnostics' })
+      vim.keymap.set('n', '<leader>fD', Snacks.picker.diagnostics_buffer, { desc = 'Buffer diagnostics' })
+      vim.keymap.set('n', '<leader>fj', Snacks.picker.jumps, { desc = 'Jumps' })
+      vim.keymap.set('n', '<leader>fm', Snacks.picker.marks, { desc = 'Marks' })
+      vim.keymap.set('n', '<leader>fk', Snacks.picker.keymaps, { desc = 'Keymaps' })
+      vim.keymap.set('n', '<leader>fh', Snacks.picker.help, { desc = 'Help pages' })
+      vim.keymap.set('n', '<leader>fu', Snacks.picker.undo, { desc = 'Undo history' })
+      vim.keymap.set('n', '<leader>fR', Snacks.picker.resume, { desc = 'Resume picker' })
+      vim.keymap.set('n', '<leader>fG', Snacks.picker.git_files, { desc = 'Git files' })
+      vim.keymap.set('n', '<leader>fl', Snacks.picker.lines, { desc = 'Buffer lines' })
+      vim.keymap.set('n', '<leader>fB', Snacks.picker.grep_buffers, { desc = 'Grep open buffers' })
 
-      vim.keymap.set('n', '<leader>sf', Snacks.picker.smart, { desc = 'Smart find files' })
-      vim.keymap.set('n', '<leader>sr', Snacks.picker.recent, { desc = 'Smart find files' })
-      vim.keymap.set('n', '<leader><leader>s', Snacks.picker.buffers, { desc = 'Search buffers' })
-      vim.keymap.set('n', 'ff', Snacks.picker.files, { desc = 'Find files' })
-      vim.keymap.set('n', '<leader>fg', Snacks.picker.git_files, { desc = 'Find git files' })
-      vim.keymap.set('n', '<leader>sb', Snacks.picker.lines, { desc = 'Buffer lines' })
-      vim.keymap.set('n', '<leader>sB', Snacks.picker.grep_buffers, { desc = 'Grep open buffers' })
-      vim.keymap.set('n', '<leader>sg', Snacks.picker.grep, { desc = 'Grep' })
-      vim.keymap.set({ 'n', 'x' }, '<leader>sw', Snacks.picker.grep_word, { desc = 'Search current word' })
-      vim.keymap.set('n', '<leader>sd', Snacks.picker.diagnostics, { desc = 'Diagnostics' })
-      vim.keymap.set('n', '<leader>sD', Snacks.picker.diagnostics_buffer, { desc = 'Buffer diagnostics' })
-      vim.keymap.set('n', '<leader>sh', Snacks.picker.help, { desc = 'Help pages' })
-      vim.keymap.set('n', '<leader>sj', Snacks.picker.jumps, { desc = 'Jumps' })
-      vim.keymap.set('n', '<leader>sk', Snacks.picker.keymaps, { desc = 'Keymaps' })
-      vim.keymap.set('n', '<leader>sl', Snacks.picker.loclist, { desc = 'Location list' })
-      vim.keymap.set('n', '<leader>sm', Snacks.picker.marks, { desc = 'Marks' })
-      vim.keymap.set('n', '<leader>sM', Snacks.picker.man, { desc = 'Man pages' })
-      vim.keymap.set('n', '<leader>sq', Snacks.picker.qflist, { desc = 'Quickfix list' })
-      vim.keymap.set('n', '<leader>sR', Snacks.picker.resume, { desc = 'Resume picker' })
-      vim.keymap.set('n', '<leader>su', Snacks.picker.undo, { desc = 'Undo history' })
-
-      vim.keymap.set('n', ']]', function() Snacks.words.jump(vim.v.count1) end, { desc = 'Next reference' })
-      vim.keymap.set('n', '[[', function() Snacks.words.jump(-vim.v.count1) end, { desc = 'Prev reference' })
+      -- Git
+      vim.keymap.set('n', '<leader>gg', Snacks.lazygit.open, { desc = 'LazyGit' })
       vim.keymap.set({ 'n', 'v' }, '<leader>gB', Snacks.gitbrowse.open, { desc = 'Git browse' })
-      vim.keymap.set('n', '<leader>cR', Snacks.rename.rename_file, { desc = 'Rename file' })
-      vim.keymap.set('n', '<leader>z', function() Snacks.zen() end, { desc = 'Zen mode' })
-      vim.keymap.set('n', '<leader>Z', function() Snacks.zen.zoom() end, { desc = 'Zen zoom' })
-      vim.keymap.set('n', '<leader>uD', function() Snacks.dim() end, { desc = 'Toggle dim' })
 
-      Snacks.toggle.option('spell', { name = 'Spelling' }):map '<leader>ts'
-      Snacks.toggle.option('wrap', { name = 'Wrap' }):map '<leader>tw'
-      Snacks.toggle.option('relativenumber', { name = 'Relative number' }):map '<leader>tL'
-      Snacks.toggle.diagnostics():map '<leader>td'
-      Snacks.toggle.line_number():map '<leader>tl'
-      Snacks.toggle.treesitter():map '<leader>tT'
-      Snacks.toggle.inlay_hints():map '<leader>th'
-      Snacks.toggle.dim():map '<leader>tD'
+      -- Terminal
+      vim.keymap.set('n', '<C-\\>', Snacks.terminal.open, { desc = 'Terminal' })
+
+      -- References
+      vim.keymap.set('n', ']r', function() Snacks.words.jump(vim.v.count1) end, { desc = 'Next reference' })
+      vim.keymap.set('n', '[r', function() Snacks.words.jump(-vim.v.count1) end, { desc = 'Prev reference' })
+
+      -- Code
+      vim.keymap.set('n', '<leader>cR', Snacks.rename.rename_file, { desc = 'Rename file' })
+
+      -- Explorer
+      vim.keymap.set('n', '<leader>e', function()
+        require('mini.files').open(vim.fn.getcwd(), true)
+      end, { desc = 'Open working directory' })
+
+      -- UI toggles
+      vim.keymap.set('n', '<leader>uz', function() Snacks.zen() end, { desc = 'Zen mode' })
+      vim.keymap.set('n', '<leader>uZ', function() Snacks.zen.zoom() end, { desc = 'Zen zoom' })
+
+      Snacks.toggle.option('spell', { name = 'Spelling' }):map '<leader>us'
+      Snacks.toggle.option('wrap', { name = 'Wrap' }):map '<leader>uw'
+      Snacks.toggle.option('relativenumber', { name = 'Relative number' }):map '<leader>uL'
+      Snacks.toggle.diagnostics():map '<leader>ud'
+      Snacks.toggle.line_number():map '<leader>ul'
+      Snacks.toggle.treesitter():map '<leader>uT'
+      Snacks.toggle.inlay_hints():map '<leader>uh'
+      Snacks.toggle.dim():map '<leader>uD'
     end,
   },
 }
