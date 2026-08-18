@@ -1,42 +1,13 @@
 return {
   {
-    'nvim-nio',
-    auto_enable = true,
-    dep_of = { 'nvim-dap-ui' },
-  },
-  {
-    'nvim-dap-ui',
-    auto_enable = true,
-    dep_of = { 'easy-dotnet.nvim' },
-    after = function()
-      vim.cmd.packadd('nvim-nio')
-      local dapui = require 'dapui'
-      dapui.setup()
-
-      local dap = require 'dap'
-      dap.listeners.after.event_initialized['dapui_config'] = function()
-        dapui.open()
-      end
-      dap.listeners.before.event_terminated['dapui_config'] = function()
-        dapui.close()
-      end
-      dap.listeners.before.event_exited['dapui_config'] = function()
-        dapui.close()
-      end
-    end,
-  },
-  {
-    'nvim-dap',
-    auto_enable = true,
-    dep_of = { 'easy-dotnet.nvim' },
-  },
-  {
     'easy-dotnet.nvim',
     auto_enable = true,
     ft = { 'cs', 'csproj', 'fsproj', 'sln' },
     cmd = { 'Dotnet' },
     ---Configure easy-dotnet.nvim.
     after = function()
+      vim.cmd.packadd('nvim-dap')
+
       require('easy-dotnet').setup {
         picker = 'snacks',
         lsp = {
@@ -89,35 +60,36 @@ return {
         },
       }
 
-      -- DAP keymaps
-      local dap = require 'dap'
-      vim.keymap.set('n', '<F5>', dap.continue, { desc = 'DAP continue / start' })
-      vim.keymap.set('n', '<F10>', dap.step_over, { desc = 'DAP step over' })
-      vim.keymap.set('n', '<F11>', dap.step_into, { desc = 'DAP step into' })
-      vim.keymap.set('n', '<F12>', dap.step_out, { desc = 'DAP step out' })
-      vim.keymap.set('n', '<leader>db', dap.toggle_breakpoint, { desc = 'DAP toggle breakpoint' })
-      vim.keymap.set('n', '<leader>dB', function()
-        dap.set_breakpoint(vim.fn.input 'Breakpoint condition: ')
-      end, { desc = 'DAP conditional breakpoint' })
-      vim.keymap.set('n', '<leader>dr', dap.repl.open, { desc = 'DAP open REPL' })
-      vim.keymap.set('n', '<leader>dl', dap.run_last, { desc = 'DAP run last' })
-      vim.keymap.set('n', '<leader>dx', dap.terminate, { desc = 'DAP terminate' })
-      vim.keymap.set('n', '<leader>dc', dap.run_to_cursor, { desc = 'DAP run to cursor' })
+      -- Buffer-local .NET run/test keymaps
+      vim.api.nvim_create_autocmd('FileType', {
+        group = vim.api.nvim_create_augroup('DotnetKeymaps', { clear = true }),
+        pattern = { 'cs', 'csproj', 'fsproj', 'sln' },
+        desc = 'Buffer-local .NET keymaps',
+        callback = function(args)
+          local opts = { buffer = args.buf }
 
-      -- DAP UI keymaps
-      vim.keymap.set('n', '<leader>du', function() require('dapui').toggle() end, { desc = 'DAP toggle UI' })
-      vim.keymap.set({ 'n', 'x' }, '<leader>de', function() require('dapui').eval() end, { desc = 'DAP evaluate expression' })
+          vim.keymap.set('n', '<leader>rr', '<cmd>Dotnet run<CR>',
+            vim.tbl_extend('force', opts, { desc = 'Run default project' }))
+          vim.keymap.set('n', '<leader>rd', '<cmd>Dotnet run debug<CR>',
+            vim.tbl_extend('force', opts, { desc = 'Debug default project' }))
+          vim.keymap.set('n', '<leader>rb', '<cmd>Dotnet build<CR>',
+            vim.tbl_extend('force', opts, { desc = 'Build default project' }))
+          vim.keymap.set('n', '<leader>rw', '<cmd>Dotnet watch<CR>',
+            vim.tbl_extend('force', opts, { desc = 'Watch default project' }))
+          vim.keymap.set('n', '<leader>rs', '<cmd>Dotnet stop<CR>',
+            vim.tbl_extend('force', opts, { desc = 'Stop running job' }))
+          vim.keymap.set('n', '<leader>rm', '<cmd>Dotnet<CR>',
+            vim.tbl_extend('force', opts, { desc = 'Dotnet action menu' }))
+          vim.keymap.set('n', '<leader>tt', '<cmd>Dotnet testrunner<CR>',
+            vim.tbl_extend('force', opts, { desc = 'Toggle test runner' }))
+        end,
+      })
 
-      -- Run and build
-      vim.keymap.set('n', '<leader>rr', '<cmd>Dotnet run<CR>', { desc = 'Run default project' })
-      vim.keymap.set('n', '<leader>rd', '<cmd>Dotnet run debug<CR>', { desc = 'Debug default project' })
-      vim.keymap.set('n', '<leader>rb', '<cmd>Dotnet build<CR>', { desc = 'Build default project' })
-      vim.keymap.set('n', '<leader>rw', '<cmd>Dotnet watch<CR>', { desc = 'Watch default project' })
-      vim.keymap.set('n', '<leader>rs', '<cmd>Dotnet stop<CR>', { desc = 'Stop running job' })
-      vim.keymap.set('n', '<leader>rm', '<cmd>Dotnet<CR>', { desc = 'Dotnet action menu' })
-
-      -- Tests
-      vim.keymap.set('n', '<leader>tt', '<cmd>Dotnet testrunner<CR>', { desc = 'Toggle test runner' })
+      -- Trigger for current buffer if it matches
+      local ft = vim.bo.filetype
+      if ft == 'cs' or ft == 'csproj' or ft == 'fsproj' or ft == 'sln' then
+        vim.api.nvim_exec_autocmds('FileType', { pattern = ft })
+      end
     end,
   },
 }

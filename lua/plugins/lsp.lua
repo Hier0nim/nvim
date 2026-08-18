@@ -31,6 +31,9 @@ return {
           'jsonls',
           'yamlls',
           'eslint',
+          'basedpyright',
+          'ruff',
+          'bashls',
         },
         handlers = {
           function(server_name)
@@ -103,4 +106,46 @@ return {
   { 'jsonls', for_cat = 'web', lsp = {} },
   { 'yamlls', for_cat = 'web', lsp = {} },
   { 'eslint', for_cat = 'web', lsp = {} },
+  {
+    'basedpyright',
+    for_cat = 'python',
+    lsp = {
+      filetypes = { 'python' },
+      settings = {
+        basedpyright = {
+          analysis = {
+            typeCheckingMode = 'standard',
+            diagnosticMode = 'openFilesOnly',
+          },
+        },
+      },
+    },
+  },
+  {
+    'ruff',
+    for_cat = 'python',
+    lsp = {
+      filetypes = { 'python' },
+      init_options = {
+        settings = {
+          showSyntaxErrors = true,
+        },
+      },
+    },
+  },
+  {
+    'bashls',
+    for_cat = 'shell',
+    lsp = {
+      filetypes = { 'sh', 'bash' },
+    },
+  },
+  {
+    'nushell',
+    for_cat = 'shell',
+    lsp = {
+      cmd = { 'nu', '--lsp' },
+      filetypes = { 'nu' },
+    },
+  },
 }
