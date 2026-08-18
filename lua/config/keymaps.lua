@@ -11,15 +11,6 @@ vim.keymap.set('v', '>', '>gv^', { desc = 'Indent right and keep selection' })
 vim.keymap.set('n', 'k', "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
 vim.keymap.set('n', 'j', "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
 
--- Diagnostics
-vim.keymap.set('n', '[d', function()
-  vim.diagnostic.jump { count = -1 }
-end, { desc = 'Previous diagnostic' })
-
-vim.keymap.set('n', ']d', function()
-  vim.diagnostic.jump { count = 1 }
-end, { desc = 'Next diagnostic' })
-
 vim.keymap.set('n', '<leader>ce', vim.diagnostic.open_float, { desc = 'Open diagnostic float' })
 
 -- Window navigation

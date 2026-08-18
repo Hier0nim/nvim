@@ -201,7 +201,7 @@ return {
       vim.keymap.set({ 'x', 'o' }, 'im', select_function_inner)
       vim.keymap.set({ 'x', 'o' }, 'ac', select_class_outer)
       vim.keymap.set({ 'x', 'o' }, 'ic', select_class_inner)
-      vim.keymap.set({ 'x', 'o' }, 'as', select_local_scope)
+      vim.keymap.set({ 'x', 'o' }, 'aS', select_local_scope)
     end,
   },
   {
