@@ -5,6 +5,12 @@ vim.api.nvim_create_autocmd('LspAttach', {
   desc = 'LSP buffer-local keymaps and commands',
   callback = function(args)
     local bufnr = args.buf
+    local client = vim.lsp.get_client_by_id(args.data.client_id)
+
+    -- Disable hover for ruff in favor of basedpyright
+    if client and client.name == 'ruff' then
+      client.server_capabilities.hoverProvider = false
+    end
 
     ---Set a normal-mode LSP keymap scoped to the buffer.
     ---@param keys string

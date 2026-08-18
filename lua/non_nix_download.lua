@@ -41,4 +41,9 @@ vim.pack.add {
   { src = gh 'mfussenegger/nvim-dap', load = false },
   { src = gh 'rcarriga/nvim-dap-ui', load = false },
   { src = gh 'nvim-neotest/nvim-nio', load = false },
+
+  { src = gh 'nvim-neotest/neotest', load = false },
+  { src = gh 'nvim-neotest/neotest-python', load = false },
+  { src = gh 'mfussenegger/nvim-dap-python', load = false },
+  { src = gh 'mfussenegger/nvim-lint', load = false },
 }

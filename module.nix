@@ -76,12 +76,46 @@ inputs:
     data = with pkgs.vimPlugins; [
       (config.nvim-lib.neovimPlugins.easy-dotnet-nvim.overrideAttrs { pname = "easy-dotnet.nvim"; })
       plenary-nvim
-      nvim-dap
-      nvim-dap-ui
-      nvim-nio
     ];
     runtimePkgs = with pkgs; [
       (pkgs.callPackage ./pkgs/easydotnet.nix { })
+    ];
+  };
+
+  config.specs.python = {
+    lazy = true;
+    data = with pkgs.vimPlugins; [
+      nvim-dap-python
+      neotest
+      neotest-python
+    ];
+    runtimePkgs = with pkgs; [
+      basedpyright
+      ruff
+      (python3.withPackages (ps: [ ps.debugpy ]))
+    ];
+  };
+
+  config.specs.shell = {
+    lazy = true;
+    data = with pkgs.vimPlugins; [
+      nvim-lint
+    ];
+    runtimePkgs = with pkgs; [
+      bash-language-server
+      shellcheck
+      shfmt
+      zsh
+      nushell
+    ];
+  };
+
+  config.specs.debug = {
+    lazy = true;
+    data = with pkgs.vimPlugins; [
+      nvim-dap
+      nvim-dap-ui
+      nvim-nio
     ];
   };
 

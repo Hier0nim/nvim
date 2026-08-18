@@ -225,6 +225,9 @@ return {
           html = { 'prettierd' },
           css = { 'prettierd' },
           yaml = { 'prettierd' },
+          python = { 'ruff_format' },
+          sh = { 'shfmt' },
+          bash = { 'shfmt' },
         },
       }
 

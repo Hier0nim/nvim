@@ -60,6 +60,37 @@ update both the plugin (vim.pack.update + :w) and the server (dotnet tool update
 
 After updating, fully restart nvim (`:qa` then reopen).
 
+## Language Support
+
+### Nix machine
+
+All language servers, formatters, and debuggers are provided by Nix specs
+automatically. No manual installation needed.
+
+### Non-Nix machine (Ubuntu)
+
+Install external tools for each language you need:
+
+#### Python
+
+- `basedpyright` -- type checker / LSP (Mason auto-installs, or `npm i -g @anthropics/basedpyright`)
+- `ruff` -- linter + formatter LSP (Mason auto-installs, or `pip install ruff`)
+- `debugpy` -- DAP adapter (`pip install debugpy`)
+
+#### Bash / Shell
+
+- `bash-language-server` -- LSP (Mason auto-installs, or `npm i -g bash-language-server`)
+- `shellcheck` -- linter (apt: `sudo apt install shellcheck`)
+- `shfmt` -- formatter (`go install mvdan.cc/sh/v3/cmd/shfmt@latest`)
+
+#### Nushell
+
+- `nu` -- the Nushell binary provides its own LSP via `nu --lsp`
+
+#### Zsh
+
+- `zsh` -- used as a linter via `zsh -n` (nvim-lint)
+
 ## Keymap Namespace
 
 | Prefix | Meaning | Examples |
