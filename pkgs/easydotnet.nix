@@ -9,8 +9,7 @@ pkgs.dotnetCorePackages.buildDotnetGlobalTool {
   version = "3.4.18";
   executables = [ "dotnet-easydotnet" ];
 
-  # Fill this in from the first Nix build; it pins the NuGet payload.
-  nugetSha256 = lib.fakeHash;
+  nugetSha256 = "sha256-4XYodebDy5ijRNP9h4bK0K37yxLh6997KijRH3tWwlA=";
 
   postFixup = ''
     ln -sf dotnet-easydotnet "$out/bin/easydotnet"
