@@ -32,6 +32,22 @@
         "type": "github"
       }
     },
+    "plugins-easy-dotnet-nvim": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1787474297,
+        "narHash": "sha256-x/NXqklLsCZraLzj6gUCTMPx54VWmEgPYIr5XfntAcE=",
+        "owner": "GustavEikaas",
+        "repo": "easy-dotnet.nvim",
+        "rev": "7765221c078267bad975fdca307776ecc01c69cc",
+        "type": "github"
+      },
+      "original": {
+        "owner": "GustavEikaas",
+        "repo": "easy-dotnet.nvim",
+        "type": "github"
+      }
+    },
     "plugins-lze": {
       "flake": false,
       "locked": {
@@ -84,6 +100,7 @@
       "inputs": {
         "nixpkgs": "nixpkgs",
         "plugins-auto-dark-mode-nvim": "plugins-auto-dark-mode-nvim",
+        "plugins-easy-dotnet-nvim": "plugins-easy-dotnet-nvim",
         "plugins-lze": "plugins-lze",
         "plugins-lzextras": "plugins-lzextras",
         "plugins-markdown-plus-nvim": "plugins-markdown-plus-nvim",
