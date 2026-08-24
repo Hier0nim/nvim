@@ -3,7 +3,26 @@
   pkgs,
 }:
 
-pkgs.dotnetCorePackages.buildDotnetGlobalTool {
+(pkgs.dotnetCorePackages.buildDotnetGlobalTool.override {
+  fetchNupkg = args:
+    (pkgs.dotnetCorePackages.fetchNupkg args).overrideAttrs (old: {
+      # patch-nupkgs mistakes dncdbg debug sidecars for patchable executables.
+      preFixup = ''
+        debugSidecars="$NIX_BUILD_TOP/dncdbg-debug-sidecars"
+        mkdir -p "$debugSidecars"
+        while IFS= read -r -d "" debugSidecar; do
+          relative="''${debugSidecar#"$out/"}"
+          mkdir -p "$debugSidecars/$(dirname "$relative")"
+          mv "$debugSidecar" "$debugSidecars/$relative"
+        done < <(find "$out/share/nuget/packages/easydotnet/3.4.18/tools/dncdbg" -name dncdbg.dbg -print0)
+        ${old.preFixup}
+        while IFS= read -r -d "" debugSidecar; do
+          relative="''${debugSidecar#"$debugSidecars/"}"
+          mv "$debugSidecar" "$out/$relative"
+        done < <(find "$debugSidecars" -type f -print0)
+      '';
+    });
+}) {
   pname = "easydotnet";
   nugetName = "EasyDotnet";
   version = "3.4.18";
