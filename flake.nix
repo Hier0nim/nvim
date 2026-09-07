@@ -28,7 +28,7 @@
     };
 
     plugins-easy-dotnet-nvim = {
-      url = "github:GustavEikaas/easy-dotnet.nvim";
+      url = "github:GustavEikaas/easy-dotnet.nvim/640612c3d1f691ed47074ae0b262670057b18445";
       flake = false;
     };
   };
@@ -41,7 +41,7 @@
       ...
     }@inputs:
     let
-      forAllSystems = nixpkgs.lib.genAttrs nixpkgs.lib.platforms.all;
+      forAllSystems = nixpkgs.lib.genAttrs [ "x86_64-linux" "aarch64-linux" ];
       module = nixpkgs.lib.modules.importApply ./module.nix inputs;
       wrapper = wrappers.lib.evalModule module;
     in

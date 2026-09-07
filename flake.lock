@@ -45,6 +45,7 @@
       "original": {
         "owner": "GustavEikaas",
         "repo": "easy-dotnet.nvim",
+        "rev": "640612c3d1f691ed47074ae0b262670057b18445",
         "type": "github"
       }
     },

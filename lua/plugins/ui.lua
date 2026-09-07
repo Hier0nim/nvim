@@ -1,14 +1,18 @@
 return {
   {
-    'vim-startuptime',
+    'nvim-hlslens',
     auto_enable = true,
-    cmd = { 'StartupTime' },
-    ---Configure vim-startuptime globals.
-    before = function()
-      vim.g.startuptime_event_width = 0
-      vim.g.startuptime_tries = 10
-      vim.g.startuptime_exe_path = nixInfo(vim.v.progpath, 'progpath')
+    event = 'DeferredUIEnter',
+    after = function()
+      -- Experimental: native search mappings and counts remain untouched.
+      require('hlslens').setup { enable_incsearch = true, nearest_only = true, calm_down = true }
     end,
+  },
+  {
+    'quicker.nvim',
+    auto_enable = true,
+    ft = 'qf',
+    after = function() require('quicker').setup {} end,
   },
   {
     'fidget.nvim',
@@ -50,6 +54,14 @@ return {
         sections = {
           lualine_c = {
             { 'filename', path = 1, status = true },
+            function()
+              local dotnet = package.loaded['easy-dotnet']
+              return dotnet and dotnet.lualine.jobs() or ''
+            end,
+            function()
+              local dotnet = package.loaded['easy-dotnet']
+              return dotnet and dotnet.lualine.active_project() or ''
+            end,
           },
         },
         inactive_sections = {
@@ -59,6 +71,8 @@ return {
           lualine_x = { 'filetype' },
         },
       }
+      vim.cmd.packadd('modicator.nvim')
+      require('modicator').setup { integration = { lualine = { enabled = true } } }
     end,
   },
   {
@@ -81,7 +95,6 @@ return {
         { '<leader>r', group = 'Run' },
         { '<leader>t', group = 'Tests' },
         { '<leader>u', group = 'UI' },
-        { '<leader>w', group = 'Windows' },
       }
     end,
   },

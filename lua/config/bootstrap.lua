@@ -111,4 +111,4 @@ end
 nixInfo.lze.h.lsp.set_ft_fallback(lsp_filetype_fallback)
 
 vim.g.mapleader = ' '
-vim.g.maplocalleader = ' '
+vim.g.maplocalleader = '\\'

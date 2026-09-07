@@ -9,7 +9,15 @@ return {
       require('util.lazygit').setup(nixInfo)
 
       require('snacks').setup {
-        bigfile = {},
+        bigfile = {
+          setup = function(ctx)
+            vim.b[ctx.buf].completion = false
+            vim.b[ctx.buf].minihipatterns_disable = true
+            Snacks.util.wo(0, { wrap = false, linebreak = false, list = false,
+              relativenumber = false, spell = false, foldmethod = 'manual', statuscolumn = '' })
+          end,
+        },
+        profiler = {},
         quickfile = {},
         words = {},
         gitbrowse = {},
@@ -22,14 +30,7 @@ return {
         scope = {},
         toggle = {},
         input = {},
-        indent = {
-          scope = {
-            hl = 'MySnacksIndent',
-          },
-          chunk = {
-            hl = 'MySnacksIndent',
-          },
-        },
+        indent = {},
         statuscolumn = {
           left = { 'mark', 'git' },
           right = { 'sign', 'fold' },
@@ -92,10 +93,7 @@ return {
       -- Code
       vim.keymap.set('n', '<leader>cR', Snacks.rename.rename_file, { desc = 'Rename file' })
 
-      -- Explorer
-      vim.keymap.set('n', '<leader>e', function()
-        require('mini.files').open(vim.fn.getcwd(), true)
-      end, { desc = 'Open working directory' })
+      vim.keymap.set('n', '<leader>up', function() Snacks.profiler.toggle() end, { desc = 'Profiler (experimental)' })
 
       -- UI toggles
       vim.keymap.set('n', '<leader>uz', function() Snacks.zen() end, { desc = 'Zen mode' })

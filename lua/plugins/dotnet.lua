@@ -2,11 +2,12 @@ return {
   {
     'easy-dotnet.nvim',
     auto_enable = true,
-    ft = { 'cs', 'csproj', 'fsproj', 'sln' },
+    ft = { 'cs', 'csproj', 'fsproj', 'sln', 'slnx' },
     cmd = { 'Dotnet' },
     ---Configure easy-dotnet.nvim.
     after = function()
       vim.cmd.packadd('nvim-dap')
+      vim.cmd.packadd('plenary.nvim')
 
       require('easy-dotnet').setup {
         picker = 'snacks',
@@ -17,6 +18,7 @@ return {
           roslynator_enabled = true,
           easy_dotnet_analyzer_enabled = true,
           auto_refresh_codelens = true,
+          restart_roslyn_on_branch_change = true,
         },
         debugger = {
           auto_register_dap = true,
@@ -24,6 +26,7 @@ return {
           apply_value_converters = true,
           bin_path = nil,
           engine = 'netcoredbg',
+          mem_cpu_usage = false,
         },
         test_runner = {
           auto_start_testrunner = true,
@@ -53,28 +56,32 @@ return {
         },
         projx_lsp = { enabled = true },
         csproj_mappings = true,
-        fsproj_mappings = true,
+        fsproj_mappings = false,
+        notifications = { handler = false },
         auto_bootstrap_namespace = {
-          type = 'block_scoped',
+          type = 'file_scoped',
           enabled = true,
+          use_clipboard_json = { behavior = 'never', register = '+' },
         },
       }
 
       -- Buffer-local .NET run/test keymaps
       vim.api.nvim_create_autocmd('FileType', {
         group = vim.api.nvim_create_augroup('DotnetKeymaps', { clear = true }),
-        pattern = { 'cs', 'csproj', 'fsproj', 'sln' },
+        pattern = { 'cs', 'csproj', 'fsproj', 'sln', 'slnx' },
         desc = 'Buffer-local .NET keymaps',
         callback = function(args)
           local opts = { buffer = args.buf }
 
-          vim.keymap.set('n', '<leader>rr', '<cmd>Dotnet run<CR>',
+          vim.keymap.set('n', '<leader>rr', function() require('easy-dotnet').run_profile_default() end,
             vim.tbl_extend('force', opts, { desc = 'Run default project' }))
-          vim.keymap.set('n', '<leader>rd', '<cmd>Dotnet run debug<CR>',
+          vim.keymap.set('n', '<leader>rd', function() require('easy-dotnet').debug_profile_default() end,
             vim.tbl_extend('force', opts, { desc = 'Debug default project' }))
-          vim.keymap.set('n', '<leader>rb', '<cmd>Dotnet build<CR>',
+          vim.keymap.set('n', '<leader>rb', function() require('easy-dotnet').build_default_quickfix() end,
             vim.tbl_extend('force', opts, { desc = 'Build default project' }))
-          vim.keymap.set('n', '<leader>rw', '<cmd>Dotnet watch<CR>',
+          vim.keymap.set('n', '<leader>rB', function() require('easy-dotnet').build_solution() end,
+            vim.tbl_extend('force', opts, { desc = 'Build solution' }))
+          vim.keymap.set('n', '<leader>rw', function() require('easy-dotnet').watch_default() end,
             vim.tbl_extend('force', opts, { desc = 'Watch default project' }))
           vim.keymap.set('n', '<leader>rs', '<cmd>Dotnet stop<CR>',
             vim.tbl_extend('force', opts, { desc = 'Stop running job' }))
@@ -87,7 +94,7 @@ return {
 
       -- Trigger for current buffer if it matches
       local ft = vim.bo.filetype
-      if ft == 'cs' or ft == 'csproj' or ft == 'fsproj' or ft == 'sln' then
+      if ft == 'cs' or ft == 'csproj' or ft == 'fsproj' or ft == 'sln' or ft == 'slnx' then
         vim.api.nvim_exec_autocmds('FileType', { pattern = ft })
       end
     end,

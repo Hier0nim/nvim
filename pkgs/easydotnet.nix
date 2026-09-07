@@ -2,7 +2,9 @@
   lib,
   pkgs,
 }:
-
+let
+  version = "3.4.24";
+in
 (pkgs.dotnetCorePackages.buildDotnetGlobalTool.override {
   fetchNupkg = args:
     (pkgs.dotnetCorePackages.fetchNupkg args).overrideAttrs (old: {
@@ -14,7 +16,7 @@
           relative="''${debugSidecar#"$out/"}"
           mkdir -p "$debugSidecars/$(dirname "$relative")"
           mv "$debugSidecar" "$debugSidecars/$relative"
-        done < <(find "$out/share/nuget/packages/easydotnet/3.4.18/tools/dncdbg" -name dncdbg.dbg -print0)
+        done < <(find "$out/share/nuget/packages/easydotnet/${version}/tools/dncdbg" -name dncdbg.dbg -print0)
         ${old.preFixup}
         while IFS= read -r -d "" debugSidecar; do
           relative="''${debugSidecar#"$debugSidecars/"}"
@@ -25,10 +27,10 @@
 }) {
   pname = "easydotnet";
   nugetName = "EasyDotnet";
-  version = "3.4.18";
+  inherit version;
   executables = [ "dotnet-easydotnet" ];
 
-  nugetSha256 = "sha256-4XYodebDy5ijRNP9h4bK0K37yxLh6997KijRH3tWwlA=";
+  nugetSha256 = "0wcb687app4lhb94y6kxbxbk6jn8az5n85dk051nhvlpkbjhnpzl";
 
   postFixup = ''
     ln -sf dotnet-easydotnet "$out/bin/easydotnet"

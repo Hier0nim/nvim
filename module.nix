@@ -77,7 +77,7 @@ inputs:
       (config.nvim-lib.neovimPlugins.easy-dotnet-nvim.overrideAttrs { pname = "easy-dotnet.nvim"; })
       plenary-nvim
     ];
-    runtimePkgs = with pkgs; [
+    runtimePkgs = [
       (pkgs.callPackage ./pkgs/easydotnet.nix { })
     ];
   };
@@ -138,7 +138,9 @@ inputs:
       mini-nvim
       snacks-nvim
       nvim-lspconfig
-      vim-startuptime
+      modicator-nvim
+      nvim-hlslens
+      quicker-nvim
 
       blink-cmp
       colorful-menu-nvim
@@ -157,20 +159,12 @@ inputs:
     ];
   };
 
-  config.specMods =
-    {
-      _parentSpec ? null,
-      _parentOpts ? null,
-      _parentName ? null,
-      config,
-      ...
-    }:
-    {
-      options.runtimePkgs = lib.mkOption {
-        type = lib.types.listOf wlib.types.stringable;
-        default = [ ];
-      };
+  config.specMods = { ... }: {
+    options.runtimePkgs = lib.mkOption {
+      type = lib.types.listOf wlib.types.stringable;
+      default = [ ];
     };
+  };
 
   config.runtimePkgs = config.specCollect (acc: v: acc ++ (v.runtimePkgs or [ ])) [ ];
 

@@ -1,11 +1,16 @@
 nixInfo.lze.load {
   { import = 'plugins.appearance' },
-  { import = 'plugins.search' },
+  { import = 'plugins.snacks' },
   { import = 'plugins.editor' },
+  { import = 'plugins.completion' },
+  { import = 'plugins.treesitter' },
   { import = 'plugins.lsp' },
   { import = 'plugins.git' },
   { import = 'plugins.ui' },
   { import = 'plugins.markdown' },
   { import = 'plugins.session' },
+  { import = 'plugins.debug' },
   { import = 'plugins.dotnet' },
+  { import = 'plugins.python' },
+  { import = 'plugins.shell' },
 }

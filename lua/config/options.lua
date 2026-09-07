@@ -1,4 +1,3 @@
-vim.o.exrc = true
 vim.o.background = 'dark'
 
 vim.opt.list = true
@@ -18,10 +17,7 @@ vim.wo.signcolumn = 'yes'
 
 vim.o.mouse = 'a'
 
-vim.opt.cpoptions:append 'I'
 vim.o.expandtab = true
-vim.o.smartindent = true
-vim.o.autoindent = true
 vim.o.tabstop = 2
 vim.o.softtabstop = -1
 vim.o.shiftwidth = 2
@@ -38,7 +34,6 @@ vim.o.smartcase = true
 vim.o.updatetime = 250
 vim.o.timeoutlen = 300
 
-vim.o.completeopt = 'menu,preview,noselect'
 vim.o.termguicolors = true
 vim.opt.cmdheight = 0
 vim.opt.spelllang = { 'en_us', 'pl' }
@@ -52,3 +47,5 @@ vim.o.sessionoptions = 'blank,buffers,curdir,folds,help,tabpages,winsize,winpos,
 
 -- Large file safety: stop syntax/regex matching on very long lines
 vim.o.synmaxcol = 500
+vim.o.cursorline = true
+vim.o.cursorlineopt = 'number'

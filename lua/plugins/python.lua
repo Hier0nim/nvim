@@ -6,7 +6,7 @@ return {
     ---Configure dap-python.
     after = function()
       vim.cmd.packadd('nvim-dap')
-      require('dap-python').setup('python3')
+      require('dap-python').setup('debugpy-adapter')
     end,
   },
   {
@@ -51,7 +51,11 @@ return {
           vim.keymap.set('n', '<leader>ts', function() neotest.run.stop() end,
             vim.tbl_extend('force', opts, { desc = 'Stop test' }))
 
-          vim.keymap.set('n', '<leader>rr', '<cmd>!python3 %<CR>',
+          vim.keymap.set('n', '<leader>rr', function()
+            local env = vim.env.VIRTUAL_ENV or vim.env.CONDA_PREFIX
+            local python = env and (env .. '/bin/python') or vim.fn.exepath('python3')
+            Snacks.terminal({ python, vim.api.nvim_buf_get_name(0) })
+          end,
             vim.tbl_extend('force', opts, { desc = 'Run current file' }))
           vim.keymap.set('n', '<leader>rd', function() require('dap').continue() end,
             vim.tbl_extend('force', opts, { desc = 'Debug current file' }))

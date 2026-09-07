@@ -13,7 +13,7 @@ return {
     'mason.nvim',
     enabled = not nixInfo.isNix,
     priority = 100,
-    on_plugin = { 'nvim-lspconfig' },
+    lazy = false,
     ---Configure mason.nvim and mason-lspconfig.nvim.
     ---@param name string
     load = function(name)
@@ -35,11 +35,18 @@ return {
           'ruff',
           'bashls',
         },
-        handlers = {
-          function(server_name)
-            vim.lsp.enable(server_name)
-          end,
+        automatic_enable = false,
+      }
+      vim.cmd.packadd('mason-tool-installer.nvim')
+      require('mason-tool-installer').setup {
+        ensure_installed = {
+          'lua-language-server', 'typescript-language-server', 'html-lsp', 'css-lsp', 'json-lsp',
+          'yaml-language-server', 'eslint-lsp', 'basedpyright', 'ruff', 'bash-language-server',
+          'stylua', 'prettierd', 'shfmt', 'shellcheck', 'debugpy',
         },
+        run_on_start = true,
+        auto_update = false,
+        start_delay = 3000,
       }
     end,
   },

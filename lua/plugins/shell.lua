@@ -8,6 +8,8 @@ return {
       local lint = require 'lint'
 
       lint.linters_by_ft = {
+        sh = { 'shellcheck' },
+        bash = { 'shellcheck' },
         zsh = { 'zsh' },
       }
 
@@ -15,7 +17,7 @@ return {
         group = vim.api.nvim_create_augroup('NvimLint', { clear = true }),
         desc = 'Run linter on save',
         callback = function()
-          lint.try_lint()
+          if lint.linters_by_ft[vim.bo.filetype] then lint.try_lint() end
         end,
       })
 
@@ -27,13 +29,8 @@ return {
           local opts = { buffer = args.buf }
 
           vim.keymap.set('n', '<leader>rr', function()
-            local file = vim.fn.shellescape(vim.fn.expand '%:p')
-            local first_line = vim.fn.getline(1)
-            if first_line:match '^#!' then
-              vim.cmd('!' .. file)
-            else
-              vim.cmd('!$SHELL ' .. file)
-            end
+            local shell = ({ sh = 'sh', bash = 'bash', zsh = 'zsh', nu = 'nu' })[vim.bo.filetype]
+            Snacks.terminal({ shell, vim.api.nvim_buf_get_name(0) })
           end, vim.tbl_extend('force', opts, { desc = 'Run current file' }))
         end,
       })
