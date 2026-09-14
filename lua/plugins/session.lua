@@ -2,33 +2,13 @@ return {
   {
     'mini.sessions',
     event = 'VimEnter',
-    ---Configure mini.sessions for automatic session read/write.
+    ---Configure mini.sessions to save restored sessions without reading one at startup.
     after = function()
       require('mini.sessions').setup {
-        autoread = true,
+        autoread = false,
         autowrite = true,
         force = { read = false, write = true, delete = false },
         verbose = { read = false, write = true, delete = true },
-      }
-    end,
-  },
-  {
-    'mini.starter',
-    event = 'VimEnter',
-    ---Configure mini.starter as the start screen.
-    after = function()
-      local starter = require('mini.starter')
-      starter.setup {
-        evaluate_single = true,
-        items = {
-          starter.sections.builtin_actions(),
-          starter.sections.recent_files(10, true),
-          starter.sections.recent_files(10, false),
-        },
-        content_hooks = {
-          starter.gen_hook.adding_bullet(),
-          starter.gen_hook.aligning('center', 'center'),
-        },
       }
     end,
   },

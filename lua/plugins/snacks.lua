@@ -1,3 +1,5 @@
+local project_session = require 'util.project_session'
+
 return {
   {
     'snacks.nvim',
@@ -16,6 +18,28 @@ return {
             Snacks.util.wo(0, { wrap = false, linebreak = false, list = false,
               relativenumber = false, spell = false, foldmethod = 'manual', statuscolumn = '' })
           end,
+        },
+        dashboard = {
+          preset = {
+            keys = {
+              { icon = ' ', key = 'f', desc = 'Find files', action = '<leader>ff' },
+              { icon = ' ', key = 'n', desc = 'New file', action = ':enew' },
+              { icon = ' ', key = 'q', desc = 'Quit', action = ':qall' },
+            },
+          },
+          sections = {
+            { section = 'header' },
+            { section = 'keys', gap = 1, padding = 1 },
+            { icon = ' ', title = 'Recent Git repositories', section = 'projects', limit = 5,
+              session = false, pick = false, action = project_session.select_project, indent = 2, padding = 1 },
+            function()
+              local cwd = vim.fn.getcwd()
+              return { icon = ' ', title = 'Recent files (repository)', section = 'recent_files',
+                cwd = Snacks.git.get_root(cwd) or cwd, limit = 10, indent = 2, padding = 1 }
+            end,
+            { icon = ' ', title = 'Recent files (global)', section = 'recent_files', limit = 10,
+              indent = 2, padding = 1 },
+          },
         },
         profiler = {},
         quickfile = {},
