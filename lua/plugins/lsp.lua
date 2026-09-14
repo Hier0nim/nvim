@@ -44,36 +44,39 @@ return {
     ---@param name string
     load = function(name)
       vim.cmd.packadd(name)
-      vim.cmd.packadd('mason-lspconfig.nvim')
+      vim.cmd.packadd 'mason-lspconfig.nvim'
 
       require('mason').setup()
 
       require('mason-lspconfig').setup {
-        ensure_installed = {
-          'lua_ls',
-          'ts_ls',
-          'html',
-          'cssls',
-          'jsonls',
-          'yamlls',
-          'eslint',
-          'basedpyright',
-          'ruff',
-          'bashls',
-        },
         automatic_enable = false,
       }
-      vim.cmd.packadd('mason-tool-installer.nvim')
+      vim.cmd.packadd 'mason-tool-installer.nvim'
       require('mason-tool-installer').setup {
         ensure_installed = {
-          'lua-language-server', 'typescript-language-server', 'html-lsp', 'css-lsp', 'json-lsp',
-          'yaml-language-server', 'eslint-lsp', 'basedpyright', 'ruff', 'bash-language-server',
-          'stylua', 'prettierd', 'shfmt', 'shellcheck', 'debugpy',
+          'lua-language-server',
+          'typescript-language-server',
+          'html-lsp',
+          'css-lsp',
+          'json-lsp',
+          'yaml-language-server',
+          'eslint-lsp',
+          'basedpyright',
+          'ruff',
+          'bash-language-server',
+          'stylua',
+          'prettierd',
+          'shfmt',
+          'shellcheck',
+          'debugpy',
         },
-        run_on_start = true,
+        run_on_start = false,
         auto_update = false,
         start_delay = 3000,
       }
+      vim.api.nvim_create_user_command('MasonUpdateConfigured', function()
+        vim.cmd 'MasonToolsUpdate'
+      end, { desc = 'Install or update configured Mason tools and LSP servers' })
     end,
   },
   {
