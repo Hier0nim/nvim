@@ -24,6 +24,8 @@ vim.pack.add({
   { src = gh 'mawkler/modicator.nvim' },
   { src = gh 'kevinhwang91/nvim-hlslens' },
   { src = gh 'stevearc/quicker.nvim' },
+  { src = gh 'rachartier/tiny-code-action.nvim' },
+  { src = gh 'rachartier/tiny-inline-diagnostic.nvim' },
   { src = gh 'j-hui/fidget.nvim' },
   { src = gh 'nvim-lualine/lualine.nvim' },
   { src = gh 'lewis6991/gitsigns.nvim' },

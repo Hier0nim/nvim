@@ -73,9 +73,8 @@ inputs:
 
   config.specs.dotnet = {
     lazy = true;
-    data = with pkgs.vimPlugins; [
+    data = [
       (config.nvim-lib.neovimPlugins.easy-dotnet-nvim.overrideAttrs { pname = "easy-dotnet.nvim"; })
-      plenary-nvim
     ];
     runtimePkgs = [
       (pkgs.callPackage ./pkgs/easydotnet.nix { })
@@ -142,6 +141,13 @@ inputs:
       modicator-nvim
       nvim-hlslens
       quicker-nvim
+      plenary-nvim
+      (config.nvim-lib.neovimPlugins.tiny-code-action-nvim.overrideAttrs {
+        pname = "tiny-code-action.nvim";
+      })
+      (config.nvim-lib.neovimPlugins.tiny-inline-diagnostic-nvim.overrideAttrs {
+        pname = "tiny-inline-diagnostic.nvim";
+      })
 
       blink-cmp
       colorful-menu-nvim

@@ -32,6 +32,16 @@
       flake = false;
     };
 
+    plugins-tiny-code-action-nvim = {
+      url = "github:rachartier/tiny-code-action.nvim";
+      flake = false;
+    };
+
+    plugins-tiny-inline-diagnostic-nvim = {
+      url = "github:rachartier/tiny-inline-diagnostic.nvim";
+      flake = false;
+    };
+
     plugins-schema-store-nvim = {
       url = "github:b0o/SchemaStore.nvim";
       flake = false;

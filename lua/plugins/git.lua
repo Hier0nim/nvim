@@ -83,7 +83,7 @@ return {
         map({ 'o', 'x' }, 'ih', ':<C-U>Gitsigns select_hunk<CR>', { desc = 'Select git hunk' })
       end
 
-      require('gitsigns').setup {
+      require("gitsigns").setup {
         signs = {
           add = { text = '▎' },
           change = { text = '▎' },

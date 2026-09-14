@@ -36,6 +36,44 @@ return {
     end,
   },
   {
+    'plenary.nvim',
+    auto_enable = true,
+    dep_of = { 'easy-dotnet.nvim' },
+  },
+  {
+    'tiny-code-action.nvim',
+    auto_enable = true,
+    event = 'LspAttach',
+    keys = {
+      { 'gra', mode = { 'n', 'x' }, desc = 'Code action' },
+    },
+    ---Configure tiny-code-action.nvim with the existing Snacks picker.
+    after = function()
+      local tiny_code_action = require 'tiny-code-action'
+      tiny_code_action.setup {
+        backend = 'vim',
+        picker = 'snacks',
+      }
+
+      vim.keymap.set({ 'n', 'x' }, 'gra', tiny_code_action.code_action, { desc = 'Code action' })
+    end,
+  },
+  {
+    'tiny-inline-diagnostic.nvim',
+    auto_enable = true,
+    lazy = false,
+    priority = 900,
+    ---Replace built-in virtual text with unobtrusive inline diagnostics.
+    after = function()
+      require('tiny-inline-diagnostic').setup {
+        preset = 'minimal',
+        options = {
+          use_icons_from_diagnostic = true,
+        },
+      }
+    end,
+  },
+  {
     'mason.nvim',
     enabled = not nixInfo.isNix,
     priority = 100,

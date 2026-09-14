@@ -7,7 +7,6 @@ return {
     ---Configure easy-dotnet.nvim.
     after = function()
       vim.cmd.packadd('nvim-dap')
-      vim.cmd.packadd('plenary.nvim')
 
       require('easy-dotnet').setup {
         picker = 'snacks',
