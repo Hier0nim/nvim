@@ -28,8 +28,9 @@ Python tests require pytest in that environment.
 
 ## Editing
 
-Space is leader; backslash is localleader. Native LSP mappings, search counts,
-bracket motions and `an`/`in` remain native (`gd` uses Snacks definitions).
+Space is leader; backslash is localleader. LSP location navigation uses Snacks;
+remaining native LSP mappings, search counts, bracket motions and `an`/`in` remain
+native.
 Use `ys`/`ds`/`cs` for surrounds, `gS` for split/join and `cr` for replace.
 MiniFiles: `-` at the current file, `<leader>e` at cwd; its `<leader>a` creates
 a .NET item. Markdown actions use localleader.

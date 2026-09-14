@@ -37,6 +37,10 @@ vim.api.nvim_create_autocmd('LspAttach', {
     local Snacks = require 'snacks'
 
     nmap('gd', Snacks.picker.lsp_definitions, 'Goto definition')
+    nmap('gD', Snacks.picker.lsp_declarations, 'Goto declaration')
+    nmap('grr', Snacks.picker.lsp_references, 'Goto references')
+    nmap('gri', Snacks.picker.lsp_implementations, 'Goto implementation')
+    nmap('grt', Snacks.picker.lsp_type_definitions, 'Goto type definition')
 
     vim.api.nvim_buf_create_user_command(bufnr, 'Format', function()
       nixInfo.lze.trigger_load('conform.nvim')
