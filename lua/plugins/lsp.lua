@@ -10,6 +10,32 @@ return {
     end,
   },
   {
+    'SchemaStore.nvim',
+    auto_enable = true,
+    after = function()
+      local schemastore = require 'schemastore'
+
+      vim.lsp.config('jsonls', {
+        settings = {
+          json = {
+            schemas = schemastore.json.schemas(),
+          },
+        },
+      })
+      vim.lsp.config('yamlls', {
+        settings = {
+          yaml = {
+            schemaStore = {
+              enable = false,
+              url = '',
+            },
+            schemas = schemastore.yaml.schemas(),
+          },
+        },
+      })
+    end,
+  },
+  {
     'mason.nvim',
     enabled = not nixInfo.isNix,
     priority = 100,
@@ -110,7 +136,7 @@ return {
   { 'ts_ls', for_cat = 'web', lsp = {} },
   { 'html', for_cat = 'web', lsp = {} },
   { 'cssls', for_cat = 'web', lsp = {} },
-  { 'jsonls', for_cat = 'web', lsp = {} },
+  { 'jsonls', for_cat = 'web', lsp = { filetypes = { 'json', 'jsonc', 'json5' } } },
   { 'yamlls', for_cat = 'web', lsp = {} },
   { 'eslint', for_cat = 'web', lsp = {} },
   {

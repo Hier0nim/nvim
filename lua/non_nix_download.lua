@@ -11,6 +11,7 @@ vim.pack.add({
   { src = gh 'nvim-mini/mini.nvim' },
   { src = gh 'folke/snacks.nvim' },
   { src = gh 'neovim/nvim-lspconfig' },
+  { src = gh 'b0o/SchemaStore.nvim' },
   { src = gh 'mason-org/mason.nvim' },
   { src = gh 'mason-org/mason-lspconfig.nvim' },
   { src = gh 'WhoIsSethDaniel/mason-tool-installer.nvim' },

@@ -138,6 +138,7 @@ inputs:
       mini-nvim
       snacks-nvim
       nvim-lspconfig
+      (config.nvim-lib.neovimPlugins.schema-store-nvim.overrideAttrs { pname = "SchemaStore.nvim"; })
       modicator-nvim
       nvim-hlslens
       quicker-nvim

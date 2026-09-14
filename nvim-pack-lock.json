@@ -1,5 +1,9 @@
 {
   "plugins": {
+    "SchemaStore.nvim": {
+      "rev": "890d8f5cfca338a1f3e59c686569e461f6182f80",
+      "src": "https://github.com/b0o/SchemaStore.nvim"
+    },
     "auto-dark-mode.nvim": {
       "rev": "54058b4fe414bd64bd2904a6f8a63f1f14e3d8df",
       "src": "https://github.com/f-person/auto-dark-mode.nvim"

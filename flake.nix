@@ -31,6 +31,11 @@
       url = "github:GustavEikaas/easy-dotnet.nvim/640612c3d1f691ed47074ae0b262670057b18445";
       flake = false;
     };
+
+    plugins-schema-store-nvim = {
+      url = "github:b0o/SchemaStore.nvim";
+      flake = false;
+    };
   };
 
   outputs =
