@@ -34,7 +34,7 @@ vim.pack.add({
   { src = gh 'MeanderingProgrammer/render-markdown.nvim' },
   { src = gh 'YousefHadder/markdown-plus.nvim' },
   { src = gh 'nvim-lua/plenary.nvim' },
-  { src = gh 'GustavEikaas/easy-dotnet.nvim', version = '640612c3d1f691ed47074ae0b262670057b18445' },
+  { src = gh 'GustavEikaas/easy-dotnet.nvim', version = 'df600029a54754d90ac35fe284b3921bb7bf1023' },
   { src = gh 'mfussenegger/nvim-dap' },
   { src = gh 'rcarriga/nvim-dap-ui' },
   { src = gh 'nvim-neotest/nvim-nio' },

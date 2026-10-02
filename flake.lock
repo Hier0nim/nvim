@@ -35,17 +35,17 @@
     "plugins-easy-dotnet-nvim": {
       "flake": false,
       "locked": {
-        "lastModified": 1788768376,
-        "narHash": "sha256-+03aFSSCadbKcJ/hbOem0n4fOoA5U1+4pnRKPsc3IOU=",
+        "lastModified": 1789468211,
+        "narHash": "sha256-1F1IXv3lNC7PP+fQESrQtx/7YTrMgl2SGRIAZzuxUQI=",
         "owner": "GustavEikaas",
         "repo": "easy-dotnet.nvim",
-        "rev": "640612c3d1f691ed47074ae0b262670057b18445",
+        "rev": "df600029a54754d90ac35fe284b3921bb7bf1023",
         "type": "github"
       },
       "original": {
         "owner": "GustavEikaas",
         "repo": "easy-dotnet.nvim",
-        "rev": "640612c3d1f691ed47074ae0b262670057b18445",
+        "rev": "df600029a54754d90ac35fe284b3921bb7bf1023",
         "type": "github"
       }
     },

@@ -17,9 +17,9 @@ categories provision plugins/tools, while non-Nix installs plugins with `vim.pac
 - Keep Git, ripgrep, fd and lazygit on PATH outside Nix. Install Nushell (`nu`)
   and Zsh when using those filetypes. No environment manager is configured.
 - .NET development requires an external .NET SDK. Non-Nix also needs
-  `dotnet tool install -g EasyDotnet --version 3.4.24` (use `update` if installed)
-  and `~/.dotnet/tools` on PATH. Nix provides EasyDotnet 3.4.24.
-  The plugin is pinned to `640612c3d1f691ed47074ae0b262670057b18445`.
+  `dotnet tool install -g EasyDotnet --version 3.4.26` (use `update` if installed)
+  and `~/.dotnet/tools` on PATH. Nix provides EasyDotnet 3.4.26.
+  The plugin is pinned to `df600029a54754d90ac35fe284b3921bb7bf1023`.
 
 Open .NET repositories at their root with one `.slnx`; select a startup project
 once through the Dotnet menu and let EasyDotnet persist it. Run/debug use the

@@ -3,7 +3,7 @@
   pkgs,
 }:
 let
-  version = "3.4.24";
+  version = "3.4.26";
 in
 (pkgs.dotnetCorePackages.buildDotnetGlobalTool.override {
   fetchNupkg = args:
@@ -30,7 +30,12 @@ in
   inherit version;
   executables = [ "dotnet-easydotnet" ];
 
-  nugetSha256 = "0wcb687app4lhb94y6kxbxbk6jn8az5n85dk051nhvlpkbjhnpzl";
+  nugetSha256 = "11d96mjnsi6369zlziynh1dqjvzjsp8jgnlgwqlljni7kv636zja";
+
+  # Roslyn needs a matching libssl/libcrypto pair ahead of nix-ld's libraries.
+  makeWrapperArgs = [
+    "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ pkgs.openssl ]}"
+  ];
 
   postFixup = ''
     # Keep the selected SDK host and DOTNET_ROOT together; otherwise use the packaged pair.
