@@ -18,6 +18,8 @@ function M.setup(MiniFiles)
   local git_requests = {}
   ---@type table<integer, { dir: string, repo: string|nil }>
   local active_buffers = {}
+  ---@type table<integer, string[]>
+  local clean_directory_lines = {}
   ---@type table<string, userdata>
   local directory_watchers = {}
   ---@type table<string, userdata[]>
@@ -77,6 +79,76 @@ function M.setup(MiniFiles)
       return nil
     end
     return vim.fs.normalize(path)
+  end
+
+  ---Use cached status only, inheriting ignored status from explicitly ignored directories.
+  ---@param entry table
+  ---@return string|nil
+  local function get_entry_status(entry)
+    local path = normalize(entry.path)
+    local best_root, status_map, relative
+    for root, cached in pairs(git_status_cache) do
+      local prefix = root == '/' and '/' or (root .. '/')
+      if path and vim.startswith(path, prefix) and (not best_root or #root > #best_root) then
+        best_root, status_map, relative = root, cached.status_map, path:sub(#prefix + 1)
+      end
+    end
+    if not status_map then
+      return nil
+    end
+    if status_map[relative] then
+      return status_map[relative]
+    end
+    for slash in relative:gmatch '()/' do
+      if status_map[relative:sub(1, slash - 1)] == '!!' then
+        return '!!'
+      end
+    end
+  end
+
+  ---Use a theme-derived shade between dotfiles (Comment) and ignored entries (NonText).
+  local function set_untracked_highlight()
+    local dot = vim.api.nvim_get_hl(0, { name = 'Comment', link = false }).fg
+    local ignored = vim.api.nvim_get_hl(0, { name = 'NonText', link = false }).fg
+    if not dot or not ignored then
+      vim.api.nvim_set_hl(0, 'MiniFilesUntracked', { link = 'Comment' })
+      return
+    end
+    local fg = 0
+    for _, shift in ipairs { 0, 8, 16 } do
+      local scale = 2 ^ shift
+      local channel = math.floor((math.floor(dot / scale) % 256 + math.floor(ignored / scale) % 256) / 2)
+      fg = fg + channel * scale
+    end
+    vim.api.nvim_set_hl(0, 'MiniFilesUntracked', { fg = fg })
+  end
+  set_untracked_highlight()
+  vim.api.nvim_create_autocmd('ColorScheme', { group = augroup 'colours', callback = set_untracked_highlight })
+
+  local function is_muted(entry)
+    local status = get_entry_status(entry)
+    return vim.startswith(entry.name, '.') or status == '??' or status == '!!'
+  end
+
+  MiniFiles.config.content.highlight = function(entry)
+    local status = get_entry_status(entry)
+    if status == '!!' then
+      return 'NonText'
+    end
+    if vim.startswith(entry.name, '.') then
+      return 'Comment'
+    end
+    return status == '??' and 'MiniFilesUntracked' or MiniFiles.default_highlight(entry)
+  end
+  MiniFiles.config.content.sort = function(entries)
+    local dots, normal, ignored = {}, {}, {}
+    for _, entry in ipairs(entries) do
+      local group = get_entry_status(entry) == '!!' and ignored or (vim.startswith(entry.name, '.') and dots or normal)
+      table.insert(group, entry)
+    end
+    -- Git changes do not move working files; retain native ordering within each group.
+    local sorted = vim.list_extend(MiniFiles.default_sort(dots), MiniFiles.default_sort(normal))
+    return vim.list_extend(sorted, MiniFiles.default_sort(ignored))
   end
 
   ---@param path string|nil
@@ -206,7 +278,7 @@ function M.setup(MiniFiles)
       offset = record_end + 1
 
       local status = record:sub(1, 2)
-      local file_path = record:sub(4)
+      local file_path = record:sub(4):gsub('/$', '')
       if status:find '[RC]' then
         local source_end = content:find('\0', offset, true)
         if not source_end then
@@ -215,7 +287,11 @@ function M.setup(MiniFiles)
         offset = source_end + 1
       end
 
-      if #status == 2 and file_path ~= '' then
+      if status == '!!' and file_path ~= '' then
+        -- Never promote an ignored child to its parent. --ignored=matching emits
+        -- ignored directories themselves, so descendants can inherit on lookup.
+        status_map[file_path] = status
+      elseif #status == 2 and file_path ~= '' then
         local current = ''
         for part in file_path:gmatch '[^/]+' do
           current = current == '' and part or (current .. '/' .. part)
@@ -258,7 +334,7 @@ function M.setup(MiniFiles)
         local entry_path = normalize(entry.path)
         local relative_path = entry_path and vim.startswith(entry_path, prefix) and entry_path:sub(#prefix + 1) or nil
         local status = relative_path and status_map[relative_path] or nil
-        if status then
+        if status and status ~= '!!' then
           local sign_text, hl_group = map_symbols(status, is_symlink(entry.path))
           vim.api.nvim_buf_set_extmark(buf_id, ns_mini_files_git, line_number - 1, 0, {
             sign_text = sign_text,
@@ -268,7 +344,7 @@ function M.setup(MiniFiles)
 
           local line = lines[line_number]
           local name_start_col = line and line:find(entry.name, 1, true) or nil
-          if name_start_col then
+          if name_start_col and not is_muted(entry) then
             vim.api.nvim_buf_set_extmark(buf_id, ns_mini_files_git, line_number - 1, name_start_col - 1, {
               end_col = name_start_col + #entry.name - 1,
               hl_group = hl_group,
@@ -280,6 +356,7 @@ function M.setup(MiniFiles)
   end
 
   local request_git_status
+  local queue_filesystem_refresh
 
   ---Apply the latest status to every active view in this repository.
   ---@param repo_root string
@@ -314,6 +391,7 @@ function M.setup(MiniFiles)
       '--porcelain=v1',
       '-z',
       '--untracked-files=all',
+      '--ignored=matching',
       '--ignore-submodules=none',
     }, { cwd = repo_root }, function(result)
       vim.schedule(function()
@@ -327,9 +405,14 @@ function M.setup(MiniFiles)
         if result.code == 0 and type(result.stdout) == 'string' then
           local status_map = parse_git_status(result.stdout)
           local refreshed_ms = now_ms()
+          local previous = git_status_cache[repo_root]
+          local changed = not previous or not vim.deep_equal(previous.status_map, status_map)
           git_status_cache[repo_root] = { time_ms = refreshed_ms, status_map = status_map }
           fallback_refresh_ms[repo_root] = refreshed_ms
           update_repo_views(repo_root, status_map)
+          if changed then
+            queue_filesystem_refresh()
+          end
         end
 
         if request.pending then
@@ -342,7 +425,10 @@ function M.setup(MiniFiles)
 
   ---@param repo_root string
   local function queue_git_refresh(repo_root)
-    git_status_cache[repo_root] = nil
+    -- Keep classification stable while the async refresh is in flight.
+    if git_status_cache[repo_root] then
+      git_status_cache[repo_root].time_ms = 0
+    end
     close_timer(git_timers[repo_root])
 
     local timer = uv.new_timer()
@@ -383,8 +469,11 @@ function M.setup(MiniFiles)
   ---Refresh directory contents without interpreting or applying MiniFiles edits.
   ---All MiniFiles buffers are checked because explorer views can be hidden.
   local function refresh_explorers()
-    for _, buf_id in ipairs(vim.api.nvim_list_bufs()) do
-      if vim.api.nvim_buf_is_valid(buf_id) and vim.api.nvim_buf_get_name(buf_id):find '^minifiles://' and vim.bo[buf_id].modified then
+    -- mini.files uses nofile scratch buffers: 'modified' stays false even
+    -- with pending filename edits. Compare native content, not TextChanged
+    -- counts, so hidden buffers and edits restored to clean are handled too.
+    for buf_id, clean_lines in pairs(clean_directory_lines) do
+      if vim.api.nvim_buf_is_loaded(buf_id) and not vim.deep_equal(clean_lines, vim.api.nvim_buf_get_lines(buf_id, 0, -1, false)) then
         return
       end
     end
@@ -396,7 +485,7 @@ function M.setup(MiniFiles)
           if MiniFiles.get_explorer_state() then
             -- Supplying a content option makes refresh reread directory contents.
             -- Unlike synchronize(), refresh never applies filesystem actions.
-            MiniFiles.refresh { content = { filter = MiniFiles.config.content.filter } }
+            MiniFiles.refresh { content = { sort = MiniFiles.config.content.sort } }
           end
         end)
       end
@@ -404,7 +493,7 @@ function M.setup(MiniFiles)
     vim.schedule(sync_active_views)
   end
 
-  local function queue_filesystem_refresh()
+  queue_filesystem_refresh = function()
     close_timer(refresh_timer)
     refresh_timer = uv.new_timer()
     local timer = refresh_timer
@@ -565,6 +654,10 @@ function M.setup(MiniFiles)
     if not buf_id then
       return
     end
+    local dir = get_mini_dir(buf_id)
+    if dir and (uv.fs_stat(dir) or {}).type == 'directory' then
+      clean_directory_lines[buf_id] = vim.api.nvim_buf_get_lines(buf_id, 0, -1, false)
+    end
     vim.schedule(sync_active_views)
 
     close_timer(overlay_timers[buf_id])
@@ -583,6 +676,13 @@ function M.setup(MiniFiles)
       end)
     )
   end
+
+  vim.api.nvim_create_autocmd('BufWipeout', {
+    group = augroup 'clean_content',
+    callback = function(args)
+      clean_directory_lines[args.buf] = nil
+    end,
+  })
 
   vim.api.nvim_create_autocmd('User', {
     group = augroup 'live_start',
