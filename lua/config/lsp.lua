@@ -1,5 +1,12 @@
 local M = {}
 
+-- Use libuv for LSP file watching on Linux instead of one inotifywait process per
+-- registration. libuv shares one inotify instance and adds a watch per directory.
+-- Private API: re-check after Neovim upgrades.
+if vim.fn.has 'linux' == 1 then
+  require('vim.lsp._watchfiles')._watchfunc = vim._watch.watchdirs
+end
+
 vim.diagnostic.config {
   virtual_text = false,
   signs = {
