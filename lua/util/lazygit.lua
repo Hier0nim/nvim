@@ -3,15 +3,32 @@ local M = {}
 ---Set up helper functions for Snacks lazygit integration.
 ---@param nixInfo table
 function M.setup(nixInfo)
+  ---Hide the Snacks terminal shown in the current window without stopping its job.
+  ---@return boolean hidden true when a Snacks terminal window was hidden
+  local function hide_current_terminal()
+    local buf = vim.api.nvim_get_current_buf()
+    for _, term in ipairs(Snacks.terminal.list()) do
+      if term.buf == buf and term:win_valid() then
+        vim.cmd.stopinsert()
+        term:hide()
+        return true
+      end
+    end
+    return false
+  end
+
   ---Reopen a file requested by lazygit in the previous editing context.
   ---
+  ---Hides the lazygit window (lazygit keeps running) and opens the file.
   ---Falls back to the current window if the previous buffer or window is not valid.
   ---@param path string
   ---@param line integer|nil
   function nixInfo.lazygit_fix(path, line)
     local prev = vim.fn.bufnr '#'
     local prev_win = vim.fn.bufwinid(prev)
-    vim.api.nvim_feedkeys('q', 'n', false)
+    hide_current_terminal()
+    -- TermClose no longer fires, so refresh buffers changed by lazygit here.
+    vim.cmd.checktime()
 
     local has_prev_buf = prev ~= -1 and vim.api.nvim_buf_is_valid(prev)
     local has_prev_win = prev_win ~= -1 and vim.api.nvim_win_is_valid(prev_win)

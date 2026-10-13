@@ -69,6 +69,10 @@ return {
         },
         lazygit = {
           config = {
+            gui = {
+              -- Initial lazygit screen mode: 'normal', 'half' or 'full'.
+              screenMode = 'half',
+            },
             os = {
               editPreset = 'nvim-remote',
               edit = vim.v.progpath
