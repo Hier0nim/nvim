@@ -28,7 +28,7 @@ inputs:
   config.specs.colorscheme = {
     lazy = true;
     data = with pkgs.vimPlugins; [
-      kanagawa-paper-nvim
+      kanagawa-paper
       onedarkpro-nvim
     ];
   };
